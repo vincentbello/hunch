@@ -1,7 +1,8 @@
+// @flow
 import { combineReducers } from 'redux';
 
-import entities from 'reducers/entities';
+import bets from 'reducers/entities/bets';
 
 export default combineReducers({
-  entities,
+  bets,
 });

@@ -4,6 +4,8 @@ import { Actions, Scene, ActionConst } from 'react-native-router-flux';
 
 import AppConfig from 'constants/navigation';
 
+import LoginContainer from 'containers/Login';
+
 /* Routes ==================================================================== */
 export default Actions.create(
   <Scene key="root" {...AppConfig.navbarProps}>
@@ -15,11 +17,12 @@ export default Actions.create(
 
     {/* Main App */}
     <Scene
-      key="app"
+      key="login"
       {...AppConfig.navbarProps}
       title={AppConfig.appName}
-      hideNavBar={false}
+      hideNavBar
       type={ActionConst.RESET}
+      component={LoginContainer}
     >
 
       {/* <Scene
