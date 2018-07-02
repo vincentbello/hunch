@@ -30,6 +30,7 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-pack": "^0.1.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "remote-redux-devtools": "^0.5.12"
   }
 }
