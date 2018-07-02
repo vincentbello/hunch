@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702020817) do
+ActiveRecord::Schema.define(version: 20180702032812) do
 
   create_table "bets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "bet_type"
@@ -73,6 +73,8 @@ ActiveRecord::Schema.define(version: 20180702020817) do
     t.datetime "last_login_at"
     t.datetime "current_login_at"
     t.integer  "login_count"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_foreign_key "bets", "games"
