@@ -1,0 +1,14 @@
+[ignore]
+.*/node_modules/.*
+
+[include]
+.*/app/.*
+
+[libs]
+
+[lints]
+
+[options]
+module.system.node.resolve_dirname=node_modules
+
+[strict]
