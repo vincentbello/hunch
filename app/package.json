@@ -6,30 +6,29 @@
     "babel-cli": "^6.26.0",
     "babel-preset-airbnb": "^2.5.1",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-react-native-stage-0": "^1.0.1",
     "flow-bin": "^0.75.0",
-    "jest-expo": "~27.0.0",
-    "react-native-scripts": "1.14.0",
+    "jest": "^23.4.1",
+    "jest-react-native": "^18.0.0",
     "react-test-renderer": "16.3.1",
     "redux-logger": "^3.0.6"
   },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "test": "jest"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "react-native"
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "expo": "^27.0.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
     "react-native-router-flux": "^4.0.0-beta.31",
+    "react-native-vector-icons": "^4.6.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-pack": "^0.1.5",
