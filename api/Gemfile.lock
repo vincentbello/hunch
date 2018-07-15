@@ -57,6 +57,9 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise_token_auth (0.1.43)
+      devise (> 3.5.2, < 4.5)
+      rails (< 6)
     erubis (2.7.0)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
@@ -159,6 +162,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   byebug
   devise
+  devise_token_auth
   figaro
   koala
   listen (~> 3.0.5)
