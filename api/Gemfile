@@ -27,11 +27,8 @@ gem 'puma', '~> 3.0'
 
 # Installed gems
 gem 'active_model_serializers', '~> 0.10.0'
-
 gem 'devise'
-
 gem 'figaro'
-
 gem 'koala'
 
 group :development, :test do
