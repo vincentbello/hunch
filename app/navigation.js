@@ -6,10 +6,17 @@ import AppConfig from 'constants/navigation';
 
 import BetsContainer from 'containers/Bets';
 import LoginContainer from 'containers/Login';
+import AppLaunch from 'components/AppLaunch';
 
 /* Routes ==================================================================== */
 export default Actions.create(
   <Scene key="root" {...AppConfig.navbarProps}>
+    <Scene
+       hideNavBar
+       key="splash"
+       component={AppLaunch}
+    />
+
     <Scene key="auth">
       <Scene
         key="login"
