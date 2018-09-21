@@ -4,9 +4,9 @@ import { Actions, Scene, ActionConst } from 'react-native-router-flux';
 
 import AppConfig from 'constants/navigation';
 
+import AppLaunchContainer from 'containers/AppLaunch';
 import BetsContainer from 'containers/Bets';
 import LoginContainer from 'containers/Login';
-import AppLaunch from 'components/AppLaunch';
 
 /* Routes ==================================================================== */
 export default Actions.create(
@@ -14,7 +14,7 @@ export default Actions.create(
     <Scene
        hideNavBar
        key="splash"
-       component={AppLaunch}
+       component={AppLaunchContainer}
     />
 
     <Scene key="auth">

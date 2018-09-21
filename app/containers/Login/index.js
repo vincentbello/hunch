@@ -54,11 +54,13 @@ class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
 
   componentDidMount() {
+    console.log('MOUNTED LOGIN CONTAINER');
     // Linking.addEventListener('url', this.handleURL);
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data) {
+    if (prevProps.user.data === null && this.props.user.data !== null) {
+      console.log('FOUND USER');
       Actions.bets();
     }
   }

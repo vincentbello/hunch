@@ -7,11 +7,16 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.3.0",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.1",
     "node-sass-middleware": "0.11.0",
+    "passport": "^0.4.0",
+    "passport-facebook-token": "^3.3.0",
     "sequelize": "^4.38.1",
     "sequelize-cli": "^4.1.1"
   },
