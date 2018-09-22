@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AsyncStorage } from 'react-native';
+import store from '../store';
 
 const axiosInstance = axios.create({
   // baseUrl: 'http://localhost:3000',
@@ -8,8 +8,8 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  async config => {
-    config.headers['x-auth-token'] = await AsyncStorage.getItem('AUTH_TOKEN');
+  config => {
+    config.headers['x-auth-token'] = store.getState().session.accessToken;
     return config;
   }, Promise.reject
 );

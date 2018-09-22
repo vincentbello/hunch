@@ -51,7 +51,7 @@ class AppLaunchContainer extends React.Component<Props> {
     AsyncStorage.getItem('AUTH_TOKEN')
       .then((token) => {
         if (token === null) {
-          Actions.auth();
+          Actions.login();
         } else {
           this.props.actions.fetchMe();
         }
@@ -61,7 +61,7 @@ class AppLaunchContainer extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.user.data === null && this.props.user.data !== null) {
       console.log('AUTHENTICATED USER!!', this.props.user.data);
-      Actions.bets();
+      Actions.replace('bets');
     }
   }
 

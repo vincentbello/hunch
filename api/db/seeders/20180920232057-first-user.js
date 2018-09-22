@@ -2,11 +2,11 @@
 
 module.exports = {
   up: queryInterface => queryInterface.bulkInsert('Users', [{
-    firstName: 'Vince',
-    lastName: 'Bello',
+    firstName: 'John',
+    lastName: 'Doe',
     createdAt: new Date(),
     updatedAt: new Date(),
-    email: 'vincent.bello@gmail.com',
+    email: 'john.doe@gmail.com',
     active: true,
     admin: true,
     fbId: '666488727',

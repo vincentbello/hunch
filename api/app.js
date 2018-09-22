@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
 import path from 'path';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
@@ -31,6 +32,10 @@ passport.use(new FacebookTokenStrategy({
       lastLoginAt: new Date(),
       currentLoginAt: new Date(),
       loginCount: initialized ? 1 : instance.loginCount + 1,
+      // Access token: expires in 2 hours
+      accessToken: jwt.sign({ id: instance.id }, 'my-secret-access-token', { expiresIn: 60 * 120 }),
+      // Refresh token: expires in 90 days
+      refreshToken: jwt.sign({ id: instance.id }, 'my-secret-refresh-token', { expiresIn: 60 * 60 * 24 * 90 }),
     };
 
     if (gender.length > 0) newProfile.gender = gender;

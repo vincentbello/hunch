@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { Linking, View, Text, TouchableOpacity } from 'react-native';
+import { AsyncStorage, Linking, View, Text, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -41,10 +42,19 @@ class BetsContainer extends React.Component<Props> {
     console.log('Fetch bets');
   }
 
+  logOut = () => {
+    AsyncStorage.removeItem('AUTH_TOKEN').then(Actions.login);
+  };
+
   render(): React.Node {
     return (
       <View>
         <Text>All Bets</Text>
+        <TouchableOpacity>
+          onPress={this.logOut}
+        >
+          <Text>Log Out</Text>
+        </TouchableOpacity>
       </View>
     );
   }

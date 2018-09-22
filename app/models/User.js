@@ -7,15 +7,10 @@ import { type User as UserPayload } from 'types/user';
 
 export default class User {
   static authenticateWithFacebook(fbAccessToken: string): Promise<UserPayload> {
-    return axios.post('http://localhost:3000/auth/facebook', { access_token: fbAccessToken })
-      .then(response => {
-        console.log('RESPONSE <><><>', response);
-        return AsyncStorage.setItem('AUTH_TOKEN', response.headers['x-auth-token']);
-      });
+    return axios.post('http://localhost:3000/auth/facebook', { access_token: fbAccessToken });
   }
 
-  static fetchMe() {
-    return api.get('http://localhost:3000/auth/me');
-    // return api.get('/auth/me');
+  static refresh(refreshToken: string, userId: number) {
+    return api.post('http://localhost:3000/auth/refresh', { refreshToken, userId });
   }
 }
