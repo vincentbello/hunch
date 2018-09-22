@@ -82,6 +82,7 @@ export default function handlePromise(state: State, action: Action, options: Pro
       return dotProp.set(prevState, fullPath, parsedData);
     },
     failure: (prevState: State): State => {
+      console.log('NETWORK ERROR OCCURRED', action.payload);
       const newSubstates = { hasError: true, error: 'An error occurred!' };
       return rootPath ? dotProp.set(prevState, rootPath, v => ({ ...v, ...newSubstates })) : { ...prevState, ...newSubstates };
     },

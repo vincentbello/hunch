@@ -4,6 +4,7 @@ import User from 'models/User';
 import { type Action } from 'types/redux';
 
 export const AUTHENTICATE = 'USER/AUTHENTICATE';
+export const LOG_OUT = 'USER/LOG_OUT';
 export const REFRESH_AUTH = 'USER/REFRESH_AUTH';
 
 export const authenticate = (fbAccessToken: string): Action => ({
@@ -11,7 +12,9 @@ export const authenticate = (fbAccessToken: string): Action => ({
   promise: User.authenticateWithFacebook(fbAccessToken),
 });
 
-export const refresh = (refreshToken: string, userId: number): Action => ({
+export const logOut = (userId: number): Action => ({ type: LOG_OUT, promiseFn: () => User.logOut(userId) });
+
+export const refreshAuth = (refreshToken: string): Action => ({
   type: REFRESH_AUTH,
-  promise: User.refresh(refreshToken, userId),
+  promiseFn: () => User.refreshAuth(refreshToken),
 });

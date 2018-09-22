@@ -8,10 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     admin: DataTypes.BOOLEAN,
     fbId: DataTypes.STRING,
     imageUrl: DataTypes.STRING,
-    gender: DataTypes.ENUM('F', 'M'),
+    gender: DataTypes.STRING,
     lastLoginAt: DataTypes.DATE,
     currentLoginAt: DataTypes.DATE,
     loginCount: DataTypes.INTEGER,
+    accessToken: DataTypes.STRING,
+    refreshToken: DataTypes.STRING,
   }, {});
   User.associate = function(models) {
     // associations can be defined here

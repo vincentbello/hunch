@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Action } from 'types/redux';
+import { type SessionState } from 'reducers/session';
 import { type UserState } from 'reducers/user';
 
-import { fetchMe } from 'actions/user';
+import { refreshAuth } from 'actions/user';
 
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
@@ -27,35 +28,37 @@ const styles = StyleSheet.create({
 });
 
 type ReduxStateSlice = {
+  session: SessionState,
   user: UserState,
 };
 
 type ReduxProps = {
+  refreshToken: string | null,
   user: UserState,
 };
 
-const mapStateToProps = ({ user }: ReduxStateSlice): ReduxProps => ({ user });
+const mapStateToProps = ({ session, user }: ReduxStateSlice): ReduxProps => ({ refreshToken: session.refreshToken, user });
 
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchMe }, dispatch),
+    ...bindActionCreators({ refreshAuth }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
-  actions: { fetchMe: () => void },
+  actions: { refreshAuth: (refreshToken: string) => void },
 };
 
 class AppLaunchContainer extends React.Component<Props> {
   componentDidMount() {
-    AsyncStorage.getItem('AUTH_TOKEN')
-      .then((token) => {
-        if (token === null) {
-          Actions.login();
-        } else {
-          this.props.actions.fetchMe();
-        }
-      });
+    // Do this when the store has persisted
+    console.log('APP LAUNCH PROPS', this.props);
+    const { actions, refreshToken } = this.props;
+    if (refreshToken === null) {
+      Actions.login();
+    } else {
+      actions.refreshAuth(refreshToken);
+    }
   }
 
   componentDidUpdate(prevProps: Props) {

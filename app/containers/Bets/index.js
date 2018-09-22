@@ -6,6 +6,8 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { logOut } from 'actions/user';
+
 import { type Action } from 'types/redux';
 import { type UserState } from 'reducers/user';
 
@@ -29,12 +31,14 @@ const mapStateToProps = (state: ReduxStateSlice): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({}, dispatch),
+    ...bindActionCreators({ logOut }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
-  actions: {},
+  actions: {
+    logOut: (userId: number) => void,
+  },
 };
 
 class BetsContainer extends React.Component<Props> {
@@ -42,17 +46,17 @@ class BetsContainer extends React.Component<Props> {
     console.log('Fetch bets');
   }
 
-  logOut = () => {
-    AsyncStorage.removeItem('AUTH_TOKEN').then(Actions.login);
-  };
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.user.data !== null && this.props.user.data === null) Actions.login();
+  }
+
+  logOut = () => this.props.actions.logOut(this.props.user.data.id);
 
   render(): React.Node {
     return (
       <View>
         <Text>All Bets</Text>
-        <TouchableOpacity>
-          onPress={this.logOut}
-        >
+        <TouchableOpacity onPress={this.logOut}>
           <Text>Log Out</Text>
         </TouchableOpacity>
       </View>
