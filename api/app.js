@@ -1,6 +1,7 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import passport from 'passport';
@@ -15,8 +16,6 @@ import UserSerializer from './serialization/User';
 import indexRouter from './routes/index';
 import authRouter from './routes/auth';
 import usersRouter from './routes/users';
-
-if (process.env.NODE_ENV !== 'production') dotenv.load();
 
 // Passport config
 passport.use(new FacebookTokenStrategy({
