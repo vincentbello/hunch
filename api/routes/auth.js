@@ -48,13 +48,13 @@ router.post('/refresh', authenticate, function(req, res, next) {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+    if (decoded.id !== req.auth.id) return res.sendStatus(401);
   } catch (err) {
     return res.sendStatus(401);
   }
 
-  if (decoded.id !== req.auth.id) return res.sendStatus(401);
-
   models.User.findById(req.auth.id).then(user => {
+    console.log('FOOBAR', user, req.auth, req.headers);
     if (refreshToken !== user.refreshToken) return res.sendStatus(401);
 
     // Refresh access token
