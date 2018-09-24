@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import passport from 'passport';
@@ -15,10 +16,12 @@ import indexRouter from './routes/index';
 import authRouter from './routes/auth';
 import usersRouter from './routes/users';
 
+if (process.env.NODE_ENV !== 'production') dotenv.load();
+
 // Passport config
 passport.use(new FacebookTokenStrategy({
-  clientID: '1508649675817033',
-  clientSecret: '37137e4e9611e362c8f83fe8ae524ae5',
+  clientID: process.env.FB_CLIENT_ID,
+  clientSecret: process.env.FB_CLIENT_SECRET,
 }, (accessToken, refreshToken, profile, done) => {
   models.User.findOrBuild({ where: { fbId: profile.id } }).spread((instance, initialized) => {
     const { id, gender, emails, photos, name: { familyName: lastName, givenName: firstName } } = profile;
@@ -33,9 +36,9 @@ passport.use(new FacebookTokenStrategy({
       currentLoginAt: new Date(),
       loginCount: initialized ? 1 : instance.loginCount + 1,
       // Access token: expires in 2 hours
-      accessToken: jwt.sign({ id: instance.id }, 'my-secret-access-token', { expiresIn: 60 * 120 }),
+      accessToken: jwt.sign({ id: instance.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }),
       // Refresh token: expires in 90 days
-      refreshToken: jwt.sign({ id: instance.id }, 'my-secret-refresh-token', { expiresIn: 60 * 60 * 24 * 90 }),
+      refreshToken: jwt.sign({ id: instance.id }, process.env.REFRESH_TOKEN_KEY, { expiresIn: 60 * 60 * 24 * 90 }),
     };
 
     if (gender.length > 0) newProfile.gender = gender;
@@ -66,7 +69,7 @@ app.use(cors({
   origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-  exposedHeaders: ['x-auth-token'],
+  exposedHeaders: ['x-auth-token', 'r-auth-token'],
 }));
 
 app.use('/', indexRouter);

@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Authenticate all requests
 const authenticate = expressJwt({
-  secret: 'my-secret-access-token',
+  secret: process.env.ACCESS_TOKEN_KEY,
   requestProperty: 'auth',
   getToken: req => req.headers['x-auth-token'] || null,
 });
@@ -30,7 +30,7 @@ router.post('/revoke', authenticate, function (req, res, next) {
 // router.post('/refresh', );
 
 // Authenticate and retrieve the access and refresh tokens via FB auth
-router.route('/facebook').post(passport.authenticate('facebook-token', { session: false }), function(req, res, next) {
+router.route('/facebook').post(passport.authenticate(process.env.FB_TOKEN_KEY, { session: false }), function(req, res, next) {
   if (!req.user) return res.send(401, 'Not authenticated!');
 
   // Prepare token for API
@@ -45,11 +45,20 @@ router.route('/facebook').post(passport.authenticate('facebook-token', { session
 // Refresh auth
 router.post('/refresh', authenticate, function(req, res, next) {
   const { refreshToken } = req.body;
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+  } catch (err) {
+    return res.sendStatus(401);
+  }
+
+  if (decoded.id !== req.auth.id) return res.sendStatus(401);
+
   models.User.findById(req.auth.id).then(user => {
     if (refreshToken !== user.refreshToken) return res.sendStatus(401);
 
     // Refresh access token
-    user.set('accessToken', jwt.sign({ id: user.id }, 'my-secret-access-token', { expiresIn: 60 * 120 }));
+    user.set('accessToken', jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }));
     user.save().then(updatedUser => {
       req.user = updatedUser;
 
