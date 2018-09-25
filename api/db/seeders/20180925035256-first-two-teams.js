@@ -3,6 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Teams', [
     {
+      abbreviation: 'LAL',
       firstName: 'Los Angeles',
       lastName: 'Lakers',
       league: 'NBA',
@@ -12,6 +13,7 @@ module.exports = {
       updatedAt: new Date(),
     },
     {
+      abbreviation: 'GSW',
       firstName: 'Golden State',
       lastName: 'Warriors',
       league: 'NBA',

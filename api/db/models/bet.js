@@ -17,24 +17,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     resolvedAt: DataTypes.DATE,
     gameId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Game', key: 'id' }
     },
     bettorId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'User', key: 'id' }
     },
     betteeId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'User', key: 'id' }
     },
     winnerId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'User', key: 'id' }
     },
   }, {});
   Bet.associate = function(models) {
-    // associations can be defined here
+    Bet.belongsTo(models.Game, { foreignKey: 'gameId' });
+    Bet.belongsTo(models.User, { foreignKey: 'bettorId' });
+    Bet.belongsTo(models.User, { foreignKey: 'betteeId' });
+    Bet.belongsTo(models.User, { foreignKey: 'winnerId' });
   };
   return Bet;
 };

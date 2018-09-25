@@ -29,19 +29,15 @@ module.exports = {
       },
       gameId: {
         type: Sequelize.INTEGER,
-        references: { model: 'Game', key: 'id' }
       },
       bettorId: {
         type: Sequelize.INTEGER,
-        references: { model: 'User', key: 'id' }
       },
       betteeId: {
         type: Sequelize.INTEGER,
-        references: { model: 'User', key: 'id' }
       },
       winnerId: {
         type: Sequelize.INTEGER,
-        references: { model: 'User', key: 'id' }
       },
       createdAt: {
         allowNull: false,

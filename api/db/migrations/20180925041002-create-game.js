@@ -37,11 +37,9 @@ module.exports = {
       },
       homeTeamId: {
         type: Sequelize.INTEGER,
-        references: { model: 'Team', key: 'id' }
       },
       awayTeamId: {
         type: Sequelize.INTEGER,
-        references: { model: 'Team', key: 'id' }
       },
       createdAt: {
         allowNull: false,

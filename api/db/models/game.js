@@ -1,4 +1,6 @@
 'use strict';
+import Team from './team';
+
 module.exports = (sequelize, DataTypes) => {
   const Game = sequelize.define('Game', {
     league: DataTypes.ENUM('NBA'),
@@ -11,16 +13,17 @@ module.exports = (sequelize, DataTypes) => {
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
     homeTeamId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Team', key: 'id' }
     },
     awayTeamId: {
+      allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Team', key: 'id' }
     },
   }, {});
   Game.associate = function(models) {
-    // associations can be defined here
+    Game.belongsTo(models.Team, { foreignKey: 'homeTeamId' });
+    Game.belongsTo(models.Team, { foreignKey: 'awayTeamId' });
   };
   return Game;
 };
