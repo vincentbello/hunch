@@ -51,22 +51,21 @@ type Props = ReduxProps & {
 
 class AppLaunchContainer extends React.Component<Props> {
   componentDidMount() {
-    // Do this when the store has persisted
-    console.log('APP LAUNCH PROPS', this.props);
+    this.autoLogin();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.user.data === null && this.props.user.data !== null) Actions.replace('bets');
+  }
+
+  autoLogin = () => {
     const { actions, refreshToken } = this.props;
     if (refreshToken === null) {
       Actions.login();
     } else {
       actions.refreshAuth(refreshToken);
     }
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) {
-      console.log('AUTHENTICATED USER!!', this.props.user.data);
-      Actions.replace('bets');
-    }
-  }
+  };
 
   render(): React.Node {
     return (

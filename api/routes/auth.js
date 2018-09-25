@@ -26,9 +26,6 @@ router.post('/revoke', authenticate, function (req, res, next) {
   });
 });
 
-// Authenticate and retrieve the access token in exchange of the refresh token
-// router.post('/refresh', );
-
 // Authenticate and retrieve the access and refresh tokens via FB auth
 router.route('/facebook').post(passport.authenticate(process.env.FB_TOKEN_KEY, { session: false }), function(req, res, next) {
   if (!req.user) return res.send(401, 'Not authenticated!');
@@ -42,19 +39,19 @@ router.route('/facebook').post(passport.authenticate(process.env.FB_TOKEN_KEY, {
   res.json(new UserSerializer(req.user).serialize());
 });
 
-// Refresh auth
-router.post('/refresh', authenticate, function(req, res, next) {
+// Authenticate and retrieve the access token in exchange of the refresh token
+router.post('/refresh', function(req, res, next) {
   const { refreshToken } = req.body;
+  let decoded;
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
-    if (decoded.id !== req.auth.id) return res.sendStatus(401);
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+    if (!decoded.id) return res.sendStatus(401);
   } catch (err) {
     return res.sendStatus(401);
   }
 
-  models.User.findById(req.auth.id).then(user => {
-    console.log('FOOBAR', user, req.auth, req.headers);
+  models.User.findById(decoded.id).then(user => {
     if (refreshToken !== user.refreshToken) return res.sendStatus(401);
 
     // Refresh access token

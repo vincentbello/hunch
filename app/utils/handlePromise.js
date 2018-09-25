@@ -48,7 +48,7 @@ const defaultPromiseHandlingConfig = {
  */
 const startTransform = (state: State, config: PromiseHandlingConfig): State => ({
   ...state,
-  ...((config.cacheData && dotProp.get(state, config.dataPath)) ? {} : initialPromiseState),
+  ...(config.cacheData && dotProp.get(state, config.dataPath) != null ? {} : initialPromiseState),
   isLoading: true,
   didFetch: true,
   meta: config.meta,

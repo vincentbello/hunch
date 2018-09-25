@@ -19,7 +19,7 @@ export default function userReducer(state: UserState = initialState, action: Act
   switch (action.type) {
     case AUTHENTICATE:
     case REFRESH_AUTH:
-      return handlePromise(state, action);
+      return handlePromise(state, action, { cacheData: true });
 
     case LOG_OUT:
       return handle(state, action, {
