@@ -52,7 +52,7 @@ router.post('/refresh', function(req, res, next) {
   }
 
   models.User.findById(decoded.id).then(user => {
-    if (refreshToken !== user.refreshToken) return res.sendStatus(401);
+    if (user === null || refreshToken !== user.refreshToken) return res.sendStatus(401);
 
     // Refresh access token
     user.set('accessToken', jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }));

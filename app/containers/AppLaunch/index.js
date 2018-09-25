@@ -55,7 +55,8 @@ class AppLaunchContainer extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) Actions.replace('bets');
+    if (prevProps.user.data === null && this.props.user.data !== null) return Actions.replace('bets');
+    if (!prevProps.user.hasError && this.props.user.hasError) Actions.login();
   }
 
   autoLogin = () => {

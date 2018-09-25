@@ -22,16 +22,20 @@ export const authenticate = (fbAccessToken: string): Action => {
   return (dispatch, getState) => dispatch({
     type: AUTHENTICATE,
     promise: User.authenticateWithFacebook(fbAccessToken),
-    onSuccess: () => setSessionTimeout(dispatch, getState),
+    meta: { onSuccess: () => setSessionTimeout(dispatch, getState) },
   });
 };
 
-export const logOut = (userId: number): Action => ({ type: LOG_OUT, promiseFn: () => User.logOut(userId), onSuccess: clearSessionTimeout });
+export const logOut = (userId: number): Action => ({
+  type: LOG_OUT,
+  promiseFn: () => User.logOut(userId),
+  meta: { onSuccess: clearSessionTimeout },
+});
 
 export const refreshAuth = (refreshToken: string): Action => {
   return (dispatch, getState) => dispatch({
     type: REFRESH_AUTH,
     promiseFn: () => User.refreshAuth(refreshToken),
-    onSuccess: () => setSessionTimeout(dispatch, getState),
+    meta: { onSuccess: () => setSessionTimeout(dispatch, getState) },
   });
 };
