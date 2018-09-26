@@ -40,7 +40,7 @@ export default class GameSerializer {
       week: this.week,
       startDate: this.startDate,
       homeTeam: this.serializeTeam(true),
-      awayTeam: this.serializeTeam(),
+      awayTeam: this.serializeTeam()
     };
   };
 }

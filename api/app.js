@@ -12,6 +12,7 @@ import UserSerializer from './serialization/User';
 
 import indexRouter from './routes/index';
 import authRouter from './routes/auth';
+import betsRouter from './routes/bets';
 import gamesRouter from './routes/games';
 import usersRouter from './routes/users';
 
@@ -41,6 +42,7 @@ app.use(cors({
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/bets', authMiddleware, betsRouter);
 app.use('/games', authMiddleware, gamesRouter);
 app.use('/users', authMiddleware, usersRouter);
 
