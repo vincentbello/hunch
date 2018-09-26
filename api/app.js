@@ -6,11 +6,13 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import sassMiddleware from 'node-sass-middleware';
 
+import authMiddleware from './middleware/auth';
 import setupPassport from './utils/passport';
 import UserSerializer from './serialization/User';
 
 import indexRouter from './routes/index';
 import authRouter from './routes/auth';
+import gamesRouter from './routes/games';
 import usersRouter from './routes/users';
 
 setupPassport();
@@ -39,6 +41,7 @@ app.use(cors({
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/users', usersRouter);
+app.use('/games', authMiddleware, gamesRouter);
+app.use('/users', authMiddleware, usersRouter);
 
 export default app;

@@ -3,19 +3,13 @@ import expressJwt from 'express-jwt';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import models from '../db/models';
+import authMiddleware from '../middleware/auth';
 import UserSerializer from '../serialization/User';
 
 const router = express.Router();
 
-// Authenticate all requests
-const authenticate = expressJwt({
-  secret: process.env.ACCESS_TOKEN_KEY,
-  requestProperty: 'auth',
-  getToken: req => req.headers['x-auth-token'] || null,
-});
-
 // Log out, revoke access by destroying the user tokens
-router.post('/revoke', authenticate, function (req, res, next) {
+router.post('/revoke', authMiddleware, function (req, res, next) {
   const { userId } = req.body;
   if (userId !== req.auth.id) return res.sendStatus(401);
 

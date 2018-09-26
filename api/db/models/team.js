@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Team = sequelize.define('Team', {
+    abbreviation: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     league: DataTypes.ENUM('NBA'),

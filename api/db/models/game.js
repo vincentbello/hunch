@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     awayScore: DataTypes.INTEGER,
     week: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE,
     homeTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -22,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Game.associate = function(models) {
-    Game.belongsTo(models.Team, { foreignKey: 'homeTeamId' });
-    Game.belongsTo(models.Team, { foreignKey: 'awayTeamId' });
+    Game.belongsTo(models.Team, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+    Game.belongsTo(models.Team, { foreignKey: 'awayTeamId', as: 'awayTeam' });
   };
   return Game;
 };
