@@ -5,7 +5,6 @@ export default store => next => action => {
     const { accessToken } = store.getState().session;
 
     if (accessToken !== null) {
-      console.log('WITH ACCESS TOKEN', accessToken);
       axios.interceptors.request.use(config => {
         config.headers['x-auth-token'] = accessToken;
         return config;

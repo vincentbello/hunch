@@ -18,7 +18,7 @@ export default class Api {
     return axios.post('http://localhost:3000/auth/refresh', { refreshToken });
   }
 
-  static fetchBets(): Promise<Array<Bet>> {
-    return axios.get('http://localhost:3000/bets');
+  static fetchBets(type: string): Promise<Array<Bet>> {
+    return axios.get(`http://localhost:3000/bets/${type}`);
   }
 }

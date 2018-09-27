@@ -1,7 +1,7 @@
 // @flow
 import { handle } from 'redux-pack';
 
-import { AUTHENTICATE, LOG_OUT, REFRESH } from 'actions/user';
+import { AUTHENTICATE, LOG_OUT, REFRESH_AUTH } from 'actions/user';
 
 import { type Action } from 'types/redux';
 
@@ -18,7 +18,7 @@ const initialState = {
 export default function sessionReducer(state: SessionState = initialState, action: Action): SessionState {
   switch (action.type) {
     case AUTHENTICATE:
-    case REFRESH:
+    case REFRESH_AUTH:
       return handle(state, action, {
         success: (prevState: SessionState): SessionState => ({
           ...state,

@@ -53,37 +53,25 @@ type State = { isAuthenticating: boolean };
 class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
 
-  componentDidMount() {
-    console.log('MOUNTED LOGIN CONTAINER');
-    // Linking.addEventListener('url', this.handleURL);
-  }
-
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) {
-      console.log('FOUND USER');
-      Actions.bets();
-    }
+    if (prevProps.user.data === null && this.props.user.data !== null) Actions.bets();
   }
 
   get isLoggingIn(): boolean {
     return this.state.isAuthenticating || this.props.user.isLoading;
   }
 
-  handleURL = (event) => {
-    console.log(event.url);
-  };
-
   loginToFacebook = () => {
     this.setState({ isAuthenticating: true });
     LoginManager.logInWithReadPermissions(['public_profile', 'email'])
       .then((result) => {
         if (result.isCancelled) {
-          console.log('Login was cancelled');
+          console.error('Login was cancelled');
           this.setState({ isAuthenticating: false });
         } else {
           return AccessToken.getCurrentAccessToken();
         }
-      }, console.log)
+      }, console.error)
       .then((data) => {
         this.setState({ isAuthenticating: false });
         // Send access token to backend

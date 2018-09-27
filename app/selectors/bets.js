@@ -8,7 +8,7 @@ import { type BetEntities } from 'reducers/entities/bets';
 
 export const getBets = createSelector(
   (state: ReduxState) => state.entities.bets,
-  (state: ReduxState, props: { listType: string }) => state.views.betLists[props.listType || 'active'].data,
+  (state: ReduxState, props: { listType: string }) => state.views.betLists[props.listType || 'active'],
   (betEntities: BetEntities, list: PromiseState<Array<number>>): PromiseState<Array<Bet>> => {
     return (list.data === null) ? list : { ...list, data: idsToList(betEntities, list.data) };
   },

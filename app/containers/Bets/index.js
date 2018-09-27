@@ -51,7 +51,7 @@ class BetsContainer extends React.Component<Props> {
     const { bets } = this.props;
     return (
       <View>
-        <Text>{bets.isLoading ? 'Loading' : bets.data.length} Bets</Text>
+        <Text>{bets.data ? bets.data.length : 'Loading'} Bets</Text>
       </View>
     );
   }

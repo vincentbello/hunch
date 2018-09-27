@@ -23,7 +23,7 @@ let middleware = [
 ];
 
 if (__DEV__) {
-  middleware = [...middleware, createLogger()];
+  // middleware = [...middleware, createLogger()];
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
