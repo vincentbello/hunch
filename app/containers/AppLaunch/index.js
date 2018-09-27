@@ -7,8 +7,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Action } from 'types/redux';
-import { type SessionState } from 'reducers/session';
-import { type UserState } from 'reducers/user';
+import { type State as ReduxState } from 'types/state';
+import { type ReduxState as SessionState } from 'reducers/session';
+import { type ReduxState as UserState } from 'reducers/user';
 
 import { refreshAuth } from 'actions/user';
 
@@ -27,17 +28,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type ReduxStateSlice = {
-  session: SessionState,
-  user: UserState,
-};
-
 type ReduxProps = {
   refreshToken: string | null,
   user: UserState,
 };
 
-const mapStateToProps = ({ session, user }: ReduxStateSlice): ReduxProps => ({ refreshToken: session.refreshToken, user });
+const mapStateToProps = ({ session, user }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
 
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {

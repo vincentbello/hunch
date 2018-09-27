@@ -9,10 +9,11 @@ export type Error = {
   meta: null | *,
 };
 
-export type PromiseState = {
+export type PromiseState<T = null> = {
   didFetch: boolean,
   error: null | Error,
   meta: null | *,
   hasError: boolean,
   isLoading: boolean,
+  data?: null | T,
 };

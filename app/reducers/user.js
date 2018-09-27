@@ -7,15 +7,13 @@ import { AUTHENTICATE, LOG_OUT, REFRESH_AUTH } from 'actions/user';
 import { type User } from 'types/user';
 import { type Action, type PromiseState } from 'types/redux';
 
-export type UserState = PromiseState & {
-  data: User | null,
-};
+export type ReduxState = PromiseState<User>;
 
 const initialState = {
   ...initialPromiseState,
 };
 
-export default function userReducer(state: UserState = initialState, action: Action): UserState {
+export default function userReducer(state: ReduxState = initialState, action: Action): ReduxState {
   switch (action.type) {
     case AUTHENTICATE:
     case REFRESH_AUTH:
@@ -23,7 +21,7 @@ export default function userReducer(state: UserState = initialState, action: Act
 
     case LOG_OUT:
       return handle(state, action, {
-        success: (): UserState => ({ ...initialState }),
+        success: (): ReduxState => ({ ...initialState }),
       });
 
     default:

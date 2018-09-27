@@ -37,6 +37,7 @@
     "redux-pack": "^0.1.5",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
-    "remote-redux-devtools": "^0.5.12"
+    "remote-redux-devtools": "^0.5.12",
+    "reselect": "^3.0.1"
   }
 }

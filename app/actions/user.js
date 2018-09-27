@@ -1,5 +1,6 @@
 // @flow
-import User from 'models/User';
+import { Actions } from 'react-native-router-flux';
+import Api from 'api';
 
 import { type Action } from 'types/redux';
 
@@ -21,21 +22,26 @@ const setSessionTimeout = (dispatch, getState) => {
 export const authenticate = (fbAccessToken: string): Action => {
   return (dispatch, getState) => dispatch({
     type: AUTHENTICATE,
-    promise: User.authenticateWithFacebook(fbAccessToken),
+    promise: Api.authenticateWithFacebook(fbAccessToken),
     meta: { onSuccess: () => setSessionTimeout(dispatch, getState) },
   });
 };
 
 export const logOut = (userId: number): Action => ({
   type: LOG_OUT,
-  promiseFn: () => User.logOut(userId),
-  meta: { onSuccess: clearSessionTimeout },
+  promiseFn: () => Api.logOut(userId),
+  meta: {
+    onSuccess: () => {
+      clearSessionTimeout();
+      Actions.login();
+    },
+  },
 });
 
 export const refreshAuth = (refreshToken: string): Action => {
   return (dispatch, getState) => dispatch({
     type: REFRESH_AUTH,
-    promiseFn: () => User.refreshAuth(refreshToken),
+    promiseFn: () => Api.refreshAuth(refreshToken),
     meta: { onSuccess: () => setSessionTimeout(dispatch, getState) },
   });
 };

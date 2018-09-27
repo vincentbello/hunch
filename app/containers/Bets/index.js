@@ -6,59 +6,52 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { logOut } from 'actions/user';
+import { getBets } from 'selectors/bets';
+import { fetchBets } from 'actions/bets';
 
-import { type Action } from 'types/redux';
-import { type UserState } from 'reducers/user';
+import { type Bet } from 'types/bet';
+import { type Action, type PromiseState } from 'types/redux';
+import { type State as ReduxState } from 'types/state';
+import { type ReduxState as UserState } from 'reducers/user';
 
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
-type ReduxStateSlice = {
-  user: UserState,
-};
-
 type ReduxProps = {
+  bets: PromiseState<Array<Bet>>,
   user: UserState,
 };
 
 // What data from the store shall we send to the component?
-const mapStateToProps = (state: ReduxStateSlice): ReduxProps => ({
+const mapStateToProps = (state: ReduxState): ReduxProps => ({
+  bets: getBets(state, { listType: 'active' }),
   user: state.user,
 });
 
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ logOut }, dispatch),
+    ...bindActionCreators({ fetchBets }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
-    logOut: (userId: number) => void,
+    fetchBets: (listType: string) => void,
   },
 };
 
 class BetsContainer extends React.Component<Props> {
-  componentDidMount() {
-    console.log('Fetch bets');
+  componentWillMount() {
+    this.props.actions.fetchBets('active');
   }
-
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data !== null && this.props.user.data === null) Actions.login();
-  }
-
-  logOut = () => this.props.actions.logOut(this.props.user.data.id);
 
   render(): React.Node {
+    const { bets } = this.props;
     return (
       <View>
-        <Text>All Bets</Text>
-        <TouchableOpacity onPress={this.logOut}>
-          <Text>Log Out</Text>
-        </TouchableOpacity>
+        <Text>{bets.isLoading ? 'Loading' : bets.data.length} Bets</Text>
       </View>
     );
   }
