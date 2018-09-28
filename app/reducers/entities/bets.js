@@ -10,7 +10,10 @@ export default function betEntitiesReducer(state: BetEntities = {}, action: Acti
   switch (action.type) {
     case FETCH_BETS:
       return handle(state, action, {
-        success: (prevState: BetEntities): BetEntities => ({ ...prevState, ...toEntities(action.payload.data) }),
+        success: (prevState: BetEntities): BetEntities => ({
+          ...prevState,
+          ...toEntities(action.payload.data, ['bettor', 'bettee', 'game']),
+        }),
       });
 
     default:
