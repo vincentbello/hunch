@@ -45,10 +45,6 @@ const styles = StyleSheet.create({
   Bets: {
     flex: 1,
   },
-  Bets_splash: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   Bets__list: {
     marginTop: 8,
   },
@@ -102,6 +98,8 @@ const styles = StyleSheet.create({
 });
 
 class BetsContainer extends React.Component<Props> {
+  static displayName = 'BetsContainer';
+
   componentWillMount() {
     this.fetchBets();
   }
@@ -147,7 +145,7 @@ class BetsContainer extends React.Component<Props> {
   render(): React.Node {
     const { bets } = this.props;
     return (
-      <View style={[styles.Bets, bets.isLoading && styles.Bets_splash]}>
+      <View style={[styles.Bets, bets.isLoading && SplashStyles]}>
         {bets.isLoading ? (
           <ActivityIndicator size="large" color={Colors.brand.primary} />
         ) : this.renderBets()}

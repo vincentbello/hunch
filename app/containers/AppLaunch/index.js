@@ -51,14 +51,14 @@ class AppLaunchContainer extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) return Actions.replace('main');
-    if (!prevProps.user.hasError && this.props.user.hasError) Actions.login();
+    if (prevProps.user.data === null && this.props.user.data !== null) return Actions.main();
+    if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();
   }
 
   autoLogin = () => {
     const { actions, refreshToken } = this.props;
     if (refreshToken === null) {
-      Actions.login();
+      Actions.loginModal();
     } else {
       actions.refreshAuth(refreshToken);
     }

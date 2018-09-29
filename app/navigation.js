@@ -1,41 +1,55 @@
 // @flow
 import * as React from 'react';
-import { Actions, Scene, Stack, ActionConst, Lightbox } from 'react-native-router-flux';
+import { Actions, ActionConst, Scene, Stack, Lightbox, Modal } from 'react-native-router-flux';
 
 import AppConfig from 'constants/navigation';
 
 import AppLaunchContainer from 'containers/AppLaunch';
 import BetsContainer from 'containers/Bets';
+import CreateBetContainer from 'containers/CreateBet';
 import LoginContainer from 'containers/Login';
+import NavButton from 'components/NavButton';
 
 /* Routes ==================================================================== */
 export default Actions.create(
-  <Lightbox hideNavbar>
-    <Stack key="root" {...AppConfig.navbarProps} hideNavbar>
-      <Scene
-        hideNavBar
-        key="splash"
-        component={AppLaunchContainer}
-      />
+  <Modal key="modal" hideNavBar>
+    <Lightbox key="lightbox">
+      <Stack key="root" {...AppConfig.navbarProps} hideNavBar>
+        <Scene
+          hideNavBar
+          key="splash"
+          component={AppLaunchContainer}
+          initial
+        />
 
-      {/* Main App */}
-      {/* <Scene key="main" {...AppConfig.navbarProps} hideNavbar> */}
-      <Scene
-        key="main"
-        {...AppConfig.navbarProps}
-        title="My Bets"
-        component={BetsContainer}
-        hideNavbar
-      />
-      {/* </Scene> */}
-    </Stack>
+        {/* Main App */}
+        <Scene key="main" type={ActionConst.REPLACE} hideNavBar>
+          <Scene
+            key="bets"
+            {...AppConfig.navbarProps}
+            title="My Bets"
+            component={BetsContainer}
+            renderRightButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
+          />
+        </Scene>
+      </Stack>
+    </Lightbox>
 
     <Scene
-      key="login"
+      key="createBetModal"
+      {...AppConfig.navbarProps}
+      title="Create Bet"
+      leftTitle="Cancel"
+      onLeft={Actions.pop}
+      component={CreateBetContainer}
+    />
+
+    <Scene
+      key="loginModal"
       {...AppConfig.navbarProps}
       title={AppConfig.appName}
       hideNavBar
       component={LoginContainer}
     />
-  </Lightbox>,
+  </Modal>,
 );

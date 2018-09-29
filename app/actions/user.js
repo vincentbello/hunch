@@ -33,7 +33,7 @@ export const logOut = (userId: number): Action => ({
   meta: {
     onSuccess: () => {
       clearSessionTimeout();
-      Actions.login();
+      Actions.loginModal();
     },
   },
 });
