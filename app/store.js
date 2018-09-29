@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { middleware as reduxPackMiddleware } from 'redux-pack';
 import { persistStore, persistReducer } from 'redux-persist';
 import { composeWithDevTools } from 'remote-redux-devtools';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import authMiddleware from 'middleware/auth';
@@ -22,9 +22,9 @@ let middleware = [
   reduxPackMiddleware,
 ];
 
-if (__DEV__) {
-  middleware = [...middleware, createLogger()];
-}
+// if (__DEV__) {
+//   middleware = [...middleware, createLogger()];
+// }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

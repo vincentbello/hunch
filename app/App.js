@@ -15,7 +15,7 @@ export default class App extends React.Component<{}> {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <RouterWithRedux scenes={AppRoutes} />
+          <RouterWithRedux navigator={AppRoutes} />
         </PersistGate>
       </Provider>
     );

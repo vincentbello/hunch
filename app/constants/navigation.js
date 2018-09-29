@@ -13,7 +13,7 @@ export default {
   navbarProps: {
     hideNavBar: false,
     // titleStyle: AppStyles.navbarTitle,
-    // navigationBarStyle: AppStyles.navbar,
+    // navigationBarStyle: { backgroundColor: 'blue' },
     // leftButtonIconStyle: AppStyles.navbarButton,
     // rightButtonIconStyle: AppStyles.navbarButton,
     // sceneStyle: {
