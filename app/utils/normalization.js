@@ -14,25 +14,24 @@ type Entities = { [id: Id]: Entity };
  */
 export const toList = (entities: Array<Entity>): Array<Id> => entities.map((entity: Entity): Id => entity.id);
 
+/** Normalize a single record */
+export const parseEntity = (entity: Entity, nestedEntityKeys: Array<string> = []): Entity =>
+  nestedEntityKeys.reduce((parsedEntity: Entity, key: string): Entity => {
+    if (typeof parsedEntity[key] === 'object') {
+      parsedEntity[`${key}Id`] = parsedEntity[key].id;
+      delete parsedEntity[key];
+    }
+    return parsedEntity;
+  }, { ...entity });
+
 /**
  * Normalize an array of records into a hash of IDs
  */
-export const toEntities = (entities: Array<Entity>, nestedEntityKeys: Array<string> = []): Entities => {
-  const entityHash = {};
-
-  entities.forEach((entity: Entity) => {
-    const entityToPersist = { ...entity };
-    nestedEntityKeys.forEach((key: string) => {
-      if (typeof entity[key] === 'object') {
-        entityToPersist[`${key}Id`] = entity[key].id;
-        delete entityToPersist[key];
-      }
-    });
-    entityHash[entity.id] = entityToPersist;
-  });
-
-  return entityHash;
-};
+export const toEntities = (entities: Array<Entity>, nestedEntityKeys: Array<string> = []): Entities =>
+  entities.reduce((entitiesHash: Entities, entity: Entity): Entities => {
+    entitiesHash[entity.id] = parseEntity(entity, nestedEntityKeys);
+    return entitiesHash;
+  }, {});
 
 export const toNestedEntities = (entities: Array<Entity> | Entity, nestedEntityKeys: Array<string> = []): Entities => {
   if (Array.isArray(entities)) {

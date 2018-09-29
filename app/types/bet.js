@@ -6,4 +6,5 @@ export type Bet = {
   resolvedAt: string,
   type: 'MONEY_LINE',
   wager: string,
+  createdAt: string,
 };

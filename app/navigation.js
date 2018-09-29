@@ -5,6 +5,7 @@ import { Actions, ActionConst, Scene, Stack, Lightbox, Modal } from 'react-nativ
 import AppConfig from 'constants/navigation';
 
 import AppLaunchContainer from 'containers/AppLaunch';
+import BetCardContainer from 'containers/BetCard';
 import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
 import LoginContainer from 'containers/Login';
@@ -30,6 +31,13 @@ export default Actions.create(
             title="My Bets"
             component={BetsContainer}
             renderRightButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
+          />
+
+          <Scene
+            key="betCard"
+            {...AppConfig.navbarProps}
+            title="Bet"
+            component={BetCardContainer}
           />
         </Scene>
       </Stack>

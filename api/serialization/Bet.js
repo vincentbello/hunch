@@ -12,6 +12,7 @@ export default class BetSerializer {
     this.game = bet.game;
     this.bettor = bet.bettor;
     this.bettee = bet.bettee;
+    this.createdAt = bet.createdAt;
   }
 
   serializeParticipant = (isBettor = false) => {
@@ -32,6 +33,7 @@ export default class BetSerializer {
       bettor: this.serializeParticipant(true),
       bettee: this.serializeParticipant(),
       game: this.game ? new GameSerializer(this.game).serialize() : null,
+      createdAt: this.createdAt,
     };
   };
 }

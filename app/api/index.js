@@ -1,5 +1,6 @@
 // @flow
 import axios from 'axios';
+import { stringify } from 'qs';
 import { AsyncStorage } from 'react-native';
 
 import { type Bet } from 'types/bet';
@@ -18,7 +19,11 @@ export default class Api {
     return axios.post('http://localhost:3000/auth/refresh', { refreshToken });
   }
 
+  static fetchBet(betId: number): Promise<Bet> {
+    return axios.get(`http://localhost:3000/bets/${betId}`);
+  }
+
   static fetchBets(type: string): Promise<Array<Bet>> {
-    return axios.get(`http://localhost:3000/bets/${type}`);
+    return axios.get(`http://localhost:3000/bets?${stringify({ type })}`);
   }
 }
