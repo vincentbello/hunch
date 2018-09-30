@@ -30,6 +30,8 @@ export default class UserSerializer {
   serialize() {
     return {
       id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
       fullName: this.fullName,
       email: this.email,
       active: this.active,

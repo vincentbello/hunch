@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { ActivityIndicator, FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
@@ -45,20 +45,50 @@ type Props = ReduxProps & {
   },
 };
 
+type State = {
+  betteeInputText: string,
+};
+
 const styles = StyleSheet.create({
-  Users: {
+  Create: {
     flex: 1,
+  },
+  Create__input: {
+    height: 40,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderColor: Colors.primary.gray,
+    fontSize: 15,
+    padding: 8,
   },
 });
 
-class CreateBetContainer extends React.Component<Props> {
+class CreateBetContainer extends React.Component<Props, State> {
+  state = { betteeInputText: '' };
+
   componentWillMount() {
     if (!this.props.users.didFetch) this.props.actions.fetchUsers('friends');
   }
 
-  renderUsers = (): React.Node => this.props.users.data !== null && (
+  get filteredUsers(): Array<User> {
+    const { data } = this.props.users;
+    if (data === null) return [];
+
+    const filterStr = this.state.betteeInputText.trim().toLowerCase();
+    if (filterStr.length === 0) return data;
+
+    return data.filter((user: User): boolean => (
+      user.firstName.toLowerCase().startsWith(filterStr) || user.lastName.toLowerCase().startsWith(filterStr)
+    ));
+  }
+
+  onBetteeInputChange = (betteeInputText: string) => {
+    this.setState({ betteeInputText });
+  };
+
+  renderUsers = (): React.Node => (
     <FlatList
-      data={this.props.users.data}
+      data={this.filteredUsers}
       keyExtractor={(user: User): string => `${user.id}`}
       renderItem={({ item }): React.Node => (
         <UserCell
@@ -72,10 +102,18 @@ class CreateBetContainer extends React.Component<Props> {
   render(): React.Node {
     const { users } = this.props;
     return (
-      <View style={[styles.Users, users.isLoading && SplashStyles]}>
-        {users.isLoading ? (
-          <ActivityIndicator size="large" color={Colors.brand.primary} />
-        ) : this.renderUsers()}
+      <View style={styles.Create}>
+        <TextInput
+          style={styles.Create__input}
+          placeholder="Name"
+          value={this.state.betteeInputText}
+          onChangeText={this.onBetteeInputChange}
+        />
+        <View style={users.isLoading && SplashStyles}>
+          {users.isLoading ? (
+            <ActivityIndicator size="large" color={Colors.brand.primary} />
+          ) : this.renderUsers()}
+        </View>
       </View>
     );
   }
