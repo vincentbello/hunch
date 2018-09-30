@@ -4,7 +4,7 @@ import { stringify } from 'qs';
 import { AsyncStorage } from 'react-native';
 
 import { type Bet } from 'types/bet';
-import { type User as UserPayload } from 'types/user';
+import { type User as UserPayload, type UserGroupType } from 'types/user';
 
 export default class Api {
   static authenticateWithFacebook(fbAccessToken: string): Promise<UserPayload> {
@@ -25,5 +25,9 @@ export default class Api {
 
   static fetchBets(type: string): Promise<Array<Bet>> {
     return axios.get(`http://localhost:3000/bets?${stringify({ type })}`);
+  }
+
+  static fetchUsers(type: UserGroupType): Promise<Array<UserPayload>> {
+    return axios.get(`http://localhost:3000/users?${stringify({ type })}`);
   }
 }

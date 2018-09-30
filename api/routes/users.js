@@ -6,7 +6,9 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  models.User.findAll().then((users) => {
+  if (req.query.type !== 'friends') return res.sendStatus(400);
+
+  models.User.findAll({ where: { active: true } }).then(users => {
     res.json(users.map(user => new UserSerializer(user).serialize()));
   });
 });

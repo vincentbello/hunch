@@ -20,7 +20,7 @@ export default function betListsReducer(state: ReduxState = initialState, action
       return handlePromise(state, action, {
         rootPath: action.meta.listType,
         cacheData: true,
-        parseData: (data: Array<Bet>) => toList(data),
+        parseData: (data: Array<Bet>): Array<number> => toList(data),
       });
 
     default:
