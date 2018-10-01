@@ -9,7 +9,8 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import { SocialIcon } from 'react-native-elements';
 
 import { fetchUsers } from 'actions/users';
-import { getNewBetUsers } from 'selectors/users';
+import { setBettee } from 'actions/createBet';
+import { getBettee, getNewBetUsers } from 'selectors/createBet';
 import UserCell from 'components/UserCell';
 
 import { type Action, type PromiseState } from 'types/redux';
@@ -22,12 +23,14 @@ import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
 type ReduxProps = {
+  bettee: User,
   user: UserState,
   users: PromiseState<Array<User>>,
 };
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
+  bettee: getBettee(state),
   user: state.user,
   users: getNewBetUsers(state),
 });
@@ -35,13 +38,14 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchUsers }, dispatch),
+    ...bindActionCreators({ fetchUsers, setBettee }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
     fetchUsers: (type: UserGroupType) => void,
+    setBettee: (betteeId: number) => void,
   },
 };
 
@@ -53,13 +57,22 @@ const styles = StyleSheet.create({
   Create: {
     flex: 1,
   },
-  Create__input: {
+  Create__header: {
     height: 40,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderColor: Colors.primary.gray,
+    flexDirection: 'row',
+    alignItems: 'center',
     fontSize: 15,
     padding: 8,
+  },
+  Create__pill: {
+    color: Colors.white,
+    backgroundColor: Colors.brand.primary,
+    borderRadius: 4,
+    padding: 4,
+    overflow: 'hidden',
   },
 });
 
@@ -86,6 +99,11 @@ class CreateBetContainer extends React.Component<Props, State> {
     this.setState({ betteeInputText });
   };
 
+  selectBettee = (userId: number) => {
+    this.setState({ betteeInputText: '' });
+    this.props.actions.setBettee(userId);
+  };
+
   renderUsers = (): React.Node => (
     <FlatList
       data={this.filteredUsers}
@@ -93,27 +111,38 @@ class CreateBetContainer extends React.Component<Props, State> {
       renderItem={({ item }): React.Node => (
         <UserCell
           user={item}
-          onPress={(): void => alert('CLICKED USER')}
+          onPress={(): void => this.selectBettee(item.id)}
         />
       )}
     />
   );
 
   render(): React.Node {
-    const { users } = this.props;
+    const { bettee, users } = this.props;
     return (
       <View style={styles.Create}>
-        <TextInput
-          style={styles.Create__input}
-          placeholder="Name"
-          value={this.state.betteeInputText}
-          onChangeText={this.onBetteeInputChange}
-        />
-        <View style={users.isLoading && SplashStyles}>
-          {users.isLoading ? (
-            <ActivityIndicator size="large" color={Colors.brand.primary} />
-          ) : this.renderUsers()}
-        </View>
+        {bettee ? (
+          <View style={styles.Create__header}>
+            <Text style={styles.Create__pill}>{bettee.fullName}</Text>
+          </View>
+        ) : (
+          <TextInput
+            style={styles.Create__header}
+            autoFocus
+            placeholder="Name"
+            value={this.state.betteeInputText}
+            onChangeText={this.onBetteeInputChange}
+          />
+        )}
+        {bettee ? (
+          <Text>Selected bettee</Text>
+        ) : (
+          <View style={users.isLoading && SplashStyles}>
+            {users.isLoading ? (
+              <ActivityIndicator size="large" color={Colors.brand.primary} />
+            ) : this.renderUsers()}
+          </View>
+        )}
       </View>
     );
   }

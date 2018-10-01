@@ -6,10 +6,16 @@ import { type UserEntities } from 'types/entities';
 import { type PromiseState } from 'types/redux';
 import { type State as ReduxState } from 'types/state';
 
-const getEntities = (state: ReduxState): Entities => state.entities;
+const getUserEntities = (state: ReduxState): UserEntities => state.entities.users;
+
+export const getBettee = createSelector(
+  getUserEntities,
+  (state: ReduxState): number | null => state.views.createBet.betteeId,
+  getEntity
+);
 
 export const getNewBetUsers = createSelector(
-  (state: ReduxState): UserEntities => state.entities.users,
+  getUserEntities,
   (state: ReduxState): PromiseState<Array<number>> => state.views.createBet.users,
   (users: UserEntities, usersPS: PromiseState<Array<number>>): PromiseState<Array<User>> => {
     if (usersPS.data === null) return usersPS;
