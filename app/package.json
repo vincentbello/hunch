@@ -7,7 +7,7 @@
     "babel-preset-airbnb": "^2.5.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react-native-stage-0": "^1.0.1",
-    "flow-bin": "^0.75.0",
+    "flow-bin": "^0.82.0",
     "jest": "^23.4.1",
     "jest-react-native": "^18.0.0",
     "react-test-renderer": "16.3.1",
