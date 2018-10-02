@@ -1,7 +1,7 @@
 // @flow
 import handlePromise, { initialPromiseState } from 'utils/handlePromise';
 import { FETCH_BET } from 'actions/bets';
-import { SET_BETTEE } from 'actions/createBet';
+import { SET_BET_AMOUNT, SET_BETTEE } from 'actions/createBet';
 import { FETCH_USERS } from 'actions/users';
 import { toList } from 'utils/normalization';
 
@@ -14,6 +14,7 @@ type ReduxState = {
 };
 
 const initialState = {
+  amount: 0,
   betteeId: null,
   users: { ...initialPromiseState },
 };
@@ -26,6 +27,9 @@ export default function createBetReducer(state: ReduxState = initialState, actio
         cacheData: true,
         parseData: (data: Array<User>): Array<number> => toList(data),
       });
+
+    case SET_BET_AMOUNT:
+      return { ...state, amount: action.payload.amount };
 
     case SET_BETTEE:
       return { ...state, betteeId: action.payload.betteeId };

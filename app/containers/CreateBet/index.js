@@ -9,8 +9,9 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import { SocialIcon } from 'react-native-elements';
 
 import { fetchUsers } from 'actions/users';
-import { setBettee } from 'actions/createBet';
-import { getBettee, getNewBetUsers } from 'selectors/createBet';
+import { setBetAmount, setBettee } from 'actions/createBet';
+import { getBetAmount, getBettee, getNewBetUsers } from 'selectors/createBet';
+import Pill from 'components/Pill';
 import UserCell from 'components/UserCell';
 
 import { type Action, type PromiseState } from 'types/redux';
@@ -23,6 +24,7 @@ import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
 type ReduxProps = {
+  betAmount: number,
   bettee: User,
   user: UserState,
   users: PromiseState<Array<User>>,
@@ -30,6 +32,7 @@ type ReduxProps = {
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
+  betAmount: getBetAmount(state),
   bettee: getBettee(state),
   user: state.user,
   users: getNewBetUsers(state),
@@ -38,14 +41,15 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchUsers, setBettee }, dispatch),
+    ...bindActionCreators({ fetchUsers, setBetAmount, setBettee }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
     fetchUsers: (type: UserGroupType) => void,
-    setBettee: (betteeId: number) => void,
+    setBetAmount: (amount: number) => void,
+    setBettee: (betteeId: number | null) => void,
   },
 };
 
@@ -58,26 +62,37 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Create__header: {
-    height: 40,
+    height: 48,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderColor: Colors.primary.gray,
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 15,
+    fontSize: 16,
     padding: 8,
   },
-  Create__pill: {
-    color: Colors.white,
-    backgroundColor: Colors.brand.primary,
-    borderRadius: 4,
-    padding: 4,
-    overflow: 'hidden',
+  Create__headerMain: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  Create__headerMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  Create__headerMetaText: {
+    color: Colors.primary.green,
+    fontSize: 20,
+    fontWeight: '900',
+  },
+  Create__headerMetaInput: {
+    // flex: 1,
   },
 });
 
 class CreateBetContainer extends React.Component<Props, State> {
-  state = { betteeInputText: '' };
+  state = {
+    betteeInputText: '',
+  };
 
   componentWillMount() {
     if (!this.props.users.didFetch) this.props.actions.fetchUsers('friends');
@@ -95,9 +110,15 @@ class CreateBetContainer extends React.Component<Props, State> {
     ));
   }
 
+  onAmountInputChange = (amountInputText: string) => {
+    this.props.actions.setBetAmount(parseInt(amountInputText, 10) || 0);
+  };
+
   onBetteeInputChange = (betteeInputText: string) => {
     this.setState({ betteeInputText });
   };
+
+  removeBettee = (): void => this.props.actions.setBettee(null);
 
   selectBettee = (userId: number) => {
     this.setState({ betteeInputText: '' });
@@ -118,12 +139,29 @@ class CreateBetContainer extends React.Component<Props, State> {
   );
 
   render(): React.Node {
-    const { bettee, users } = this.props;
+    const { betAmount, bettee, users } = this.props;
     return (
       <View style={styles.Create}>
         {bettee ? (
           <View style={styles.Create__header}>
-            <Text style={styles.Create__pill}>{bettee.fullName}</Text>
+            <View style={styles.Create__headerMain}>
+              <Pill
+                canRemove
+                label={bettee.fullName}
+                onRemove={this.removeBettee}
+              />
+            </View>
+            <View style={styles.Create__headerMeta}>
+              <Text style={styles.Create__headerMetaText}>$</Text>
+              <TextInput
+                style={[styles.Create__headerMetaText, styles.Create__headerMetaInput]}
+                autoFocus
+                keyboardType="number-pad"
+                placeholder="0"
+                value={`${betAmount === 0 ? '' : betAmount}`}
+                onChangeText={this.onAmountInputChange}
+              />
+            </View>
           </View>
         ) : (
           <TextInput
@@ -134,9 +172,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             onChangeText={this.onBetteeInputChange}
           />
         )}
-        {bettee ? (
-          <Text>Selected bettee</Text>
-        ) : (
+        {!bettee && (
           <View style={users.isLoading && SplashStyles}>
             {users.isLoading ? (
               <ActivityIndicator size="large" color={Colors.brand.primary} />

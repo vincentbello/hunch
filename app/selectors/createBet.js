@@ -8,6 +8,8 @@ import { type State as ReduxState } from 'types/state';
 
 const getUserEntities = (state: ReduxState): UserEntities => state.entities.users;
 
+export const getBetAmount = (state: ReduxState): number => state.views.createBet.amount;
+
 export const getBettee = createSelector(
   getUserEntities,
   (state: ReduxState): number | null => state.views.createBet.betteeId,
