@@ -4,10 +4,12 @@ import GameSerializer from '../serialization/Game';
 
 const router = express.Router();
 
-/* GET completed games. */
+/* GET NBA games. */
 router.get('/', function(req, res, next) {
+  if (req.query.type !== 'upcoming') return res.sendStatus(400);
+
   models.Game.findAll({
-    where: { completed: true },
+    where: { league: req.query.league },
     include: [
       { model: models.Team, as: 'homeTeam' },
       { model: models.Team, as: 'awayTeam' },

@@ -1,26 +1,40 @@
 // @flow
 import handlePromise, { initialPromiseState } from 'utils/handlePromise';
 import { FETCH_BET } from 'actions/bets';
-import { SET_BET_AMOUNT, SET_BETTEE } from 'actions/createBet';
+import { FETCH_GAMES } from 'actions/games';
+import { SET_BET_AMOUNT, SET_BETTEE, SET_GAME } from 'actions/createBet';
 import { FETCH_USERS } from 'actions/users';
 import { toList } from 'utils/normalization';
 
+import { type Game } from 'types/game';
 import { type User } from 'types/user';
 import { type Action, type PromiseState } from 'types/redux';
 
 type ReduxState = {
+  amount: number,
   betteeId: number | null,
+  gameId: number | null,
+  games: PromiseState<Array<number>>,
   users: PromiseState<Array<number>>,
 };
 
 const initialState = {
   amount: 0,
   betteeId: null,
+  gameId: null,
+  games: { ...initialPromiseState },
   users: { ...initialPromiseState },
 };
 
 export default function createBetReducer(state: ReduxState = initialState, action: Action): ReduxState {
   switch (action.type) {
+    case FETCH_GAMES:
+      return handlePromise(state, action, {
+        rootPath: 'games',
+        cacheData: true,
+        parseData: (data: Array<Game>): Array<number> => toList(data),
+      });
+
     case FETCH_USERS:
       return handlePromise(state, action, {
         rootPath: 'users',
@@ -33,6 +47,9 @@ export default function createBetReducer(state: ReduxState = initialState, actio
 
     case SET_BETTEE:
       return { ...state, betteeId: action.payload.betteeId };
+
+    case SET_GAME:
+      return { ...state, gameId: action.payload.gameId };
 
     default:
       return state;

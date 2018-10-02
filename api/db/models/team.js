@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     abbreviation: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
+    imageUrl: DataTypes.STRING,
     league: DataTypes.ENUM('NBA'),
     conference: DataTypes.STRING,
     division: DataTypes.STRING

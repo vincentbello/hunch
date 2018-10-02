@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { ActivityIndicator, FlatList, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { ActivityIndicator, Button, FlatList, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
@@ -8,12 +8,15 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 
 import { SocialIcon } from 'react-native-elements';
 
+import { fetchGames } from 'actions/games';
 import { fetchUsers } from 'actions/users';
-import { setBetAmount, setBettee } from 'actions/createBet';
-import { getBetAmount, getBettee, getNewBetUsers } from 'selectors/createBet';
+import { setBetAmount, setBettee, setGame } from 'actions/createBet';
+import { getBetAmount, getBettee, getGameId, getGames, getNewBetUsers } from 'selectors/createBet';
 import Pill from 'components/Pill';
+import GameCell from 'components/GameCell';
 import UserCell from 'components/UserCell';
 
+import { type Game } from 'types/game';
 import { type Action, type PromiseState } from 'types/redux';
 import { type User, type UserGroupType } from 'types/user';
 import { type State as ReduxState } from 'types/state';
@@ -26,6 +29,8 @@ import Typography from 'theme/typography';
 type ReduxProps = {
   betAmount: number,
   bettee: User,
+  gameId: number | null,
+  games: PromiseState<Array<Game>>,
   user: UserState,
   users: PromiseState<Array<User>>,
 };
@@ -34,6 +39,8 @@ type ReduxProps = {
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
   betAmount: getBetAmount(state),
   bettee: getBettee(state),
+  gameId: getGameId(state),
+  games: getGames(state),
   user: state.user,
   users: getNewBetUsers(state),
 });
@@ -41,15 +48,17 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchUsers, setBetAmount, setBettee }, dispatch),
+    ...bindActionCreators({ fetchGames, fetchUsers, setBetAmount, setBettee, setGame }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
+    fetchGames: (league: string, type: string) => void,
     fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
     setBettee: (betteeId: number | null) => void,
+    setGame: (gameId: number | null) => void,
   },
 };
 
@@ -61,15 +70,21 @@ const styles = StyleSheet.create({
   Create: {
     flex: 1,
   },
+  Create__container: {
+    flex: 1,
+  },
   Create__header: {
     height: 48,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
+    borderTopWidth: 1,
     borderColor: Colors.primary.gray,
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 16,
     padding: 8,
+  },
+  Create__headerInput: {
+    fontSize: 16,
   },
   Create__headerMain: {
     flex: 1,
@@ -84,8 +99,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
   },
-  Create__headerMetaInput: {
-    // flex: 1,
+  Create__list: {
+    marginTop: 8,
   },
 });
 
@@ -123,7 +138,29 @@ class CreateBetContainer extends React.Component<Props, State> {
   selectBettee = (userId: number) => {
     this.setState({ betteeInputText: '' });
     this.props.actions.setBettee(userId);
+
+    if (!this.props.games.didFetch) this.props.actions.fetchGames('NBA'/** Hardcoded */, 'upcoming');
   };
+
+  selectGame = (gameId: number) => {
+    this.props.actions.setGame(this.props.gameId === gameId ? null : gameId);
+  };
+
+  renderGames = (): React.Node => this.props.games.data !== null && (
+    <FlatList
+      style={styles.Create__list}
+      data={this.props.games.data}
+      extraData={this.props.gameId}
+      keyExtractor={(game: Game): string => `${game.id}`}
+      renderItem={({ item }): React.Node => (
+        <GameCell
+          game={item}
+          muted={this.props.gameId !== null && this.props.gameId !== item.id}
+          onPress={(): void => this.selectGame(item.id)}
+        />
+      )}
+    />
+  );
 
   renderUsers = (): React.Node => (
     <FlatList
@@ -139,7 +176,7 @@ class CreateBetContainer extends React.Component<Props, State> {
   );
 
   render(): React.Node {
-    const { betAmount, bettee, users } = this.props;
+    const { betAmount, bettee, gameId, games, users } = this.props;
     return (
       <View style={styles.Create}>
         {bettee ? (
@@ -154,7 +191,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             <View style={styles.Create__headerMeta}>
               <Text style={styles.Create__headerMetaText}>$</Text>
               <TextInput
-                style={[styles.Create__headerMetaText, styles.Create__headerMetaInput]}
+                style={styles.Create__headerMetaText}
                 autoFocus
                 keyboardType="number-pad"
                 placeholder="0"
@@ -165,20 +202,27 @@ class CreateBetContainer extends React.Component<Props, State> {
           </View>
         ) : (
           <TextInput
-            style={styles.Create__header}
+            style={[styles.Create__header, styles.Create__headerInput]}
             autoFocus
             placeholder="Name"
             value={this.state.betteeInputText}
             onChangeText={this.onBetteeInputChange}
           />
         )}
-        {!bettee && (
-          <View style={users.isLoading && SplashStyles}>
-            {users.isLoading ? (
-              <ActivityIndicator size="large" color={Colors.brand.primary} />
-            ) : this.renderUsers()}
-          </View>
-        )}
+        <View style={[styles.Create__container, (users.isLoading || games.isLoading) && SplashStyles]}>
+          {(users.isLoading || games.isLoading) ? (
+            <ActivityIndicator size="large" color={Colors.brand.primary} />
+          ) : (
+            bettee ? this.renderGames() : this.renderUsers()
+          )}
+          <Button
+            style={styles.Create__button}
+            color={Colors.brand.primary}
+            disabled={!bettee || !gameId || betAmount <= 0}
+            title="Create Bet"
+            onPress={(): void => console.log('CREATE BET')}
+          />
+        </View>
       </View>
     );
   }

@@ -4,6 +4,7 @@ import { stringify } from 'qs';
 import { AsyncStorage } from 'react-native';
 
 import { type Bet } from 'types/bet';
+import { type Game } from 'types/game';
 import { type User as UserPayload, type UserGroupType } from 'types/user';
 
 export default class Api {
@@ -25,6 +26,10 @@ export default class Api {
 
   static fetchBets(type: string): Promise<Array<Bet>> {
     return axios.get(`http://localhost:3000/bets?${stringify({ type })}`);
+  }
+
+  static fetchGames(league: string, type: string): Promise<Array<Game>> {
+    return axios.get(`http://localhost:3000/games?${stringify({ league, type })}`)
   }
 
   static fetchUsers(type: UserGroupType): Promise<Array<UserPayload>> {

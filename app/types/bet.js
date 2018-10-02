@@ -1,6 +1,8 @@
 // @flow
 export type Bet = {
   id: number,
+  responded: boolean,
+  accepted: boolean,
   active: boolean,
   amount: number,
   resolvedAt: string,

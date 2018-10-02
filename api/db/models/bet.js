@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    responded: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    accepted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     resolvedAt: DataTypes.DATE,
     gameId: {
       allowNull: false,

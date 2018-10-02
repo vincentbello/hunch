@@ -7,6 +7,8 @@ export default class BetSerializer {
     this.type = bet.type;
     this.amount = bet.amount;
     this.wager = bet.wager;
+    this.responded = bet.responded;
+    this.accepted = bet.accepted;
     this.active = bet.active;
     this.resolvedAt = bet.resolvedAt;
     this.game = bet.game;
@@ -28,6 +30,8 @@ export default class BetSerializer {
       type: this.type,
       amount: this.amount,
       wager: this.wager,
+      responded: this.responded,
+      accepted: this.accepted,
       active: this.active,
       resolvedAt: this.resolvedAt,
       bettor: this.serializeParticipant(true),
