@@ -184,7 +184,6 @@ class CreateBetContainer extends React.Component<Props, State> {
       <FlatList
         style={styles.Create__list}
         data={this.props.games.data}
-        extraData={this.props.gameId}
         keyExtractor={(game: Game): string => `${game.id}`}
         renderItem={({ item }): React.Node => (
           <GameCell
@@ -210,7 +209,7 @@ class CreateBetContainer extends React.Component<Props, State> {
   );
 
   render(): React.Node {
-    const { betAmount, bettee, gameId, games, users } = this.props;
+    const { betAmount, bettee, game, games, users } = this.props;
     return (
       <View style={styles.Create}>
         {bettee ? (
@@ -252,7 +251,7 @@ class CreateBetContainer extends React.Component<Props, State> {
           <Button
             style={styles.Create__button}
             color={Colors.brand.primary}
-            disabled={!bettee || !gameId || betAmount <= 0}
+            disabled={!bettee || !game || betAmount <= 0}
             title="Create Bet"
             onPress={(): void => console.log('CREATE BET')}
           />
