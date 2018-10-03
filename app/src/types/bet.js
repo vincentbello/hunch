@@ -1,5 +1,6 @@
 // @flow
 import { type Game } from 'types/game';
+import { type Team } from 'types/team';
 import { type User } from 'types/user';
 
 export type Bet = {
@@ -15,7 +16,9 @@ export type Bet = {
   bettorId: number,
   betteeId: number,
   gameId: number,
+  bettorPickTeamId: number,
   bettor: User,
   bettee: User,
   game: Game,
+  bettorPickTeam: Team,
 };

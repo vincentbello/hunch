@@ -51,7 +51,20 @@ export const toNestedEntities = (entities: Array<Entity> | Entity, nestedEntityK
   return entityHash;
 };
 
-export const getEntity = (entities: Entities, entityId: Id): Entity => entities[entityId];
+export const getEntity = (
+  entities: Entities,
+  entityId: Id,
+  nestedEntityKeys: { [key: string]: string } = {},
+  allEntities: AllEntities = {}
+): Entity => {
+  const entity = entities[entityId];
+  if (!entity) return entity;
+
+  return Object.keys(nestedEntityKeys).reduce((fullEntity: Entity, key: string): Entity => {
+    fullEntity[key] = allEntities[nestedEntityKeys[key]][fullEntity[`${key}Id`]];
+    return fullEntity;
+  }, { ...entity });
+}
 
 export function idsToList(
   entities: Entities,
@@ -60,16 +73,8 @@ export function idsToList(
   allEntities: AllEntities = {}
 ): Array<Entity> {
   return ids.reduce((list: Array<Entity>, id: Id): Array<Entity> => {
-    const entity = getEntity(entities, id);
-
-    if (entity) {
-      const listEntity = { ...entity };
-      Object.keys(nestedEntityKeys).forEach((key: string) => {
-        listEntity[key] = getEntity(allEntities[nestedEntityKeys[key]], listEntity[`${key}Id`]);
-      });
-      list.push(listEntity);
-    }
-
+    const entity = getEntity(entities, id, nestedEntityKeys, allEntities);
+    if (entity) list.push(entity);
     return list;
   }, []);
 }

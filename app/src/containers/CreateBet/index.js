@@ -5,19 +5,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
-
+import Icon from 'react-native-vector-icons/Feather';
 import { SocialIcon } from 'react-native-elements';
 
 import { fetchGames } from 'actions/games';
 import { fetchUsers } from 'actions/users';
-import { setBetAmount, setBettee, setGame } from 'actions/createBet';
-import { getBetAmount, getBettee, getGameId, getGames, getNewBetUsers } from 'selectors/createBet';
+import { setBetAmount, setBettee, setBettorPickTeam, setGame } from 'actions/createBet';
+import { getBetAmount, getBettee, getBettorPickTeam, getGame, getGames, getNewBetUsers } from 'selectors/createBet';
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
 import UserCell from 'components/UserCell';
 
 import { type Game } from 'types/game';
 import { type Action, type PromiseState } from 'types/redux';
+import { type Team } from 'types/team';
 import { type User, type UserGroupType } from 'types/user';
 import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
@@ -29,7 +30,8 @@ import Typography from 'theme/typography';
 type ReduxProps = {
   betAmount: number,
   bettee: User,
-  gameId: number | null,
+  bettorPickTeam: Team | null,
+  game: Game | null,
   games: PromiseState<Array<Game>>,
   user: UserState,
   users: PromiseState<Array<User>>,
@@ -39,7 +41,8 @@ type ReduxProps = {
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
   betAmount: getBetAmount(state),
   bettee: getBettee(state),
-  gameId: getGameId(state),
+  bettorPickTeam: getBettorPickTeam(state),
+  game: getGame(state),
   games: getGames(state),
   user: state.user,
   users: getNewBetUsers(state),
@@ -48,7 +51,7 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchGames, fetchUsers, setBetAmount, setBettee, setGame }, dispatch),
+    ...bindActionCreators({ fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
   }
 });
 
@@ -58,6 +61,7 @@ type Props = ReduxProps & {
     fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
     setBettee: (betteeId: number | null) => void,
+    setBettorPickTeam: (bettorPickTeamId: number | null) => void,
     setGame: (gameId: number | null) => void,
   },
 };
@@ -102,6 +106,20 @@ const styles = StyleSheet.create({
   Create__list: {
     marginTop: 8,
   },
+  Create__section: {},
+  Create__sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
+  },
+  Create__sectionHeaderText: {
+    ...Typography.h4,
+    fontWeight: 'bold',
+    flex: 1,
+  },
 });
 
 class CreateBetContainer extends React.Component<Props, State> {
@@ -142,25 +160,41 @@ class CreateBetContainer extends React.Component<Props, State> {
     if (!this.props.games.didFetch) this.props.actions.fetchGames('NBA'/** Hardcoded */, 'upcoming');
   };
 
-  selectGame = (gameId: number) => {
-    this.props.actions.setGame(this.props.gameId === gameId ? null : gameId);
-  };
-
-  renderGames = (): React.Node => this.props.games.data !== null && (
-    <FlatList
-      style={styles.Create__list}
-      data={this.props.games.data}
-      extraData={this.props.gameId}
-      keyExtractor={(game: Game): string => `${game.id}`}
-      renderItem={({ item }): React.Node => (
-        <GameCell
-          game={item}
-          muted={this.props.gameId !== null && this.props.gameId !== item.id}
-          onPress={(): void => this.selectGame(item.id)}
+  renderSelectedGame = (): React.Node => this.props.game !== null && (
+    <View style={styles.Create__section}>
+      <View style={styles.Create__sectionHeader}>
+        <Text style={styles.Create__sectionHeaderText}>Selected Game</Text>
+        <Icon.Button
+          backgroundColor="transparent"
+          color={Colors.brand.primary}
+          iconStyle={{ marginRight: 0 }}
+          name="x"
+          size={18}
+          onPress={(): void => this.props.actions.setGame(null)}
         />
-      )}
-    />
+      </View>
+      <GameCell game={this.props.game} />
+    </View>
   );
+
+  renderGameSelection = (): React.Node => {
+    if (this.props.game !== null) return this.renderSelectedGame();
+
+    return this.props.games.data !== null && (
+      <FlatList
+        style={styles.Create__list}
+        data={this.props.games.data}
+        extraData={this.props.gameId}
+        keyExtractor={(game: Game): string => `${game.id}`}
+        renderItem={({ item }): React.Node => (
+          <GameCell
+            game={item}
+            onPress={(): void => this.props.actions.setGame(item.id)}
+          />
+        )}
+      />
+    );
+  };
 
   renderUsers = (): React.Node => (
     <FlatList
@@ -213,7 +247,7 @@ class CreateBetContainer extends React.Component<Props, State> {
           {(users.isLoading || games.isLoading) ? (
             <ActivityIndicator size="large" color={Colors.brand.primary} />
           ) : (
-            bettee ? this.renderGames() : this.renderUsers()
+            bettee ? this.renderGameSelection() : this.renderUsers()
           )}
           <Button
             style={styles.Create__button}

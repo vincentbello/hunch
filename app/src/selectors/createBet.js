@@ -4,22 +4,37 @@ import { getEntity, idsToList } from 'utils/normalization';
 
 import { type Game } from 'types/game';
 import { type User } from 'types/user';
-import { type AllEntities, type UserEntities } from 'types/entities';
+import { type AllEntities, type TeamEntities, type UserEntities } from 'types/entities';
 import { type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 
 const getEntities = (state: ReduxState): AllEntities => state.entities;
-
+const getTeamEntities = (state: ReduxState): TeamEntities => state.entities.teams;
 const getUserEntities = (state: ReduxState): UserEntities => state.entities.users;
 
 export const getBetAmount = (state: ReduxState): number => state.views.createBet.amount;
-
-export const getGameId = (state: ReduxState): number | null => state.views.createBet.gameId;
 
 export const getBettee = createSelector(
   getUserEntities,
   (state: ReduxState): number | null => state.views.createBet.betteeId,
   getEntity
+);
+
+export const getBettorPickTeam = createSelector(
+  getTeamEntities,
+  (state: ReduxState): number | null => state.views.createBet.bettorPickTeamId,
+  (teamEntities: TeamEntities, bettorPickTeamId: number | null): Team | null => (
+    bettorPickTeamId === null ? null : getEntity(teamEntities, bettorPickTeamId)
+  )
+);
+
+export const getGame = createSelector(
+  getEntities,
+  (state: ReduxState): number | null => state.views.createBet.gameId,
+  (entities: AllEntities, gameId: number | null): Game | null => {
+    if (gameId === null) return null;
+    return getEntity(entities.games, gameId, { homeTeam: 'teams', awayTeam: 'teams' }, entities);
+  }
 );
 
 export const getNewBetUsers = createSelector(

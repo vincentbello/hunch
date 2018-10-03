@@ -40,9 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.INTEGER,
     },
+    bettorPickTeamId: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+    },
   }, {});
   Bet.associate = function(models) {
     Bet.belongsTo(models.Game, { foreignKey: 'gameId', as: 'game' });
+    Bet.belongsTo(models.Team, { foreignKey: 'bettorPickTeamId', as: 'bettorPickTeam' });
     Bet.belongsTo(models.User, { foreignKey: 'bettorId', as: 'bettor' });
     Bet.belongsTo(models.User, { foreignKey: 'betteeId', as: 'bettee' });
     Bet.belongsTo(models.User, { foreignKey: 'winnerId' });
