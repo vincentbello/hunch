@@ -26,7 +26,7 @@ type ReduxProps = {
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
-  bets: getBets(state, { listType: 'active' }),
+  bets: getBets(state, { listType: 'requested' }),
   user: state.user,
 });
 
@@ -50,16 +50,15 @@ const styles = StyleSheet.create({
   },
 });
 
-class BetsContainer extends React.Component<Props> {
-  static displayName = 'BetsContainer';
+class BetRequestsContainer extends React.Component<Props> {
+  static displayName = 'BetRequestsContainer';
 
   componentWillMount() {
-    this.props.actions.fetchBets('requested');
     if (!this.props.bets.didFetch) this.fetchBets();
   }
 
   fetchBets = (): void => {
-    this.props.actions.fetchBets('active');
+    this.props.actions.fetchBets('requested');
   };
 
   renderBets = (): React.Node => this.props.bets.data !== null && (
@@ -71,8 +70,8 @@ class BetsContainer extends React.Component<Props> {
       renderItem={({ item }): React.Node => (
         <BetCell
           bet={item}
+          disabled
           userId={this.props.user.data.id}
-          onPress={(): void => Actions.betCard({ betId: item.id })}
         />
       )}
     />
@@ -90,4 +89,4 @@ class BetsContainer extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BetsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(BetRequestsContainer);

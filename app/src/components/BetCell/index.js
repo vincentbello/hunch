@@ -72,12 +72,16 @@ const styles = StyleSheet.create({
 
 type Props = {
   bet: Bet,
+  disabled: boolean,
   userId: number,
   onPress: () => void,
 };
 
 export default class BetCell extends React.PureComponent<Props> {
-  static defaultProps = { onPress() {} };
+  static defaultProps = {
+    disabled: false,
+    onPress() {},
+  };
 
   get displayedImageUrl(): string | null {
     if (this.isInvolved) return this.isBettor ? this.props.bet.bettee.imageUrl : this.props.bet.bettor.imageUrl;
@@ -95,9 +99,9 @@ export default class BetCell extends React.PureComponent<Props> {
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
-    const { bet, userId, onPress } = this.props;
+    const { bet, disabled, userId, onPress } = this.props;
     return (
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
           {displayedImageUrl !== null && <Image style={styles.Bet__image} source={{ uri: displayedImageUrl }} />}
           <View style={styles.Bet__content}>

@@ -15,5 +15,5 @@ export type PromiseState<T = null> = {
   meta: null | *,
   hasError: boolean,
   isLoading: boolean,
-  data?: null | T,
+  data: null | T,
 };

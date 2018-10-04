@@ -8,10 +8,12 @@ import { type Action, type PromiseState } from 'types/redux';
 
 export type ReduxState = {
   active: PromiseState<Array<number>>,
+  requested: PromiseState<Array<number>>,
 };
 
 const initialState = {
   active: { ...initialPromiseState },
+  requested: { ...initialPromiseState },
 }
 
 export default function betListsReducer(state: ReduxState = initialState, action: Action): ReduxState {

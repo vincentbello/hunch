@@ -7,11 +7,14 @@ import { type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 
 const getEntities = (state: ReduxState): AllEntities => state.entities;
+const getTypePromiseState = (state: ReduxState, props: { listType: string }): PromiseState<Array<number>> => {
+  return state.views.betLists[props.listType || 'active'];
+};
 
 export const getBets = createSelector(
   getEntities,
-  (state: ReduxState, props: { listType: string }): PromiseState<Array<number>> => state.views.betLists[props.listType || 'active'],
-  (entities: Entities, list: PromiseState<Array<number>>): PromiseState<Array<Bet>> => {
+  getTypePromiseState,
+  (entities: AllEntities, list: PromiseState<Array<number>>): PromiseState<Array<Bet>> => {
     if (list.data === null) return list;
 
     return {
@@ -19,6 +22,11 @@ export const getBets = createSelector(
       data: idsToList(entities.bets, list.data, { bettor: 'users', bettee: 'users' }, entities),
     };
   },
+);
+
+export const getNumBets = createSelector(
+  getTypePromiseState,
+  (promiseState: PromiseState<Array<number>>): number => promiseState.data === null ? 0 : promiseState.data.length
 );
 
 export const getBet = createSelector(

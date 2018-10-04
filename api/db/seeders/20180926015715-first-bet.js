@@ -39,7 +39,7 @@ module.exports = {
         type: 'MONEY_LINE',
         amount: 1,
         wager: 'The Warriors will beat the Lakers',
-        active: true,
+        active: false,
         accepted: false,
         responded: false,
         resolvedAt: null,
