@@ -58,7 +58,7 @@ class BetsContainer extends React.Component<Props> {
   }
 
   fetchBets = (): void => {
-    if (!this.props.bets.didFetch) this.props.actions.fetchBets('active');
+    this.props.actions.fetchBets('active');
   }
 
   renderBets = (): React.Node => this.props.bets.data !== null && (

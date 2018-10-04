@@ -2,7 +2,7 @@
 import handlePromise, { initialPromiseState } from 'utils/handlePromise';
 import { FETCH_BET } from 'actions/bets';
 import { FETCH_GAMES } from 'actions/games';
-import { SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_GAME } from 'actions/createBet';
+import { CREATE_BET, SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_GAME } from 'actions/createBet';
 import { FETCH_USERS } from 'actions/users';
 import { toList } from 'utils/normalization';
 
@@ -12,8 +12,9 @@ import { type Action, type PromiseState } from 'types/redux';
 
 export type ReduxState = {
   amount: number,
-  bettorPickId: number | null,
+  bettorPickTeamId: number | null,
   betteeId: number | null,
+  creation: PromiseState<>,
   gameId: number | null,
   games: PromiseState<Array<number>>,
   users: PromiseState<Array<number>>,
@@ -21,8 +22,9 @@ export type ReduxState = {
 
 const initialState = {
   amount: 0,
-  bettorPickId: null,
+  bettorPickTeamId: null,
   betteeId: null,
+  creation: { ...initialPromiseState },
   gameId: null,
   games: { ...initialPromiseState },
   users: { ...initialPromiseState },
@@ -30,6 +32,12 @@ const initialState = {
 
 export default function createBetReducer(state: ReduxState = initialState, action: Action): ReduxState {
   switch (action.type) {
+    case CREATE_BET:
+      return handlePromise(state, action, {
+        rootPath: 'creation',
+        handleSuccess: (prevState: ReduxState): ReduxState => ({ ...initialState }),
+      });
+
     case FETCH_GAMES:
       return handlePromise(state, action, {
         rootPath: 'games',
@@ -51,10 +59,10 @@ export default function createBetReducer(state: ReduxState = initialState, actio
       return { ...state, betteeId: action.payload.betteeId };
 
     case SET_BETTOR_PICK_TEAM:
-      return { ...state, amount: action.payload.bettorPickTeamId };
+      return { ...state, bettorPickTeamId: action.payload.bettorPickTeamId };
 
     case SET_GAME:
-      return { ...state, gameId: action.payload.gameId };
+      return { ...state, gameId: action.payload.gameId, bettorPickTeamId: initialState.bettorPickTeamId };
 
     default:
       return state;

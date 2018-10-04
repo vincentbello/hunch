@@ -17,6 +17,8 @@ export default {
     widthQuarter: screenWidth * 0.25,
     widthThreeQuarters: screenWidth * 0.75,
   },
+  isIPhoneX: Platform.OS === 'ios' && screenHeight === 812,
+  homeIndicatorHeight: 34,
   navbarHeight: (Platform.OS === 'ios') ? 64 : 54,
   statusBarHeight: (Platform.OS === 'ios') ? 16 : 0,
   tabbarHeight: 51,

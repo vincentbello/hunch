@@ -1,19 +1,35 @@
 // @flow
 import { handle } from 'redux-pack';
+import { CREATE_BET } from 'actions/createBet';
 import { FETCH_BET, FETCH_BETS } from 'actions/bets';
-import { toEntities } from 'utils/normalization';
+import { parseEntity, toEntities } from 'utils/normalization';
 
 import { type BetEntities } from 'types/entities';
 import { type Action } from 'types/redux';
 
 export default function betEntitiesReducer(state: BetEntities = {}, action: Action): BetEntities {
   switch (action.type) {
+    case CREATE_BET:
+      return handle(state, action, {
+        success: (prevState: BetEntities): BetEntities => ({
+          ...prevState,
+          [action.payload.data.id]: parseEntity(action.payload.data),
+        }),
+      });
+
     case FETCH_BET:
+      return handle(state, action, {
+        success: (prevState: BetEntities): BetEntities => ({
+          ...prevState,
+          [action.payload.data.id]: parseEntity(action, ['bettor', 'bettee', 'game']),
+        }),
+      });
+
     case FETCH_BETS:
       return handle(state, action, {
         success: (prevState: BetEntities): BetEntities => ({
           ...prevState,
-          ...toEntities(action.type === FETCH_BET ? [action.payload.data] : action.payload.data, ['bettor', 'bettee', 'game']),
+          ...toEntities(action.payload.data, ['bettor', 'bettee', 'game']),
         }),
       });
 

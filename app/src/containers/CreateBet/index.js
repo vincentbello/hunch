@@ -10,10 +10,12 @@ import { SocialIcon } from 'react-native-elements';
 
 import { fetchGames } from 'actions/games';
 import { fetchUsers } from 'actions/users';
-import { setBetAmount, setBettee, setBettorPickTeam, setGame } from 'actions/createBet';
-import { getBetAmount, getBettee, getBettorPickTeam, getGame, getGames, getNewBetUsers } from 'selectors/createBet';
+import { createBet, setBetAmount, setBettee, setBettorPickTeam, setGame } from 'actions/createBet';
+import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, getGame, getGames,
+  getNewBetUsers } from 'selectors/createBet';
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
+import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
 
 import { type Game } from 'types/game';
@@ -25,12 +27,14 @@ import { type ReduxState as UserState } from 'reducers/user';
 
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
+import Sizes from 'theme/sizes';
 import Typography from 'theme/typography';
 
 type ReduxProps = {
   betAmount: number,
   bettee: User,
   bettorPickTeam: Team | null,
+  creationPromiseState: PromiseState<>,
   game: Game | null,
   games: PromiseState<Array<Game>>,
   user: UserState,
@@ -42,6 +46,7 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
   betAmount: getBetAmount(state),
   bettee: getBettee(state),
   bettorPickTeam: getBettorPickTeam(state),
+  creationPromiseState: getCreationPromiseState(state),
   game: getGame(state),
   games: getGames(state),
   user: state.user,
@@ -51,12 +56,13 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
+    ...bindActionCreators({ createBet, fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
+    createBet: (betteeId: number, amount: number, gameId: number, bettorPickTeamId: number) => void,
     fetchGames: (league: string, type: string) => void,
     fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderTopWidth: 1,
-    borderColor: Colors.primary.gray,
+    borderColor: Colors.border,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
@@ -103,22 +109,51 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
   },
-  Create__list: {
-    marginTop: 8,
-  },
-  Create__section: {},
   Create__sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 4,
-    paddingBottom: 4,
+    paddingBottom: 0,
+    marginBottom: 4,
+    height: 32,
   },
   Create__sectionHeaderText: {
-    ...Typography.h4,
-    fontWeight: 'bold',
+    ...Typography.h3,
+    fontWeight: '900',
     flex: 1,
+  },
+  Create__sectionHeaderIcon: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  Create__horizontalCellContainer: {
+    flexDirection: 'row',
+  },
+  Create__horizontalCell: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  Create__horizontalCell_last: {
+    marginRight: 8,
+  },
+  Create__button: {
+    padding: 16,
+    marginBottom: Sizes.isIPhoneX ? Sizes.homeIndicatorHeight : 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.brand.primary,
+  },
+  Create__button_disabled: {
+    opacity: 0.25,
+  },
+  Create__buttonText: {
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 12,
   },
 });
 
@@ -129,6 +164,16 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   componentWillMount() {
     if (!this.props.users.didFetch) this.props.actions.fetchUsers('friends');
+  }
+
+  get isCreateButtonDisabled(): boolean {
+    return (
+      this.props.bettee === null ||
+      this.props.betAmount <= 0 ||
+      this.props.game === null ||
+      this.props.bettorPickTeam === null ||
+      this.props.creationPromiseState.isLoading
+    );
   }
 
   get filteredUsers(): Array<User> {
@@ -151,6 +196,13 @@ class CreateBetContainer extends React.Component<Props, State> {
     this.setState({ betteeInputText });
   };
 
+  create = () => {
+    const { actions, betAmount, bettee, bettorPickTeam, game } = this.props;
+    if (bettee !== null && betAmount > 0 && game !== null && bettorPickTeam !== null) {
+      actions.createBet(bettee.id, betAmount, game.id, bettorPickTeam.id);
+    }
+  };
+
   removeBettee = (): void => this.props.actions.setBettee(null);
 
   selectBettee = (userId: number) => {
@@ -160,38 +212,89 @@ class CreateBetContainer extends React.Component<Props, State> {
     if (!this.props.games.didFetch) this.props.actions.fetchGames('NBA'/** Hardcoded */, 'upcoming');
   };
 
-  renderSelectedGame = (): React.Node => this.props.game !== null && (
-    <View style={styles.Create__section}>
-      <View style={styles.Create__sectionHeader}>
-        <Text style={styles.Create__sectionHeaderText}>Selected Game</Text>
-        <Icon.Button
-          backgroundColor="transparent"
-          color={Colors.brand.primary}
-          iconStyle={{ marginRight: 0 }}
-          name="x"
-          size={18}
-          onPress={(): void => this.props.actions.setGame(null)}
-        />
-      </View>
-      <GameCell game={this.props.game} />
-    </View>
-  );
+  selectBettorPickTeam = (teamId: number) => {
+    this.props.actions.setBettorPickTeam(this.props.bettorPickTeam === null || this.props.bettorPickTeam.id !== teamId ? teamId : null);
+  };
+
+  renderPickSelection = (): React.Node => {
+    const { actions, bettorPickTeam, game } = this.props;
+    if (game === null) return null;
+
+    return (
+      <React.Fragment>
+        <View style={styles.Create__sectionHeader}>
+          <Text style={styles.Create__sectionHeaderText}>My Pick</Text>
+          {bettorPickTeam && (
+            <Icon.Button
+              style={styles.Create__sectionHeaderIcon}
+              backgroundColor="transparent"
+              color={Colors.brand.primary}
+              iconStyle={{ marginRight: 0 }}
+              name="x"
+              size={18}
+              onPress={(): void => actions.setBettorPickTeam(null)}
+            />
+          )}
+        </View>
+        <View style={styles.Create__horizontalCellContainer}>
+          <View style={styles.Create__horizontalCell}>
+            <TeamCell
+              team={game.awayTeam}
+              muted={bettorPickTeam !== null && game.awayTeam.id !== bettorPickTeam.id}
+              selected={bettorPickTeam !== null && game.awayTeam.id === bettorPickTeam.id}
+              onPress={(): void => this.selectBettorPickTeam(game.awayTeam.id)}
+            />
+          </View>
+          <View style={[styles.Create__horizontalCell, styles.Create__horizontalCell_last]}>
+            <TeamCell
+              team={game.homeTeam}
+              muted={bettorPickTeam !== null && game.homeTeam.id !== bettorPickTeam.id}
+              selected={bettorPickTeam !== null && game.homeTeam.id === bettorPickTeam.id}
+              onPress={(): void => this.selectBettorPickTeam(game.homeTeam.id)}
+            />
+          </View>
+        </View>
+      </React.Fragment>
+    );
+  };
 
   renderGameSelection = (): React.Node => {
-    if (this.props.game !== null) return this.renderSelectedGame();
-
-    return this.props.games.data !== null && (
-      <FlatList
-        style={styles.Create__list}
-        data={this.props.games.data}
-        keyExtractor={(game: Game): string => `${game.id}`}
-        renderItem={({ item }): React.Node => (
-          <GameCell
-            game={item}
-            onPress={(): void => this.props.actions.setGame(item.id)}
-          />
+    return (
+      <React.Fragment>
+        <View style={styles.Create__sectionHeader}>
+          <Text style={styles.Create__sectionHeaderText}>{this.props.game === null ? 'Select a Game' : 'Selected Game'}</Text>
+          {this.props.game !== null && (
+            <Icon.Button
+              style={styles.Create__sectionHeaderIcon}
+              backgroundColor="transparent"
+              color={Colors.brand.primary}
+              iconStyle={{ marginRight: 0 }}
+              name="x"
+              size={18}
+              onPress={(): void => this.props.actions.setGame(null)}
+            />
+          )}
+        </View>
+        {this.props.game === null ? (
+          this.props.games.data !== null && (
+            <FlatList
+              data={this.props.games.data}
+              keyExtractor={(game: Game): string => `${game.id}`}
+              renderItem={({ item }): React.Node => (
+                <GameCell
+                  game={item}
+                  onPress={(): void => this.props.actions.setGame(item.id)}
+                />
+              )}
+            />
+          )
+        ) : (
+          <React.Fragment>
+            <GameCell game={this.props.game} />
+            {this.renderPickSelection()}
+          </React.Fragment>
         )}
-      />
+      </React.Fragment>
     );
   };
 
@@ -209,7 +312,8 @@ class CreateBetContainer extends React.Component<Props, State> {
   );
 
   render(): React.Node {
-    const { betAmount, bettee, game, games, users } = this.props;
+    const { isCreateButtonDisabled } = this;
+    const { betAmount, bettee, creationPromiseState, game, games, users } = this.props;
     return (
       <View style={styles.Create}>
         {bettee ? (
@@ -248,14 +352,13 @@ class CreateBetContainer extends React.Component<Props, State> {
           ) : (
             bettee ? this.renderGameSelection() : this.renderUsers()
           )}
-          <Button
-            style={styles.Create__button}
-            color={Colors.brand.primary}
-            disabled={!bettee || !game || betAmount <= 0}
-            title="Create Bet"
-            onPress={(): void => console.log('CREATE BET')}
-          />
         </View>
+        <TouchableOpacity disabled={isCreateButtonDisabled} onPress={this.create}>
+          <View style={[styles.Create__button, isCreateButtonDisabled && styles.Create__button_disabled]}>
+            <Icon name="send" size={24} color={Colors.white} />
+            <Text style={styles.Create__buttonText}>{creationPromiseState.isLoading ? 'Sending...' : 'Send Bet Request'}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

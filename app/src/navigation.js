@@ -8,6 +8,7 @@ import AppLaunchContainer from 'containers/AppLaunch';
 import BetCardContainer from 'containers/BetCard';
 import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
+// import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
 import NavButton from 'components/NavButton';
 
@@ -28,8 +29,9 @@ export default Actions.create(
           <Scene
             key="bets"
             {...AppConfig.navbarProps}
-            title="My Bets"
+            title="My Active Bets"
             component={BetsContainer}
+            // renderLeftButton={<InboxButtonContainer />}
             renderRightButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
           />
 

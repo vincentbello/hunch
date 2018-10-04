@@ -4,6 +4,7 @@ const app = {
   darkBackground: '#CCCCCC',
   cardBackground: '#FFFFFF',
   listItemBackground: '#FFFFFF',
+  disabled: '#9E9E9E',
 };
 
 const brand = {
@@ -22,6 +23,7 @@ const text = {
 
 const borders = {
   border: '#D0D1D5',
+  cellBorder: '#EEEEEE',
 };
 
 const tabbar = {

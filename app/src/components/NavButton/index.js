@@ -20,7 +20,7 @@ const NavButton = ({ iconName, targetScene }: Props): React.Node => (
   <Icon.Button
     backgroundColor="transparent"
     color={Colors.brand.primary}
-    iconStyle={{ marginRight: 4 }}
+    iconStyle={{ marginRight: 4, marginLeft: 4 }}
     name={iconName}
     size={24}
     onPress={Actions[targetScene]}

@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getEntity, idsToList } from 'utils/normalization';
 
 import { type Game } from 'types/game';
+import { type Team } from 'types/team';
 import { type User } from 'types/user';
 import { type AllEntities, type TeamEntities, type UserEntities } from 'types/entities';
 import { type PromiseState } from 'types/redux';
@@ -13,6 +14,7 @@ const getTeamEntities = (state: ReduxState): TeamEntities => state.entities.team
 const getUserEntities = (state: ReduxState): UserEntities => state.entities.users;
 
 export const getBetAmount = (state: ReduxState): number => state.views.createBet.amount;
+export const getCreationPromiseState = (state: ReduxState): PromiseState<> => state.views.createBet.creation;
 
 export const getBettee = createSelector(
   getUserEntities,

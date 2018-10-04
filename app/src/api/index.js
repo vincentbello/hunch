@@ -20,6 +20,10 @@ export default class Api {
     return axios.post('http://localhost:3000/auth/refresh', { refreshToken });
   }
 
+  static createBet(betteeId: number, amount: number, gameId: number, bettorPickTeamId: number): Promise<Bet> {
+    return axios.post(`http://localhost:3000/bets`, { betteeId, amount, gameId, bettorPickTeamId });
+  }
+
   static fetchBet(betId: number): Promise<Bet> {
     return axios.get(`http://localhost:3000/bets/${betId}`);
   }
