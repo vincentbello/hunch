@@ -32,6 +32,10 @@ export default class Api {
     return axios.get(`http://localhost:3000/bets?${stringify({ type })}`);
   }
 
+  static respondToBet(betId: number, accepted: boolean): Promise<Bet> {
+    return axios.patch(`http://localhost:3000/bets/${betId}/response`, { accepted });
+  }
+
   static fetchGames(league: string, type: string): Promise<Array<Game>> {
     return axios.get(`http://localhost:3000/games?${stringify({ league, type })}`)
   }

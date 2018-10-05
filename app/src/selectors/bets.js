@@ -42,3 +42,7 @@ export const getBet = createSelector(
     };
   },
 );
+
+export const getRespondingBetId = (state: ReduxState): number | null => (
+  state.views.betLists.response.isLoading && state.views.betLists.response.meta !== null ? state.views.betLists.response.meta.betId : null
+);

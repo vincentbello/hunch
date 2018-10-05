@@ -5,8 +5,8 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { getBets } from 'selectors/bets';
-import { fetchBets } from 'actions/bets';
+import { getBets, getRespondingBetId } from 'selectors/bets';
+import { fetchBets, respondToBet } from 'actions/bets';
 
 import { type Bet } from 'types/bet';
 import { type Action, type PromiseState } from 'types/redux';
@@ -21,25 +21,28 @@ import BetCell from 'components/BetCell';
 
 type ReduxProps = {
   bets: PromiseState<Array<Bet>>,
+  respondingBetId: number | null,
   user: UserState,
 };
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
   bets: getBets(state, { listType: 'requested' }),
+  respondingBetId: getRespondingBetId(state),
   user: state.user,
 });
 
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchBets }, dispatch),
+    ...bindActionCreators({ fetchBets, respondToBet }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
     fetchBets: (listType: string) => void,
+    respondToBet: (betId: number, accepted: boolean) => void,
   },
 };
 
@@ -71,7 +74,9 @@ class BetRequestsContainer extends React.Component<Props> {
         <BetCell
           bet={item}
           disabled
+          isResponding={item.id === this.props.respondingBetId}
           userId={this.props.user.data.id}
+          respond={(accepted: boolean): void => this.props.actions.respondToBet(item.id, accepted)}
         />
       )}
     />

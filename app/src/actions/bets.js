@@ -5,6 +5,7 @@ import { type Action } from 'types/redux';
 
 export const FETCH_BET = 'BETS/FETCH_BET';
 export const FETCH_BETS = 'BETS/FETCH_BETS';
+export const RESPOND_TO_BET = 'BETS/RESPOND_TO_BET';
 
 export const fetchBet = (betId: number): Action => ({
   type: FETCH_BET,
@@ -16,3 +17,9 @@ export const fetchBets = (listType: 'active' = 'active'): Action => ({
   promiseFn: () => Api.fetchBets(listType),
   meta: { listType },
 });
+
+export const respondToBet = (betId: number, accepted: boolean = false): Action => ({
+  type: RESPOND_TO_BET,
+  promiseFn: () => Api.respondToBet(betId, accepted),
+  meta: { betId },
+})

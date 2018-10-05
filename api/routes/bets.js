@@ -49,8 +49,7 @@ router.post('/', function(req, res, next) {
   }).then(bet => res.json(new BetSerializer(bet).serialize()));
 });
 
-/** Get a specific bet by ID */
-router.get('/:betId', function(req, res, next) {
+function getBet(req, res, next) {
   models.Bet.findById(req.params.betId, {
     include: [
       { model: models.Game, as: 'game' },
@@ -58,6 +57,15 @@ router.get('/:betId', function(req, res, next) {
       { model: models.User, as: 'bettee' },
     ],
   }).then(bet => res.json(new BetSerializer(bet).serialize()));
+}
+
+router.patch('/:betId/response', function(req, res, next) {
+  const { accepted } = req.body;
+  models.Bet.update({ accepted, active: accepted, responded: true }, { where: { id: req.params.betId } })
+    .then(() => getBet(req, res, next));
 });
+
+/** Get a specific bet by ID */
+router.get('/:betId', getBet);
 
 export default router;

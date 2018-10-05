@@ -16,8 +16,6 @@ const NOW = new Date();
 
 const styles = StyleSheet.create({
   Bet: {
-    flexDirection: 'row',
-    height: 68,
     backgroundColor: 'white',
     borderRadius: 2,
     marginLeft: 8,
@@ -27,6 +25,12 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 4,
     paddingBottom: 4,
+  },
+  Bet__container: {
+    flexDirection: 'row',
+    height: 68,
+    backgroundColor: 'white',
+    borderRadius: 2,
     alignItems: 'center',
   },
   Bet__image: {
@@ -68,19 +72,58 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.primary.gray,
   },
+  Bet__footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 4,
+    paddingBottom: 4,
+  },
+  Bet__footerText: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+  },
+  Bet__buttonContainer: {
+    flex: 1,
+  },
+  Bet__button: {
+    overflow: 'hidden',
+    padding: 8,
+    marginRight: 8,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  Bet__button_primary: {
+    marginRight: 0,
+    backgroundColor: Colors.brand.primary,
+  },
+  Bet__buttonText: {
+    fontWeight: 'bold',
+    color: Colors.textSecondary,
+  },
+  Bet__buttonText_primary: {
+    color: Colors.white,
+  },
 });
 
 type Props = {
   bet: Bet,
   disabled: boolean,
+  isResponding: boolean,
   userId: number,
   onPress: () => void,
+  respond: (accept: boolean) => void,
 };
 
 export default class BetCell extends React.PureComponent<Props> {
   static defaultProps = {
     disabled: false,
+    isResponding: false,
     onPress() {},
+    respond() {},
   };
 
   get displayedImageUrl(): string | null {
@@ -99,23 +142,45 @@ export default class BetCell extends React.PureComponent<Props> {
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
-    const { bet, disabled, userId, onPress } = this.props;
+    const { bet, disabled, isResponding, userId, onPress, respond } = this.props;
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
-          {displayedImageUrl !== null && <Image style={styles.Bet__image} source={{ uri: displayedImageUrl }} />}
-          <View style={styles.Bet__content}>
-            <View style={styles.Bet__header}>
-              <Text style={styles.Bet__headerText}>
-                {isInvolved && isBettor ? <Text>You</Text> : <Text style={styles.Bet__link}>{bet.bettor.fullName}</Text>}
-                <Text> bet </Text>
-                {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.Bet__link}>{bet.bettee.fullName}</Text>}
-              </Text>
-              <Text style={styles.Bet__label}>${bet.amount}</Text>
+          <View style={styles.Bet__container}>
+            {displayedImageUrl !== null && <Image style={styles.Bet__image} source={{ uri: displayedImageUrl }} />}
+            <View style={styles.Bet__content}>
+              <View style={styles.Bet__header}>
+                <Text style={styles.Bet__headerText}>
+                  {isInvolved && isBettor ? <Text>You</Text> : <Text style={styles.Bet__link}>{bet.bettor.fullName}</Text>}
+                  <Text> bet </Text>
+                  {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.Bet__link}>{bet.bettee.fullName}</Text>}
+                </Text>
+                <Text style={styles.Bet__label}>${bet.amount}</Text>
+              </View>
+              <Text style={styles.Bet__body}>“{bet.wager}”</Text>
+              <Text style={styles.Bet__meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>
             </View>
-            <Text style={styles.Bet__body}>“{bet.wager}”</Text>
-            <Text style={styles.Bet__meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>
           </View>
+          {!bet.responded && (
+            <View style={styles.Bet__footer}>
+              {isResponding ? (
+                <Text style={styles.Bet__footerText}>Responding...</Text>
+              ) : (
+                <React.Fragment>
+                  <TouchableOpacity onPress={(): void => respond(false)} style={styles.Bet__buttonContainer}>
+                    <View style={styles.Bet__button}>
+                      <Text style={styles.Bet__buttonText}>Reject</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={(): void => respond(true)} style={styles.Bet__buttonContainer}>
+                    <View style={[styles.Bet__button, styles.Bet__button_primary]}>
+                      <Text style={[styles.Bet__buttonText, styles.Bet__buttonText_primary]}>Accept</Text>
+                    </View>
+                  </TouchableOpacity>
+                </React.Fragment>
+              )}
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );
