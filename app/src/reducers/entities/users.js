@@ -1,6 +1,6 @@
 // @flow
 import { handle } from 'redux-pack';
-import { FETCH_BETS } from 'actions/bets';
+import { FETCH_BETS, RESPOND_TO_BET } from 'actions/bets';
 import { FETCH_USERS } from 'actions/users';
 import { toEntities, toNestedEntities } from 'utils/normalization';
 
@@ -12,6 +12,7 @@ import { type Action } from 'types/redux';
 export default function userEntitiesReducer(state: UserEntities = {}, action: Action): UserEntities {
   switch (action.type) {
     case FETCH_BETS:
+    case RESPOND_TO_BET:
       return handle(state, action, {
         success: (prevState: UserEntities): UserEntities => ({
           ...prevState,
