@@ -18,6 +18,7 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
 import BetCell from 'components/BetCell';
+import Splash from 'components/Splash';
 
 type ReduxProps = {
   bets: PromiseState<Array<Bet>>,
@@ -64,23 +65,27 @@ class BetRequestsContainer extends React.Component<Props> {
     this.props.actions.fetchBets('requested');
   };
 
-  renderBets = (): React.Node => this.props.bets.data !== null && (
-    <FlatList
-      data={this.props.bets.data}
-      keyExtractor={(bet: Bet): string => `${bet.id}`}
-      onRefresh={this.fetchBets}
-      refreshing={this.props.bets.isLoading}
-      renderItem={({ item, index }: { item: Bet, index: number }): React.Node => (
-        <BetCell
-          bet={item}
-          disabled
-          isResponding={item.id === this.props.respondingBetId}
-          userId={this.props.user.data.id}
-          respond={(accepted: boolean): void => this.props.actions.respondToBet(item.id, index, accepted)}
-        />
-      )}
-    />
-  );
+  renderBets = (): React.Node => {
+    if (this.props.bets.data === null) return null;
+    if (this.props.bets.data.length === 0) return <Splash heading="You have no bet requests." iconName="inbox" />;
+    return (
+      <FlatList
+        data={this.props.bets.data}
+        keyExtractor={(bet: Bet): string => `${bet.id}`}
+        onRefresh={this.fetchBets}
+        refreshing={this.props.bets.isLoading}
+        renderItem={({ item, index }: { item: Bet, index: number }): React.Node => (
+          <BetCell
+            bet={item}
+            disabled
+            isResponding={item.id === this.props.respondingBetId}
+            userId={this.props.user.data.id}
+            respond={(accepted: boolean): void => this.props.actions.respondToBet(item.id, index, accepted)}
+          />
+        )}
+      />
+    );
+  };
 
   render(): React.Node {
     const { bets } = this.props;

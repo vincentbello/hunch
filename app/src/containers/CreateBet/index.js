@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   Create__button: {
     padding: 16,
-    marginBottom: Sizes.isIPhoneX ? Sizes.homeIndicatorHeight : 0,
+    marginBottom: Sizes.homeIndicatorHeight,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
