@@ -32,7 +32,7 @@ export default function betListsReducer(state: ReduxState = initialState, action
       return handlePromise(state, action, {
         meta: { betId: action.meta.betId },
         rootPath: 'response',
-        parseData: (data: Bet): null => null,
+        handleSuccess: (prevState: ReduxState): ReduxState => dotProp.delete(prevState, `requested.data.${action.meta.betIndex}`),
       });
 
     default:

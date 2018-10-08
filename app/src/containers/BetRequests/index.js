@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch: Action => any) => ({
 type Props = ReduxProps & {
   actions: {
     fetchBets: (listType: string) => void,
-    respondToBet: (betId: number, accepted: boolean) => void,
+    respondToBet: (betId: number, index: number, accepted: boolean) => void,
   },
 };
 
@@ -70,13 +70,13 @@ class BetRequestsContainer extends React.Component<Props> {
       keyExtractor={(bet: Bet): string => `${bet.id}`}
       onRefresh={this.fetchBets}
       refreshing={this.props.bets.isLoading}
-      renderItem={({ item }): React.Node => (
+      renderItem={({ item, index }: { item: Bet, index: number }): React.Node => (
         <BetCell
           bet={item}
           disabled
           isResponding={item.id === this.props.respondingBetId}
           userId={this.props.user.data.id}
-          respond={(accepted: boolean): void => this.props.actions.respondToBet(item.id, accepted)}
+          respond={(accepted: boolean): void => this.props.actions.respondToBet(item.id, index, accepted)}
         />
       )}
     />

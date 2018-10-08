@@ -22,7 +22,7 @@ export default function betEntitiesReducer(state: BetEntities = {}, action: Acti
       return handle(state, action, {
         success: (prevState: BetEntities): BetEntities => ({
           ...prevState,
-          [action.payload.data.id]: parseEntity(action, ['bettor', 'bettee', 'game']),
+          [action.payload.data.id]: parseEntity(action.payload.data, ['bettor', 'bettee', 'game']),
         }),
       });
 

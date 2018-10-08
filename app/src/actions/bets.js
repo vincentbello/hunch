@@ -18,8 +18,8 @@ export const fetchBets = (listType: 'active' = 'active'): Action => ({
   meta: { listType },
 });
 
-export const respondToBet = (betId: number, accepted: boolean = false): Action => ({
+export const respondToBet = (betId: number, betIndex: number, accepted: boolean = false): Action => ({
   type: RESPOND_TO_BET,
   promiseFn: () => Api.respondToBet(betId, accepted),
-  meta: { betId },
+  meta: { betId, betIndex },
 })

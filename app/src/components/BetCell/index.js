@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: Colors.border,
     backgroundColor: Colors.white,
-    textAlign: 'center',
     alignItems: 'center',
   },
   Bet__button_primary: {
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
   Bet__buttonText: {
     fontWeight: 'bold',
     color: Colors.textSecondary,
+    textAlign: 'center',
   },
   Bet__buttonText_primary: {
     color: Colors.white,
@@ -141,6 +141,7 @@ export default class BetCell extends React.PureComponent<Props> {
   }
 
   render(): React.Node {
+    console.log(this.props.bet);
     const { displayedImageUrl, isBettor, isInvolved } = this;
     const { bet, disabled, isResponding, userId, onPress, respond } = this.props;
     return (
