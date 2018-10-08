@@ -30,7 +30,7 @@ export default Actions.create(
           <Scene
             key="bets"
             {...AppConfig.navbarProps}
-            title="My Active Bets"
+            title="My Bets"
             component={BetsContainer}
             renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
             renderRightButton={<InboxButtonContainer />}

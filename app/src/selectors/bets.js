@@ -1,15 +1,20 @@
 // @flow
 import { createSelector } from 'reselect';
+import { BET_VIEW_TYPES } from 'constants/bet-view-types';
 import { getEntity, idsToList } from 'utils/normalization';
-import { type Bet } from 'types/bet';
+import { type ReduxState as BetListsState } from 'reducers/views/betLists';
+import { type Bet, type ViewType } from 'types/bet';
 import { type AllEntities } from 'types/entities';
 import { type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 
 const getEntities = (state: ReduxState): AllEntities => state.entities;
-const getTypePromiseState = (state: ReduxState, props: { listType: string }): PromiseState<Array<number>> => {
-  return state.views.betLists[props.listType || 'active'];
-};
+const getTypePromiseState = createSelector(
+  (state: ReduxState): BetListsState => state.views.betLists,
+  (state: ReduxState, props: { viewType?: ViewType }): ViewType =>
+    (props && props.viewType) ? props.viewType : BET_VIEW_TYPES[state.views.betLists.viewIndex].key,
+  (betLists: BetListsState, viewType: ViewType): PromiseState<Array<number>> => betLists[viewType]
+);
 
 export const getBets = createSelector(
   getEntities,
@@ -46,3 +51,7 @@ export const getBet = createSelector(
 export const getRespondingBetId = (state: ReduxState): number | null => (
   state.views.betLists.response.isLoading && state.views.betLists.response.meta !== null ? state.views.betLists.response.meta.betId : null
 );
+
+export const getViewIndex = (state: ReduxState): number => state.views.betLists.viewIndex;
+
+export const getViewType = createSelector(getViewIndex, (index: number): ViewType => BET_VIEW_TYPES[index].key);

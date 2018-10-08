@@ -7,23 +7,29 @@ const router = express.Router();
 
 /* GET active bets for the authenticated user. */
 router.get('/', function(req, res, next) {
-  if (!['active', 'requested'].includes(req.query.type)) return res.sendStatus(400);
+  if (!['active', 'completed', 'requested'].includes(req.query.type)) return res.sendStatus(400);
 
-  let where = {};
-  if (req.query.type === 'requested') {
-    where = {
-      betteeId: req.auth.id,
-      responded: false,
-    };
-  } else if (req.query.type === 'active') {
-    where = {
+  const where = {
+    active: {
       active: true,
       [Op.or]: [
         { bettorId: req.auth.id },
         { betteeId: req.auth.id },
       ],
-    };
-  }
+    },
+    completed: {
+      accepted: true,
+      active: false,
+      [Op.or]: [
+        { bettorId: req.auth.id },
+        { betteeId: req.auth.id },
+      ],
+    },
+    requested: {
+      betteeId: req.auth.id,
+      responded: false,
+    },
+  }[req.query.type];
 
   models.Bet.findAll({
     where,

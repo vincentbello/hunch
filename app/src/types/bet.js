@@ -22,3 +22,5 @@ export type Bet = {
   game: Game,
   bettorPickTeam: Team,
 };
+
+export type ViewType = 'active' | 'completed' | 'requested';

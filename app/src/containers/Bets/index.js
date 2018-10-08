@@ -2,13 +2,15 @@
 import * as React from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { getBets } from 'selectors/bets';
-import { fetchBets } from 'actions/bets';
+import { BET_VIEW_TYPES } from 'constants/bet-view-types';
+import { getBets, getViewIndex, getViewType } from 'selectors/bets';
+import { fetchBets, setViewIndex } from 'actions/bets';
 
-import { type Bet } from 'types/bet';
+import { type Bet, type ViewType } from 'types/bet';
 import { type Action, type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
@@ -18,28 +20,34 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
 import BetCell from 'components/BetCell';
+import Splash from 'components/Splash';
 
 type ReduxProps = {
   bets: PromiseState<Array<Bet>>,
   user: UserState,
+  viewIndex: number,
+  viewType: ViewType,
 };
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
-  bets: getBets(state, { listType: 'active' }),
+  bets: getBets(state),
   user: state.user,
+  viewIndex: getViewIndex(state),
+  viewType: getViewType(state),
 });
 
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchBets }, dispatch),
+    ...bindActionCreators({ fetchBets, setViewIndex }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
-    fetchBets: (listType: string) => void,
+    fetchBets: (viewType: ViewType) => void,
+    setViewIndex: (viewIndex: number) => void,
   },
 };
 
@@ -58,34 +66,55 @@ class BetsContainer extends React.Component<Props> {
     if (!this.props.bets.didFetch) this.fetchBets();
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.viewType !== this.props.viewType) {
+      if (!this.props.bets.didFetch) this.fetchBets();
+    }
+  }
+
   fetchBets = (): void => {
-    this.props.actions.fetchBets('active');
+    this.props.actions.fetchBets(this.props.viewType);
   };
 
-  renderBets = (): React.Node => this.props.bets.data !== null && (
-    <FlatList
-      data={this.props.bets.data}
-      keyExtractor={(bet: Bet): string => `${bet.id}`}
-      onRefresh={this.fetchBets}
-      refreshing={this.props.bets.isLoading}
-      renderItem={({ item }): React.Node => (
-        <BetCell
-          bet={item}
-          userId={this.props.user.data.id}
-          onPress={(): void => Actions.betCard({ betId: item.id })}
-        />
-      )}
-    />
+  renderBets = (): React.Node => {
+    const { bets, user, viewType } = this.props;
+    if (bets.data === null) return null;
+    if (bets.data.length === 0) return <Splash heading={`You have no ${viewType} bets.`} iconName="slash" />;
+
+    return (
+      <FlatList
+        data={bets.data}
+        keyExtractor={(bet: Bet): string => `${bet.id}`}
+        onRefresh={this.fetchBets}
+        refreshing={bets.isLoading}
+        renderItem={({ item }): React.Node => (
+          <BetCell
+            bet={item}
+            userId={user.data.id}
+            onPress={(): void => Actions.betCard({ betId: item.id })}
+          />
+        )}
+      />
+    );
+  };
+
+  renderView = (): React.Node => (
+    this.props.bets.isLoading ? (
+      <ActivityIndicator size="large" color={Colors.brand.primary} />
+    ) : this.renderBets()
   );
 
   render(): React.Node {
-    const { bets } = this.props;
+    const { actions, bets, viewIndex, viewType } = this.props;
     return (
-      <View style={[styles.Bets, bets.isLoading && SplashStyles]}>
-        {bets.isLoading ? (
-          <ActivityIndicator size="large" color={Colors.brand.primary} />
-        ) : this.renderBets()}
-      </View>
+      <TabView
+        navigationState={{
+          index: viewIndex,
+          routes: BET_VIEW_TYPES,
+        }}
+        onIndexChange={actions.setViewIndex}
+        renderScene={this.renderView}
+      />
     );
   }
 }
