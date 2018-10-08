@@ -54,7 +54,21 @@ type Props = ReduxProps & {
 const styles = StyleSheet.create({
   Bets: {
     flex: 1,
-    paddingTop: 8,
+  },
+  Bets__indicator: {
+    backgroundColor: Colors.brand.primary,
+  },
+  Bets__tab: {
+    padding: 4,
+  },
+  Bets__tabbar: {
+    backgroundColor: Colors.white,
+    marginBottom: 8,
+  },
+  Bets__label: {
+    color: Colors.brand.primary,
+    fontSize: 13,
+    fontWeight: 'bold',
   },
 });
 
@@ -98,6 +112,16 @@ class BetsContainer extends React.Component<Props> {
     );
   };
 
+  renderTabBar = (props): React.Node => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.Bets__indicator}
+      labelStyle={styles.Bets__label}
+      tabStyle={styles.Bets__tab}
+      style={styles.Bets__tabbar}
+    />
+  );
+
   renderView = (): React.Node => (
     this.props.bets.isLoading ? (
       <ActivityIndicator size="large" color={Colors.brand.primary} />
@@ -114,6 +138,7 @@ class BetsContainer extends React.Component<Props> {
         }}
         onIndexChange={actions.setViewIndex}
         renderScene={this.renderView}
+        renderTabBar={this.renderTabBar}
       />
     );
   }
