@@ -13,6 +13,7 @@ export type Bet = {
   type: 'MONEY_LINE',
   wager: string,
   createdAt: string,
+  lastRemindedAt: string,
   bettorId: number,
   betteeId: number,
   gameId: number,
@@ -23,4 +24,4 @@ export type Bet = {
   bettorPickTeam: Team,
 };
 
-export type ViewType = 'active' | 'completed' | 'requested';
+export type ViewType = 'active' | 'completed' | 'pending' | 'requested';

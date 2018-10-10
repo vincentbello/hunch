@@ -7,7 +7,7 @@ const router = express.Router();
 
 /* GET active bets for the authenticated user. */
 router.get('/', function(req, res, next) {
-  if (!['active', 'completed', 'requested'].includes(req.query.type)) return res.sendStatus(400);
+  if (!['active', 'completed', 'pending', 'requested'].includes(req.query.type)) return res.sendStatus(400);
 
   const where = {
     active: {
@@ -24,6 +24,10 @@ router.get('/', function(req, res, next) {
         { bettorId: req.auth.id },
         { betteeId: req.auth.id },
       ],
+    },
+    pending: {
+      bettorId: req.auth.id,
+      responded: false,
     },
     requested: {
       betteeId: req.auth.id,
@@ -48,6 +52,7 @@ router.post('/', function(req, res, next) {
     amount,
     wager: 'Here is a fun bet!', // Placeholder
     active: false,
+    lastRemindedAt: new Date(),
     gameId,
     bettorId: req.auth.id,
     betteeId: betteeId,
@@ -68,6 +73,16 @@ function getBet(req, res, next) {
 router.patch('/:betId/response', function(req, res, next) {
   const { accepted } = req.body;
   models.Bet.update({ accepted, active: accepted, responded: true }, { where: { id: req.params.betId } })
+    .then(() => getBet(req, res, next));
+});
+
+router.delete('/:betId', function(req, res, next) {
+  models.Bet.destroy({ where: { id: req.params.betId } }).then(() => res.sendStatus(200));
+});
+
+router.patch('/:betId/remind', function(req, res, next) {
+  // TODO: Send Reminder
+  models.Bet.update({ lastRemindedAt: new Date() }, { where: { id: req.params.betId } })
     .then(() => getBet(req, res, next));
 });
 

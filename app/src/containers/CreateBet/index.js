@@ -8,6 +8,7 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import Icon from 'react-native-vector-icons/Feather';
 import { SocialIcon } from 'react-native-elements';
 
+import { fetchBets } from 'actions/bets';
 import { fetchGames } from 'actions/games';
 import { fetchUsers } from 'actions/users';
 import { createBet, setBetAmount, setBettee, setBettorPickTeam, setGame } from 'actions/createBet';
@@ -18,6 +19,7 @@ import GameCell from 'components/GameCell';
 import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
 
+import { type ViewType } from 'types/bet';
 import { type Game } from 'types/game';
 import { type Action, type PromiseState } from 'types/redux';
 import { type Team } from 'types/team';
@@ -56,13 +58,14 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ createBet, fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
+    ...bindActionCreators({ createBet, fetchBets, fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
     createBet: (betteeId: number, amount: number, gameId: number, bettorPickTeamId: number) => void,
+    fetchBets: (viewType: ViewType) => void,
     fetchGames: (league: string, type: string) => void,
     fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
@@ -164,6 +167,17 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   componentWillMount() {
     if (!this.props.users.didFetch) this.props.actions.fetchUsers('friends');
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (
+      prevProps.creationPromiseState.isLoading &&
+      !this.props.creationPromiseState.isLoading &&
+      !this.props.creationPromiseState.hasError
+    ) {
+      this.props.actions.fetchBets('pending');
+      Actions.pop();
+    }
   }
 
   get isCreateButtonDisabled(): boolean {

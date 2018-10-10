@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false,
     },
     resolvedAt: DataTypes.DATE,
+    lastRemindedAt: DataTypes.DATE,
     gameId: {
       allowNull: false,
       type: DataTypes.INTEGER,

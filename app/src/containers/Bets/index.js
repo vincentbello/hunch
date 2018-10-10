@@ -2,20 +2,20 @@
 import * as React from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { TabBar, TabView } from 'react-native-tab-view';
+import { PagerPan, TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { BET_VIEW_TYPES } from 'constants/bet-view-types';
 import { getBets, getViewIndex, getViewType } from 'selectors/bets';
-import { fetchBets, setViewIndex } from 'actions/bets';
+import { cancelRequest, fetchBets, remind, setViewIndex } from 'actions/bets';
 
 import { type Bet, type ViewType } from 'types/bet';
 import { type Action, type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
 
-import { SplashStyles } from 'theme/app';
+import { SplashStylesWithNav } from 'theme/app';
 import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
@@ -40,13 +40,15 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ fetchBets, setViewIndex }, dispatch),
+    ...bindActionCreators({ cancelRequest, fetchBets, remind, setViewIndex }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
   actions: {
+    cancelRequest: (betId: number, index: number) => void,
     fetchBets: (viewType: ViewType) => void,
+    remind: (betId: number) => void,
     setViewIndex: (viewIndex: number) => void,
   },
 };
@@ -91,7 +93,7 @@ class BetsContainer extends React.Component<Props> {
   };
 
   renderBets = (): React.Node => {
-    const { bets, user, viewType } = this.props;
+    const { actions, bets, user, viewType } = this.props;
     if (bets.data === null) return null;
     if (bets.data.length === 0) return <Splash heading={`You have no ${viewType} bets.`} iconName="slash" />;
 
@@ -101,16 +103,20 @@ class BetsContainer extends React.Component<Props> {
         keyExtractor={(bet: Bet): string => `${bet.id}`}
         onRefresh={this.fetchBets}
         refreshing={bets.isLoading}
-        renderItem={({ item }): React.Node => (
+        renderItem={({ item, index }): React.Node => (
           <BetCell
             bet={item}
             userId={user.data.id}
             onPress={(): void => Actions.betCard({ betId: item.id })}
+            cancelRequest={(): void => actions.cancelRequest(item.id, index)}
+            remind={(): void => actions.remind(item.id)}
           />
         )}
       />
     );
   };
+
+  renderPager = (props): React.Node => <PagerPan {...props} swipeEnabled={false} />;
 
   renderTabBar = (props): React.Node => (
     <TabBar
@@ -124,7 +130,9 @@ class BetsContainer extends React.Component<Props> {
 
   renderView = (): React.Node => (
     this.props.bets.isLoading ? (
-      <ActivityIndicator size="large" color={Colors.brand.primary} />
+      <View style={SplashStylesWithNav}>
+        <ActivityIndicator size="large" color={Colors.brand.primary} />
+      </View>
     ) : this.renderBets()
   );
 
@@ -137,6 +145,7 @@ class BetsContainer extends React.Component<Props> {
           routes: BET_VIEW_TYPES,
         }}
         onIndexChange={actions.setViewIndex}
+        renderPager={this.renderPager}
         renderScene={this.renderView}
         renderTabBar={this.renderTabBar}
       />

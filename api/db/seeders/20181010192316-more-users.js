@@ -1,0 +1,53 @@
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Users', [
+    {
+      firstName: 'William',
+      lastName: 'Cannon',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      email: 'will.cannon@gmail.com',
+      active: true,
+      admin: false,
+      fbId: '2345678',
+      gender: 'M',
+      imageUrl: 'https://icon-icons.com/icons2/108/PNG/256/males_male_avatar_man_people_faces_18359.png',
+      lastLoginAt: new Date(),
+      currentLoginAt: new Date(),
+      loginCount: 0,
+    },
+    {
+      firstName: 'Anna',
+      lastName: 'Blackshear',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      email: 'ab@gmail.com',
+      active: true,
+      admin: false,
+      fbId: '2345679',
+      gender: 'F',
+      imageUrl: 'https://icon-icons.com/icons2/108/PNG/256/females_female_avatar_woman_people_faces_18386.png',
+      lastLoginAt: new Date(),
+      currentLoginAt: new Date(),
+      loginCount: 0,
+    },
+    {
+      firstName: 'Betty',
+      lastName: 'Wagner',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      email: 'bwags@gmail.com',
+      active: true,
+      admin: false,
+      fbId: '3345678',
+      gender: 'F',
+      imageUrl: 'https://icon-icons.com/icons2/108/PNG/256/females_female_avatar_woman_people_faces_18401.png',
+      lastLoginAt: new Date(),
+      currentLoginAt: new Date(),
+      loginCount: 0,
+    },
+  ], {}),
+
+  down: queryInterface => queryInterface.bulkDelete('Users', null, {}),
+};

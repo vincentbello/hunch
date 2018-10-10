@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { AsyncStorage, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { distanceInWordsToNow } from 'date-fns';
+import { distanceInWordsToNow, differenceInDays } from 'date-fns';
 
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   Bet__footer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 4,
     paddingBottom: 4,
   },
@@ -84,6 +85,12 @@ const styles = StyleSheet.create({
   },
   Bet__buttonContainer: {
     flex: 1,
+  },
+  Bet__buttonPlaceholder: {
+    flex: 1,
+    fontSize: 12,
+    color: Colors.textSecondary,
+    textAlign: 'center',
   },
   Bet__button: {
     overflow: 'hidden',
@@ -115,6 +122,8 @@ type Props = {
   isResponding: boolean,
   userId: number,
   onPress: () => void,
+  cancelRequest: () => void,
+  remind: () => void,
   respond: (accept: boolean) => void,
 };
 
@@ -123,6 +132,8 @@ export default class BetCell extends React.PureComponent<Props> {
     disabled: false,
     isResponding: false,
     onPress() {},
+    cancelRequest() {},
+    remind() {},
     respond() {},
   };
 
@@ -140,10 +151,17 @@ export default class BetCell extends React.PureComponent<Props> {
     return userId === bet.bettorId || userId === bet.betteeId;
   }
 
+  get primaryAction(): () => void {
+    return this.isBettor ? this.props.remind : (): void => this.props.respond(true);
+  }
+
+  get secondaryAction(): () => void {
+    return this.isBettor ? this.props.cancelRequest : (): void => this.props.respond(false);
+  }
+
   render(): React.Node {
-    console.log(this.props.bet);
     const { displayedImageUrl, isBettor, isInvolved } = this;
-    const { bet, disabled, isResponding, userId, onPress, respond } = this.props;
+    const { bet, disabled, isResponding, userId, onPress } = this.props;
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
@@ -168,16 +186,22 @@ export default class BetCell extends React.PureComponent<Props> {
                 <Text style={styles.Bet__footerText}>Responding...</Text>
               ) : (
                 <React.Fragment>
-                  <TouchableOpacity onPress={(): void => respond(false)} style={styles.Bet__buttonContainer}>
+                  <TouchableOpacity onPress={this.secondaryAction} style={styles.Bet__buttonContainer}>
                     <View style={styles.Bet__button}>
-                      <Text style={styles.Bet__buttonText}>Reject</Text>
+                      <Text style={styles.Bet__buttonText}>{isBettor ? 'Cancel Bet' : 'Reject'}</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={(): void => respond(true)} style={styles.Bet__buttonContainer}>
-                    <View style={[styles.Bet__button, styles.Bet__button_primary]}>
-                      <Text style={[styles.Bet__buttonText, styles.Bet__buttonText_primary]}>Accept</Text>
-                    </View>
-                  </TouchableOpacity>
+                  {isBettor && differenceInDays(new Date(), bet.lastRemindedAt) < 2 ? (
+                    <Text style={styles.Bet__buttonPlaceholder}>
+                      {bet.lastRemindedAt === bet.createdAt ? 'Created' : 'Reminded'} {distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}
+                    </Text>
+                  ) : (
+                    <TouchableOpacity onPress={this.primaryAction} style={styles.Bet__buttonContainer}>
+                      <View style={[styles.Bet__button, styles.Bet__button_primary]}>
+                        <Text style={[styles.Bet__buttonText, styles.Bet__buttonText_primary]}>{isBettor ? 'Remind' : 'Accept'}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
                 </React.Fragment>
               )}
             </View>

@@ -20,6 +20,10 @@ export default class Api {
     return axios.post('http://localhost:3000/auth/refresh', { refreshToken });
   }
 
+  static cancelBetRequest(betId: number): Promise<> {
+    return axios.delete(`http://localhost:3000/bets/${betId}`);
+  }
+
   static createBet(betteeId: number, amount: number, gameId: number, bettorPickTeamId: number): Promise<Bet> {
     return axios.post(`http://localhost:3000/bets`, { betteeId, amount, gameId, bettorPickTeamId });
   }
@@ -30,6 +34,10 @@ export default class Api {
 
   static fetchBets(type: string): Promise<Array<Bet>> {
     return axios.get(`http://localhost:3000/bets?${stringify({ type })}`);
+  }
+
+  static remindBetRequest(betId: number): Promise<Bet> {
+    return axios.patch(`http://localhost:3000/bets/${betId}/remind`);
   }
 
   static respondToBet(betId: number, accepted: boolean): Promise<Bet> {

@@ -11,5 +11,5 @@ export const SplashStyles = {
 
 export const SplashStylesWithNav = {
   ...SplashStyles,
-  height: AppSizes.screen.height - AppSizes.navbarHeight - AppSizes.homeIndicatorHeight,
+  height: AppSizes.screen.height - AppSizes.statusBarHeight - AppSizes.navbarHeight - AppSizes.homeIndicatorHeight,
 };
