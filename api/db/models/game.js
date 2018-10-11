@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     awayScore: DataTypes.INTEGER,
     week: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
+    xmlStatsId: DataTypes.STRING,
     homeTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,

@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     imageUrl: DataTypes.STRING,
     league: DataTypes.ENUM('NBA'),
     conference: DataTypes.STRING,
-    division: DataTypes.STRING
+    division: DataTypes.STRING,
+    site: DataTypes.STRING,
+    city: DataTypes.STRING,
+    state: DataTypes.STRING,
+    xmlStatsId: DataTypes.STRING,
   }, {});
   Team.associate = function(models) {
     // associations can be defined here
