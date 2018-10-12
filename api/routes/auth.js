@@ -7,6 +7,23 @@ import authMiddleware from '../middleware/auth';
 import UserSerializer from '../serialization/User';
 
 const router = express.Router();
+const now = new Date();
+
+router.post('/device', authMiddleware, function (req, res, next) {
+  const { deviceToken } = req.body;
+  models.Device.findOrBuild({ where: { userId: req.auth.id, token } }).spread((instance, initialized) => {
+    if (!initialized) return res.sendStatus(200);
+
+    instance.update({
+      type: 'IOS', // Placeholder
+      token: deviceToken,
+      allowedNotifications: false, // Placeholder
+      userId: req.auth.id,
+      createdAt: now,
+      updatedAt: now,
+    }).then(res.sendStatus(200));
+  });
+});
 
 // Log out, revoke access by destroying the user tokens
 router.post('/revoke', authMiddleware, function (req, res, next) {

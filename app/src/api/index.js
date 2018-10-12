@@ -20,6 +20,10 @@ export default class Api {
     return axios.post('http://localhost:3000/auth/refresh', { refreshToken });
   }
 
+  static registerDevice(deviceToken: string): Promise<> {
+    return axios.post('http://localhost:3000/auth/device', { deviceToken });
+  }
+
   static cancelBetRequest(betId: number): Promise<> {
     return axios.delete(`http://localhost:3000/bets/${betId}`);
   }

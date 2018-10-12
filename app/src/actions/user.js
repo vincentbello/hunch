@@ -7,6 +7,7 @@ import { type Action } from 'types/redux';
 export const AUTHENTICATE = 'USER/AUTHENTICATE';
 export const LOG_OUT = 'USER/LOG_OUT';
 export const REFRESH_AUTH = 'USER/REFRESH_AUTH';
+export const REGISTER_DEVICE = 'USER/REGISTER_DEVICE';
 
 let sessionTimeout = null;
 
@@ -45,3 +46,8 @@ export const refreshAuth = (refreshToken: string): Action => {
     meta: { onSuccess: () => setSessionTimeout(dispatch, getState) },
   });
 };
+
+export const registerDevice = (deviceToken: string): Action => ({
+  type: REGISTER_DEVICE,
+  promiseFn: () => Api.registerDevice(deviceToken),
+});

@@ -11,7 +11,8 @@ import { type ReduxState } from 'types/state';
 import { type ReduxState as SessionState } from 'reducers/session';
 import { type ReduxState as UserState } from 'reducers/user';
 
-import { refreshAuth } from 'actions/user';
+import { refreshAuth, registerDevice } from 'actions/user';
+import NotificationService from 'services/NotificationService';
 
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
@@ -37,12 +38,15 @@ const mapStateToProps = ({ session, user }: ReduxState): ReduxProps => ({ refres
 
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ refreshAuth }, dispatch),
+    ...bindActionCreators({ refreshAuth, registerDevice }, dispatch),
   }
 });
 
 type Props = ReduxProps & {
-  actions: { refreshAuth: (refreshToken: string) => void },
+  actions: {
+    refreshAuth: (refreshToken: string) => void,
+    registerDevice: (deviceToken: string) => void,
+  },
 };
 
 class AppLaunchContainer extends React.Component<Props> {
@@ -51,7 +55,10 @@ class AppLaunchContainer extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) return Actions.main();
+    if (prevProps.user.data === null && this.props.user.data !== null) {
+      new NotificationService(this.props.actions.registerDevice.bind(this));
+      return Actions.main();
+    }
     if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();
   }
 
