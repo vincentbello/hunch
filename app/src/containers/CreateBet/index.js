@@ -339,6 +339,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             }}
             onIndexChange={this.props.actions.setDateViewIndex}
             renderScene={this.renderGamesList}
+            scrollable
             small
           />
         ) : (

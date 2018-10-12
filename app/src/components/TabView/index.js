@@ -31,17 +31,21 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0,
   },
+  tab_scrollable: {
+    width: 72,
+  },
 });
 
-const CustomTabView = ({ small, ...tabViewProps }) => (
+const CustomTabView = ({ small, scrollable, ...tabViewProps }) => (
   <TabView
     renderPager={props => <PagerPan {...props} swipeEnabled={false} />}
     renderTabBar={props => (
       <TabBar
         {...props}
+        scrollEnabled={scrollable}
         indicatorStyle={styles.indicator}
         labelStyle={[styles.label, small && styles.label_small]}
-        tabStyle={[styles.tab, small && styles.tab_small]}
+        tabStyle={[styles.tab, small && styles.tab_small, scrollable && styles.tab_scrollable]}
         style={styles.bar}
         getLabelText={({ route }) => (small ? route.title : route.title.toUpperCase())}
       />
@@ -50,6 +54,10 @@ const CustomTabView = ({ small, ...tabViewProps }) => (
   />
 );
 
+CustomTabView.defaultProps = {
+  scrollable: false,
+  small: false,
+};
 CustomTabView.displayName = 'TabView';
 
 export default CustomTabView;
