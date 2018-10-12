@@ -24,7 +24,7 @@ async function pollGames() {
     },
   });
 
-  const updatedIds = [];
+  const updatedGames = [];
 
   for (let i = 0; i < games.length; i++) {
     const game = games[i];
@@ -45,13 +45,17 @@ async function pollGames() {
     }
 
     try {
-      await models.Game.update({
-        completed: true,
-        homeScore: boxscore.home_totals.points,
-        awayScore: boxscore.away_totals.points,
-        updatedAt: now,
-      }, { where: { id: game.id } });
-      updatedIds.push(game.id);
+      const newData = {
+        ...game,
+        attrs: {
+          completed: true,
+          homeScore: boxscore.home_totals.points,
+          awayScore: boxscore.away_totals.points,
+          updatedAt: now,
+        },
+      };
+      await models.Game.update(newData.attrs, { where: { id: game.id } });
+      updatedGames[game.id] = newData;
     } catch (err) {
       console.log(`Error updating game ${game.id}.`, err);
     }
@@ -62,9 +66,33 @@ async function pollGames() {
     }
   }
 
-  // TODO: Resolve bets!
+  const updatedGameIds = Object.keys(updatedGames);
+  console.log(`\n\n\nSuccessfully updated ${updatedGameIds.length} games.`);
 
-  console.log(`\n\n\nSuccessfully updated ${updatedIds.length} games.`)
-}
+  const bets = await models.Bet.findAll({
+    where: {
+      gameId: {
+        [Op.or]: updatedGameIds,
+      },
+    },
+  });
+
+  for (let i = 0; i < bets.length; i++) {
+    const bet = bets[i];
+    const updatedGame = updatedGames[bet.gameId];
+    const winningTeamId = updatedGame.attrs.homeScore > updatedGame.attrs.awayScore ? updatedGame.homeTeamId : updatedGame.awayTeamId;
+    const winnerId = winningTeamId === bet.bettorPickTeamId ? bet.bettorId : bet.betteeId;
+    const loserId = winningTeamId === bet.bettorPickTeamId ? bet.betteeId : bet.bettorId;
+    await models.Bet.update({
+      active: false,
+      winnerId,
+      resolvedAt: now,
+      updatedAt: now,
+    }, { where: { id: bet.id } });
+    // Notify winnerId
+    // Notify loserId
+  }
+  console.log(`Found ${bets.length} bets.`);
+};
 
 pollGames();
