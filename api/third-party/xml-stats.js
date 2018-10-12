@@ -42,6 +42,10 @@ export default class XmlStatsClient {
     });
   }
 
+  static fetchGame(league, gameId) {
+    return XmlStatsClient.get(buildUrl({ sport: league, endpoint: 'boxscore', id: gameId }));
+  }
+
   static fetchGames(league, teamId, season) {
     return XmlStatsClient.get(buildUrl({ sport: league, endpoint: 'results', id: teamId, params: { season } }));
   }
