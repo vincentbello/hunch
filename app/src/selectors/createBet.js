@@ -1,5 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
+import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { getEntity, idsToList } from 'utils/normalization';
 
 import { type Game } from 'types/game';
@@ -15,6 +16,7 @@ const getUserEntities = (state: ReduxState): UserEntities => state.entities.user
 
 export const getBetAmount = (state: ReduxState): number => state.views.createBet.amount;
 export const getCreationPromiseState = (state: ReduxState): PromiseState<> => state.views.createBet.creation;
+export const getDateViewIndex = (state: ReduxState): number => state.views.createBet.dateViewIndex;
 
 export const getBettee = createSelector(
   getUserEntities,
@@ -29,6 +31,8 @@ export const getBettorPickTeam = createSelector(
     bettorPickTeamId === null ? null : getEntity(teamEntities, bettorPickTeamId)
   )
 );
+
+export const getDateViewType = createSelector(getDateViewIndex, (index: number): string => DATE_VIEW_TYPES[index].key);
 
 export const getGame = createSelector(
   getEntities,
@@ -50,7 +54,7 @@ export const getNewBetUsers = createSelector(
 
 export const getGames = createSelector(
   getEntities,
-  (state: ReduxState): PromiseState<Array<number>> => state.views.createBet.games,
+  (state: ReduxState): PromiseState<Array<number>> => state.views.createBet.games[DATE_VIEW_TYPES[state.views.createBet.dateViewIndex].key],
   (entities: AllEntities, gamesPS: PromiseState<Array<number>>): PromiseState<Array<Game>> => {
     if (gamesPS.data === null) return gamesPS;
 

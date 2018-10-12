@@ -1,9 +1,10 @@
 // @flow
 import handlePromise, { initialPromiseState } from 'utils/handlePromise';
 import { FETCH_BET } from 'actions/bets';
-import { FETCH_GAMES } from 'actions/games';
-import { CREATE_BET, SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_GAME } from 'actions/createBet';
+import { FETCH_UPCOMING_GAMES } from 'actions/games';
+import { CREATE_BET, SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_DATE_VIEW_INDEX, SET_GAME } from 'actions/createBet';
 import { FETCH_USERS } from 'actions/users';
+import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { toList } from 'utils/normalization';
 
 import { type Game } from 'types/game';
@@ -16,8 +17,11 @@ export type ReduxState = {
   betteeId: number | null,
   creation: PromiseState<>,
   gameId: number | null,
-  games: PromiseState<Array<number>>,
+  games: {
+    [dateKey: string]: PromiseState<Array<number>>,
+  },
   users: PromiseState<Array<number>>,
+  dateViewIndex: number,
 };
 
 const initialState = {
@@ -26,8 +30,9 @@ const initialState = {
   betteeId: null,
   creation: { ...initialPromiseState },
   gameId: null,
-  games: { ...initialPromiseState },
+  games: DATE_VIEW_TYPES.reduce((types, type) => ({ ...types, [type.key]: { ...initialPromiseState } }), {}),
   users: { ...initialPromiseState },
+  dateViewIndex: 0,
 };
 
 export default function createBetReducer(state: ReduxState = initialState, action: Action): ReduxState {
@@ -38,9 +43,9 @@ export default function createBetReducer(state: ReduxState = initialState, actio
         handleSuccess: (prevState: ReduxState): ReduxState => ({ ...initialState }),
       });
 
-    case FETCH_GAMES:
+    case FETCH_UPCOMING_GAMES:
       return handlePromise(state, action, {
-        rootPath: 'games',
+        rootPath: `games.${action.meta.date}`,
         cacheData: true,
         parseData: (data: Array<Game>): Array<number> => toList(data),
       });
@@ -60,6 +65,9 @@ export default function createBetReducer(state: ReduxState = initialState, actio
 
     case SET_BETTOR_PICK_TEAM:
       return { ...state, bettorPickTeamId: action.payload.bettorPickTeamId };
+
+    case SET_DATE_VIEW_INDEX:
+      return { ...state, dateViewIndex: action.payload.dateViewIndex };
 
     case SET_GAME:
       return { ...state, gameId: action.payload.gameId, bettorPickTeamId: initialState.bettorPickTeamId };

@@ -3,9 +3,10 @@ import Api from 'api';
 
 import { type Action } from 'types/redux';
 
-export const FETCH_GAMES = 'GAMES/FETCH_GAMES';
+export const FETCH_UPCOMING_GAMES = 'GAMES/FETCH_UPCOMING_GAMES';
 
-export const fetchGames = (league: string, type: 'upcoming' = 'upcoming'): Action => ({
-  type: FETCH_GAMES,
-  promiseFn: () => Api.fetchGames(league, type),
+export const fetchUpcomingGames = (league: string, date: string): Action => ({
+  type: FETCH_UPCOMING_GAMES,
+  promiseFn: () => Api.fetchUpcomingGames(league, date),
+  meta: { date },
 });

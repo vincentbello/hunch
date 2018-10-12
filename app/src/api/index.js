@@ -44,8 +44,8 @@ export default class Api {
     return axios.patch(`http://localhost:3000/bets/${betId}/response`, { accepted });
   }
 
-  static fetchGames(league: string, type: string): Promise<Array<Game>> {
-    return axios.get(`http://localhost:3000/games?${stringify({ league, type })}`)
+  static fetchUpcomingGames(league: string, date: string): Promise<Array<Game>> {
+    return axios.get(`http://localhost:3000/games/upcoming?${stringify({ league, date })}`)
   }
 
   static fetchUsers(type: UserGroupType): Promise<Array<UserPayload>> {

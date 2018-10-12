@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import { BET_VIEW_TYPES } from 'constants/bet-view-types';
+import { BET_VIEW_TYPES } from 'constants/view-types';
 import { getEntity, idsToList } from 'utils/normalization';
 import { type ReduxState as BetListsState } from 'reducers/views/betLists';
 import { type Bet, type ViewType } from 'types/bet';

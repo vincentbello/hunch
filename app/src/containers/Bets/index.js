@@ -2,11 +2,10 @@
 import * as React from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { PagerPan, TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { BET_VIEW_TYPES } from 'constants/bet-view-types';
+import { BET_VIEW_TYPES } from 'constants/view-types';
 import { getBets, getViewIndex, getViewType } from 'selectors/bets';
 import { cancelRequest, fetchBets, remind, setViewIndex } from 'actions/bets';
 
@@ -20,6 +19,7 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
 import BetCell from 'components/BetCell';
+import TabView from 'components/TabView';
 import Splash from 'components/Splash';
 
 type ReduxProps = {
@@ -57,21 +57,6 @@ const styles = StyleSheet.create({
   Bets: {
     flex: 1,
   },
-  Bets__indicator: {
-    backgroundColor: Colors.brand.primary,
-  },
-  Bets__tab: {
-    padding: 4,
-  },
-  Bets__tabbar: {
-    backgroundColor: Colors.white,
-    marginBottom: 8,
-  },
-  Bets__label: {
-    color: Colors.brand.primary,
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
 });
 
 class BetsContainer extends React.Component<Props> {
@@ -83,9 +68,7 @@ class BetsContainer extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.viewType !== this.props.viewType) {
-      if (!this.props.bets.didFetch) this.fetchBets();
-    }
+    if (prevProps.viewType !== this.props.viewType && !this.props.bets.didFetch) this.fetchBets();
   }
 
   fetchBets = (): void => {
@@ -116,18 +99,6 @@ class BetsContainer extends React.Component<Props> {
     );
   };
 
-  renderPager = (props): React.Node => <PagerPan {...props} swipeEnabled={false} />;
-
-  renderTabBar = (props): React.Node => (
-    <TabBar
-      {...props}
-      indicatorStyle={styles.Bets__indicator}
-      labelStyle={styles.Bets__label}
-      tabStyle={styles.Bets__tab}
-      style={styles.Bets__tabbar}
-    />
-  );
-
   renderView = (): React.Node => (
     this.props.bets.isLoading ? (
       <View style={SplashStylesWithNav}>
@@ -145,9 +116,7 @@ class BetsContainer extends React.Component<Props> {
           routes: BET_VIEW_TYPES,
         }}
         onIndexChange={actions.setViewIndex}
-        renderPager={this.renderPager}
         renderScene={this.renderView}
-        renderTabBar={this.renderTabBar}
       />
     );
   }

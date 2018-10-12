@@ -8,14 +8,16 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import Icon from 'react-native-vector-icons/Feather';
 import { SocialIcon } from 'react-native-elements';
 
+import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { fetchBets } from 'actions/bets';
-import { fetchGames } from 'actions/games';
+import { fetchUpcomingGames } from 'actions/games';
 import { fetchUsers } from 'actions/users';
-import { createBet, setBetAmount, setBettee, setBettorPickTeam, setGame } from 'actions/createBet';
-import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, getGame, getGames,
+import { createBet, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame } from 'actions/createBet';
+import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, getDateViewIndex, getDateViewType, getGame, getGames,
   getNewBetUsers } from 'selectors/createBet';
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
+import TabView from 'components/TabView';
 import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
 
@@ -37,6 +39,8 @@ type ReduxProps = {
   bettee: User,
   bettorPickTeam: Team | null,
   creationPromiseState: PromiseState<>,
+  dateViewIndex: number,
+  dateViewType: string,
   game: Game | null,
   games: PromiseState<Array<Game>>,
   user: UserState,
@@ -49,6 +53,8 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
   bettee: getBettee(state),
   bettorPickTeam: getBettorPickTeam(state),
   creationPromiseState: getCreationPromiseState(state),
+  dateViewIndex: getDateViewIndex(state),
+  dateViewType: getDateViewType(state),
   game: getGame(state),
   games: getGames(state),
   user: state.user,
@@ -58,7 +64,17 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ createBet, fetchBets, fetchGames, fetchUsers, setBetAmount, setBettee, setBettorPickTeam, setGame }, dispatch),
+    ...bindActionCreators({
+      createBet,
+      fetchBets,
+      fetchUpcomingGames,
+      fetchUsers,
+      setBetAmount,
+      setBettee,
+      setBettorPickTeam,
+      setDateViewIndex,
+      setGame,
+    }, dispatch),
   }
 });
 
@@ -66,11 +82,12 @@ type Props = ReduxProps & {
   actions: {
     createBet: (betteeId: number, amount: number, gameId: number, bettorPickTeamId: number) => void,
     fetchBets: (viewType: ViewType) => void,
-    fetchGames: (league: string, type: string) => void,
+    fetchUpcomingGames: (league: string, date: string) => void,
     fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
     setBettee: (betteeId: number | null) => void,
     setBettorPickTeam: (bettorPickTeamId: number | null) => void,
+    setDateViewIndex: (dateViewIndex: number) => void,
     setGame: (gameId: number | null) => void,
   },
 };
@@ -170,6 +187,11 @@ class CreateBetContainer extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    if (prevProps.dateViewType !== this.props.dateViewType && !this.props.games.didFetch) {
+      this.fetchGames();
+      return;
+    }
+
     if (
       prevProps.creationPromiseState.isLoading &&
       !this.props.creationPromiseState.isLoading &&
@@ -210,6 +232,8 @@ class CreateBetContainer extends React.Component<Props, State> {
     this.setState({ betteeInputText });
   };
 
+  fetchGames = (): void => this.props.actions.fetchUpcomingGames('NBA'/** Hardcoded */, this.props.dateViewType);
+
   create = () => {
     const { actions, betAmount, bettee, bettorPickTeam, game } = this.props;
     if (bettee !== null && betAmount > 0 && game !== null && bettorPickTeam !== null) {
@@ -223,7 +247,7 @@ class CreateBetContainer extends React.Component<Props, State> {
     this.setState({ betteeInputText: '' });
     this.props.actions.setBettee(userId);
 
-    if (!this.props.games.didFetch) this.props.actions.fetchGames('NBA'/** Hardcoded */, 'upcoming');
+    if (!this.props.games.didFetch) this.fetchGames();
   };
 
   selectBettorPickTeam = (teamId: number) => {
@@ -272,6 +296,19 @@ class CreateBetContainer extends React.Component<Props, State> {
     );
   };
 
+  renderGamesList = (): React.Node => this.props.games.data !== null && (
+    <FlatList
+      data={this.props.games.data}
+      keyExtractor={(game: Game): string => `${game.id}`}
+      renderItem={({ item }): React.Node => (
+        <GameCell
+          game={item}
+          onPress={(): void => this.props.actions.setGame(item.id)}
+        />
+      )}
+    />
+  );
+
   renderGameSelection = (): React.Node => {
     return (
       <React.Fragment>
@@ -290,18 +327,15 @@ class CreateBetContainer extends React.Component<Props, State> {
           )}
         </View>
         {this.props.game === null ? (
-          this.props.games.data !== null && (
-            <FlatList
-              data={this.props.games.data}
-              keyExtractor={(game: Game): string => `${game.id}`}
-              renderItem={({ item }): React.Node => (
-                <GameCell
-                  game={item}
-                  onPress={(): void => this.props.actions.setGame(item.id)}
-                />
-              )}
-            />
-          )
+          <TabView
+            navigationState={{
+              index: this.props.dateViewIndex,
+              routes: DATE_VIEW_TYPES,
+            }}
+            onIndexChange={this.props.actions.setDateViewIndex}
+            renderScene={this.renderGamesList}
+            small
+          />
         ) : (
           <React.Fragment>
             <GameCell game={this.props.game} />
