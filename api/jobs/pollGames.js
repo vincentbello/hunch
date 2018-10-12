@@ -89,8 +89,8 @@ async function pollGames() {
       resolvedAt: now,
       updatedAt: now,
     }, { where: { id: bet.id } });
-    // Notify winnerId
-    // Notify loserId
+    // TODO: Notify winnerId
+    // TODO: Notify loserId
   }
   console.log(`Found ${bets.length} bets.`);
 };
