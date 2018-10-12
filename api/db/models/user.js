@@ -1,4 +1,6 @@
 'use strict';
+import Device from './Device';
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: DataTypes.STRING,
@@ -16,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     refreshToken: DataTypes.STRING,
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(Device, { as: 'devices' });
   };
   return User;
 };
