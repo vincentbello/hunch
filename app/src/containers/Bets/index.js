@@ -19,6 +19,7 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
 import BetCell from 'components/BetCell';
+import PromiseStateSplash from 'components/PromiseStateSplash';
 import TabView from 'components/TabView';
 import Splash from 'components/Splash';
 
@@ -99,13 +100,7 @@ class BetsContainer extends React.Component<Props> {
     );
   };
 
-  renderView = (): React.Node => (
-    this.props.bets.isLoading ? (
-      <View style={SplashStylesWithNav}>
-        <ActivityIndicator size="large" color={Colors.brand.primary} />
-      </View>
-    ) : this.renderBets()
-  );
+  renderView = (): React.Node => <PromiseStateSplash promiseState={this.props.bets}>{this.renderBets()}</PromiseStateSplash>;
 
   render(): React.Node {
     const { actions, bets, viewIndex, viewType } = this.props;

@@ -6,7 +6,7 @@
 	<dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		24YMr3fNPFlr2ZK31qja0xw/0wo=
+		5JT8FJErrrx0OteakoQLNBK4FXU=
 		</data>
 		<key>Feather.ttf</key>
 		<data>
@@ -67,11 +67,11 @@
 		</data>
 		<key>PlugIns/HunchTests.xctest.dSYM/Contents/Resources/DWARF/HunchTests</key>
 		<data>
-		CRjXQg4HNARllCOoPwSXVb1NWzY=
+		OvDIPY+zPVlX2z/+BC4zVgo2MYc=
 		</data>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<data>
-		NvGDMEZQJXUmKFZNArY5nSnWWJg=
+		GT8+DrAwzSMh7Oa4Yy3NdDBg9J8=
 		</data>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>
 		<data>
@@ -88,11 +88,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			24YMr3fNPFlr2ZK31qja0xw/0wo=
+			5JT8FJErrrx0OteakoQLNBK4FXU=
 			</data>
 			<key>hash2</key>
 			<data>
-			mvCaYT66GbxsmkMOfSNAzRQTPIgbYsZ9kr8fcJ+CNMU=
+			Ie/6vlBh/SkzvYHhiHxHdovy34jEAYwSz2PSto3BvnE=
 			</data>
 		</dict>
 		<key>Feather.ttf</key>
@@ -222,22 +222,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CRjXQg4HNARllCOoPwSXVb1NWzY=
+			OvDIPY+zPVlX2z/+BC4zVgo2MYc=
 			</data>
 			<key>hash2</key>
 			<data>
-			NYBZLlsaMyDCGVtC0GBIXiZRMHPABT+fgCZzJXF4wMQ=
+			0JDCeJsgdQBmPqyJ7Jo2ny7IciwVf1DvtdvA86mt2As=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			NvGDMEZQJXUmKFZNArY5nSnWWJg=
+			GT8+DrAwzSMh7Oa4Yy3NdDBg9J8=
 			</data>
 			<key>hash2</key>
 			<data>
-			G6mFdMUDjpoPCZXL1oZycQNq48iYiys1kPYu2NNoNBU=
+			8WLztXJGZTDWci9nVSrzMMbtB5FMIpZpDBoFIMKbXMk=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>

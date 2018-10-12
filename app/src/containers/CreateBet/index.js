@@ -17,6 +17,7 @@ import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, ge
   getNewBetUsers } from 'selectors/createBet';
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
+import PromiseStateSplash from 'components/PromiseStateSplash';
 import TabView from 'components/TabView';
 import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
@@ -296,17 +297,21 @@ class CreateBetContainer extends React.Component<Props, State> {
     );
   };
 
-  renderGamesList = (): React.Node => this.props.games.data !== null && (
-    <FlatList
-      data={this.props.games.data}
-      keyExtractor={(game: Game): string => `${game.id}`}
-      renderItem={({ item }): React.Node => (
-        <GameCell
-          game={item}
-          onPress={(): void => this.props.actions.setGame(item.id)}
+  renderGamesList = (): React.Node => (
+    <PromiseStateSplash promiseState={this.props.games}>
+      {this.props.games.data !== null && (
+        <FlatList
+          data={this.props.games.data}
+          keyExtractor={(game: Game): string => `${game.id}`}
+          renderItem={({ item }): React.Node => (
+            <GameCell
+              game={item}
+              onPress={(): void => this.props.actions.setGame(item.id)}
+            />
+          )}
         />
       )}
-    />
+    </PromiseStateSplash>
   );
 
   renderGameSelection = (): React.Node => {

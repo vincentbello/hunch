@@ -19,11 +19,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   label_small: {
-    fontSize: 11,
+    fontSize: 10,
     textAlign: 'center',
   },
   tab: {
     padding: 4,
+  },
+  tab_small: {
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
 });
 
@@ -35,7 +41,7 @@ const CustomTabView = ({ small, ...tabViewProps }) => (
         {...props}
         indicatorStyle={styles.indicator}
         labelStyle={[styles.label, small && styles.label_small]}
-        tabStyle={styles.tab}
+        tabStyle={[styles.tab, small && styles.tab_small]}
         style={styles.bar}
         getLabelText={({ route }) => (small ? route.title : route.title.toUpperCase())}
       />

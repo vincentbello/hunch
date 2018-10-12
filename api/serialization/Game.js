@@ -37,6 +37,8 @@ export default class GameSerializer {
       season: this.season,
       seasonType: this.seasonType,
       completed: this.completed,
+      homeScore: this.homeScore,
+      awayScore: this.awayScore,
       week: this.week,
       startDate: this.startDate,
       homeTeam: this.serializeTeam(true),
