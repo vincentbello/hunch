@@ -9,14 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: 'id',
-      },
     },
   }, {});
   Device.associate = function(models) {
-    // associations can be defined here
+    Device.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   };
   return Device;
 };

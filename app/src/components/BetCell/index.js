@@ -57,6 +57,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
   },
+  Bet__label_red: {
+    color: Colors.primary.red,
+  },
   Bet__headerText: {
     flex: 1,
     color: Colors.textPrimary,
@@ -151,6 +154,14 @@ export default class BetCell extends React.PureComponent<Props> {
     return userId === bet.bettorId || userId === bet.betteeId;
   }
 
+  get betOutcome(): string {
+    const { bet, userId } = this.props;
+    const amount = `$${bet.amount}`;
+
+    if (bet.winnerId === null) return amount;
+    return `${bet.winnerId === userId ? 'Won' : 'Lost'} ${amount}`;
+  }
+
   get primaryAction(): () => void {
     return this.isBettor ? this.props.remind : (): void => this.props.respond(true);
   }
@@ -174,7 +185,9 @@ export default class BetCell extends React.PureComponent<Props> {
                   <Text> bet </Text>
                   {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.Bet__link}>{bet.bettee.fullName}</Text>}
                 </Text>
-                <Text style={styles.Bet__label}>${bet.amount}</Text>
+                <Text style={[styles.Bet__label, bet.winnerId !== null && bet.winnerId !== userId && styles.Bet__label_red]}>
+                  {this.betOutcome}
+                </Text>
               </View>
               <Text style={styles.Bet__body}>“{bet.wager}”</Text>
               <Text style={styles.Bet__meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>

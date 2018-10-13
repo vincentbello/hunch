@@ -10,6 +10,7 @@ export default class BetSerializer {
     this.responded = bet.responded;
     this.accepted = bet.accepted;
     this.active = bet.active;
+    this.winnerId = bet.winnerId;
     this.resolvedAt = bet.resolvedAt;
     this.lastRemindedAt = bet.lastRemindedAt;
     this.game = bet.game;
@@ -34,6 +35,7 @@ export default class BetSerializer {
       responded: this.responded,
       accepted: this.accepted,
       active: this.active,
+      winnerId: this.winnerId,
       resolvedAt: this.resolvedAt,
       lastRemindedAt: this.lastRemindedAt,
       bettor: this.serializeParticipant(true),

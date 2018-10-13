@@ -3,10 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>application-identifier</key>
-	<string>FAKETEAMID.org.reactjs.native.example.Hunch</string>
-	<key>keychain-access-groups</key>
-	<array>
-		<string>FAKETEAMID.org.reactjs.native.example.Hunch</string>
-	</array>
+	<string>GL527J2335.com.vincentbello.Hunch</string>
+	<key>aps-environment</key>
+	<string>development</string>
 </dict>
 </plist>

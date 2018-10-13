@@ -34,7 +34,7 @@ type ReduxProps = {
   user: UserState,
 };
 
-const mapStateToProps = ({ session, user }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
+const mapStateToProps = ({ session, user, ...otherProps }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
 
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
@@ -51,12 +51,12 @@ type Props = ReduxProps & {
 
 class AppLaunchContainer extends React.Component<Props> {
   componentDidMount() {
-    this.autoLogin();
+    setTimeout(this.autoLogin);
   }
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.user.data === null && this.props.user.data !== null) {
-      new NotificationService(this.props.actions.registerDevice.bind(this));
+      // new NotificationService(this.props.actions.registerDevice.bind(this));
       return Actions.main();
     }
     if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();

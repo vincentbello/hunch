@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     refreshToken: DataTypes.STRING,
   }, {});
   User.associate = function(models) {
-    User.hasMany(Device, { as: 'devices' });
   };
   return User;
 };

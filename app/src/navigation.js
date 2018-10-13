@@ -22,7 +22,6 @@ export default Actions.create(
           hideNavBar
           key="splash"
           component={AppLaunchContainer}
-          initial
         />
 
         {/* Main App */}

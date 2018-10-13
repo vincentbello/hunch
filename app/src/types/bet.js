@@ -12,6 +12,7 @@ export type Bet = {
   resolvedAt: string,
   type: 'MONEY_LINE',
   wager: string,
+  winnerId: number | null,
   createdAt: string,
   lastRemindedAt: string,
   bettorId: number,
