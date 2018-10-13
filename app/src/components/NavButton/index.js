@@ -3,6 +3,8 @@ import * as React from 'react';
 import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
+import PushNotification from 'react-native-push-notification';
+
 import Icon from 'react-native-vector-icons/Feather';
 
 import Colors from 'theme/colors';

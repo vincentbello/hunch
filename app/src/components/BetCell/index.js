@@ -201,7 +201,7 @@ export default class BetCell extends React.PureComponent<Props> {
                 <React.Fragment>
                   <TouchableOpacity onPress={this.secondaryAction} style={styles.Bet__buttonContainer}>
                     <View style={styles.Bet__button}>
-                      <Text style={styles.Bet__buttonText}>{isBettor ? 'Cancel Bet' : 'Reject'}</Text>
+                      <Text style={styles.Bet__buttonText}>{isBettor ? 'Cancel Bet' : 'Decline'}</Text>
                     </View>
                   </TouchableOpacity>
                   {isBettor && differenceInDays(new Date(), bet.lastRemindedAt) < 2 ? (

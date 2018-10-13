@@ -56,7 +56,10 @@ class AppLaunchContainer extends React.Component<Props> {
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.user.data === null && this.props.user.data !== null) {
-      // new NotificationService(this.props.actions.registerDevice.bind(this));
+      new NotificationService((token) => {
+        console.log(token);
+        this.props.actions.registerDevice();
+      });
       return Actions.main();
     }
     if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();
