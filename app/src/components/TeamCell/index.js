@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Image, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { format } from 'date-fns';
 
@@ -10,6 +10,8 @@ import { type Team } from 'types/team';
 
 import Colors from 'theme/colors';
 import Typography from 'theme/typography';
+
+import Image from 'components/Image';
 
 const styles = StyleSheet.create({
   Team: {
@@ -57,7 +59,7 @@ type Props = {
 const TeamCell = ({ muted, selected, team, onPress }: Props): React.Node => (
   <TouchableOpacity onPress={onPress}>
     <View style={[styles.Team, muted && styles.Team_muted]}>
-      {team.imageUrl !== null && <Image style={styles.Team__image} source={{ uri: team.imageUrl }} />}
+      <Image size="large" url={team.imageUrl} />
       <Text style={styles.Team__label}>{team.lastName}</Text>
       {selected && (
         <View style={styles.Team__selection}>

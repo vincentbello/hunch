@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { AsyncStorage, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
 
@@ -11,6 +11,8 @@ import { type Bet } from 'types/bet';
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
+
+import Image from 'components/Image';
 
 const NOW = new Date();
 
@@ -33,16 +35,9 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignItems: 'center',
   },
-  Bet__image: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: Colors.primary.gray,
-  },
   Bet__content: {
     flex: 1,
+    marginLeft: 8,
   },
   Bet__header: {
     flex: 1,
@@ -177,7 +172,7 @@ export default class BetCell extends React.PureComponent<Props> {
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
           <View style={styles.Bet__container}>
-            {displayedImageUrl !== null && <Image style={styles.Bet__image} source={{ uri: displayedImageUrl }} />}
+            <Image rounded url={displayedImageUrl} />
             <View style={styles.Bet__content}>
               <View style={styles.Bet__header}>
                 <Text style={styles.Bet__headerText}>
