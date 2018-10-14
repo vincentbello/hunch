@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   Image_empty: {
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.background,
   },
   Image__emptyIcon: {
 
@@ -52,7 +53,7 @@ const CustomImage = ({ rounded, size, url }: Props): React.Node => {
 
   return (
     <View style={[...style, styles.Image_empty]}>
-      <Icon name="user" size={dimension / 3} color={Colors.white} style={styles.Image__emptyIcon} />
+      <Icon name="user" size={dimension * 2 / 3} color={Colors.textSecondary} style={styles.Image__emptyIcon} />
     </View>
   );
 };
