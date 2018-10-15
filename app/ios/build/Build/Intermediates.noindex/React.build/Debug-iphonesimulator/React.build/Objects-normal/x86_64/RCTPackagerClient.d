@@ -5,4 +5,4 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTLog.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTAssert.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTUtils.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/../Libraries/WebSocket/RCTReconnectingWebSocket.h
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.h

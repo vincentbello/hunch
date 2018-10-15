@@ -1541,7 +1541,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = GL527J2335;
-				FRAMEWORK_SEARCH_PATHS = "~/Documents/FacebookSDK/**";
+				FRAMEWORK_SEARCH_PATHS = "/Users/vincebello/Documents/FacebookSDK/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1568,7 +1568,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hunch/Hunch.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GL527J2335;
-				FRAMEWORK_SEARCH_PATHS = "~/Documents/FacebookSDK/**";
+				FRAMEWORK_SEARCH_PATHS = "/Users/vincebello/Documents/FacebookSDK/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
