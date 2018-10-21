@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     opacity: 0.25,
   },
   Game__content: {
-    flex: 3,
+    flex: 7,
   },
   Game__row: {
     flexDirection: 'row',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     right: -5,
   },
   Game__meta: {
-    flex: 1,
+    flex: 3,
   },
   Game__metaContainer: {
     flex: 1,

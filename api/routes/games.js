@@ -11,14 +11,12 @@ router.get('/upcoming', function(req, res, next) {
   if (!req.query.date || !req.query.league) return res.sendStatus(400);
   const { date, league } = req.query;
   const dateObj = new Date(date.substr(4), parseInt(date.substr(0, 2), 10) - 1, date.substr(2, 2));
-  const targetDate = subYears(addMonths(dateObj, 1), 1); // Offset for testing
-  const now = subYears(addMonths(new Date(), 1), 1); // Offset for testing
 
   models.Game.findAll({
     where: {
       startDate: {
-        [Op.gte]: max(startOfDay(targetDate), now),
-        [Op.lte]: endOfDay(targetDate),
+        [Op.gte]: max(startOfDay(dateObj), new Date()),
+        [Op.lte]: endOfDay(dateObj),
       },
       league,
     },

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     state: DataTypes.STRING,
     xmlStatsId: DataTypes.STRING,
-    msfStatsId: DataTypes.INTEGER,
+    msfId: DataTypes.INTEGER,
   }, {});
   Team.associate = function(models) {
     // associations can be defined here

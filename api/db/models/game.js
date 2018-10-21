@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     week: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
     xmlStatsId: DataTypes.STRING,
-    msfStatsId: DataTypes.INTEGER,
+    msfId: DataTypes.INTEGER,
     homeTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,

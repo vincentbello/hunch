@@ -6,9 +6,9 @@ import http from 'http';
 import minimist from 'minimist';
 const debug = debugModule('node-api:server');
 
-import XmlStatsClient from '../third-party/xml-stats';
-import models from '../db/models';
-import sleep from '../utils/sleep';
+import XmlStatsClient from '../../third-party/my-sports-feeds';
+import models from '../../db/models';
+import sleep from '../../utils/sleep';
 
 const argv = minimist(process.argv.slice(2));
 const league = (argv.league || argv.l || 'NBA').toUpperCase();

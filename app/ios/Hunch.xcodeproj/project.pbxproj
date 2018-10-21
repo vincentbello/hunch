@@ -42,7 +42,6 @@
 		62B2B02BDDBA44CCA1D4691E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3B50922045F4F27B5A77382 /* FontAwesome5_Regular.ttf */; };
 		707BE7F8A18A4B4D969EDD0E /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFBE38C3C76E444698DFBA58 /* SimpleLineIcons.ttf */; };
 		736B2DD166EA473CAAC08D71 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38B7F474F96247179AB1A9C1 /* FontAwesome5_Brands.ttf */; };
-		780EE1FA5024476FB3AB97F7 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82591C2EE4F24FE49A26C2DD /* libRCTFBSDK.a */; };
 		826100A59C09470799918D02 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A59ECEC7BE064C9DA0EF76FD /* FontAwesome5_Solid.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		930785D0DD804038A8D8EC9A /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8313789923474CA6B3E94EAE /* Octicons.ttf */; };
@@ -54,6 +53,7 @@
 		E634AFAC37416AD1E85039C3 /* libPods-Hunch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43536A64C60E3BA2074E6513 /* libPods-Hunch.a */; };
 		E6D238075CE64F999B00EC35 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 332973DCEE584353945A2BED /* Foundation.ttf */; };
 		EEC8015B55FD4E978D5D6381 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA21984832F64E1BB254F063 /* Entypo.ttf */; };
+		F04C81EA217D2A2F0038C149 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0EE041A2172862D0050F0DA /* libRCTFBSDK.a */; };
 		F05837F021653A1E000DFADC /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F05837CA21653A1E000DFADC /* Feather.ttf */; };
 		F0879D932171689800D6DC47 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0879D902171685C00D6DC47 /* libRCTPushNotification.a */; };
 		F0EE03D12172817F0050F0DA /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0EE03CA2172812F0050F0DA /* libRNVectorIcons.a */; };
@@ -457,7 +457,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				F0879D932171689800D6DC47 /* libRCTPushNotification.a in Frameworks */,
 				F0EE03D12172817F0050F0DA /* libRNVectorIcons.a in Frameworks */,
-				780EE1FA5024476FB3AB97F7 /* libRCTFBSDK.a in Frameworks */,
+				F04C81EA217D2A2F0038C149 /* libRCTFBSDK.a in Frameworks */,
 				F0EE0465217290920050F0DA /* FBSDKShareKit.framework in Frameworks */,
 				F0EE0466217290920050F0DA /* FBSDKCoreKit.framework in Frameworks */,
 				F0EE0467217290920050F0DA /* FBSDKLoginKit.framework in Frameworks */,

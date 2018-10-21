@@ -5,8 +5,8 @@ import http from 'http';
 import minimist from 'minimist';
 const debug = debugModule('node-api:server');
 
-import XmlStatsClient from '../third-party/xml-stats';
-import models from '../db/models';
+import XmlStatsClient from '../../third-party/xml-stats';
+import models from '../../db/models';
 
 const argv = minimist(process.argv.slice(2));
 const league = argv.league || 'NBA';
