@@ -4,6 +4,7 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>FontAwesome.ttf</string>
 		<string>Feather.ttf</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>

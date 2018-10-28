@@ -42,6 +42,7 @@
 		BAE37494B8EF42678DDB088C /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D68397BAF8D43C7939B4DAB /* FBSDKCoreKit.framework */; };
 		D9CFBB98D36D4A11B836618D /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D703144C7E114764A8E96EBA /* FBSDKShareKit.framework */; };
 		F0DD64E621853D1A0072F301 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0DD64BF21853D1A0072F301 /* Feather.ttf */; };
+		F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0DD64E7218639720072F301 /* FontAwesome.ttf */; };
 		FB2FDF737EAE430DA44E5A7A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918772BC3ED40B5B381003D /* FBSDKLoginKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -361,6 +362,7 @@
 		D703144C7E114764A8E96EBA /* FBSDKShareKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ./ios/Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		D918772BC3ED40B5B381003D /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ./ios/Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		F0DD64BF21853D1A0072F301 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		F0DD64E7218639720072F301 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,6 +506,7 @@
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				F0DD64E7218639720072F301 /* FontAwesome.ttf */,
 				F0DD64BF21853D1A0072F301 /* Feather.ttf */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1108,6 +1111,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				F0DD64E621853D1A0072F301 /* Feather.ttf in Resources */,
+				F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
