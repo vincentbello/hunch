@@ -23,4 +23,5 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTInvalidating.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/UIView+React.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTComponent.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTRefreshControl.h
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTRefreshControl.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/ScrollView/RCTScrollableProtocol.h

@@ -77,12 +77,12 @@ extern const NSUInteger AKFHeaderTextTypeCount;
 /**
   Returns a theme that uses an outline style with simple color groups that will be applied to the theme.
 
- - Parameter primaryColor: The color used for `buttonBackgroundColor`, `buttonBorderColor`, `buttonDisabledBorderColor`,
+ @param primaryColor The color used for `buttonBackgroundColor`, `buttonBorderColor`, `buttonDisabledBorderColor`,
  `buttonDisabledTextColor`, `buttonHighlightedBackgroundColor`, `buttonHighlightedBorderColor`,
  `headerBackgroundColor`, `iconColor`, `inputBorderColor`
- - Parameter primaryTextColor: The color used for `buttonHighlightedTextColor`, `buttonTextColor`, `headerTextColor`.
- - Parameter secondaryTextColor: The color used for `inputTextColor`, `textColor`, `titleColor`.
- - Parameter statusBarStyle: The style to use for the status bar.
+ @param primaryTextColor The color used for `buttonHighlightedTextColor`, `buttonTextColor`, `headerTextColor`.
+ @param secondaryTextColor The color used for `inputTextColor`, `textColor`, `titleColor`.
+ @param statusBarStyle The style to use for the status bar.
  */
 + (instancetype)outlineThemeWithPrimaryColor:(UIColor *)primaryColor
                             primaryTextColor:(UIColor *)primaryTextColor
@@ -92,13 +92,13 @@ extern const NSUInteger AKFHeaderTextTypeCount;
 /**
   Returns a theme with simple color groups that will be applied to the theme.
 
- - Parameter primaryColor: The color used for `buttonBackgroundColor`, `buttonBorderColor`,
+ @param primaryColor The color used for `buttonBackgroundColor`, `buttonBorderColor`,
  `buttonHighlightedBackgroundColor`, `buttonHighlightedBorderColor`, `headerBackgroundColor`, `iconColor`.
- - Parameter primaryTextColor: The color used for `buttonHighlightedTextColor`, `buttonTextColor`, `headerTextColor`.
- - Parameter secondaryColor: The color used for `buttonDisabledBackgroundColor`, `buttonDisabledBorderColor`,
+ @param primaryTextColor The color used for `buttonHighlightedTextColor`, `buttonTextColor`, `headerTextColor`.
+ @param secondaryColor The color used for `buttonDisabledBackgroundColor`, `buttonDisabledBorderColor`,
  `inputBackgroundColor`, `inputBorderColor`.
- - Parameter secondaryTextColor: The color used for `buttonDisabledTextColor`, `inputTextColor`, `textColor`, `titleColor`.
- - Parameter statusBarStyle: The style to use for the status bar.
+ @param secondaryTextColor The color used for `buttonDisabledTextColor`, `inputTextColor`, `textColor`, `titleColor`.
+ @param statusBarStyle The style to use for the status bar.
  */
 + (instancetype)themeWithPrimaryColor:(UIColor *)primaryColor
                      primaryTextColor:(UIColor *)primaryTextColor

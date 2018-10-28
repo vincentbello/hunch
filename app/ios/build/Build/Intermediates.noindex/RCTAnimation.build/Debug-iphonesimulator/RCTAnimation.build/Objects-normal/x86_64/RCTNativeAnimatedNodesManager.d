@@ -1,8 +1,6 @@
 dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.m \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTValueAnimatedNode.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUIManager.h \
@@ -28,6 +26,8 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAdditionAnimatedNode.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTValueAnimatedNode.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Drivers/RCTAnimationDriver.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTDiffClampAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTDivisionAnimatedNode.h \
@@ -40,5 +40,6 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTPropsAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Drivers/RCTSpringAnimation.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTStyleAnimatedNode.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTSubtractionAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTTransformAnimatedNode.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTTrackingAnimatedNode.h

@@ -23,4 +23,8 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/TextInput/RCTInputAccessoryShadowView.h \
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLayout.h \
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/TextInput/RCTInputAccessoryView.h

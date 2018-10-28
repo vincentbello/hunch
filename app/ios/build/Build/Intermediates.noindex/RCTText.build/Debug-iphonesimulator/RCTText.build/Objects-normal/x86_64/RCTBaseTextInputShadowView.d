@@ -18,6 +18,7 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextAttributes.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextTransform.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView+Layout.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUIManager.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTViewManager.h \

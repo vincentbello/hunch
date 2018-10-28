@@ -12,6 +12,7 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTEventDispatcher.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTLog.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/Surface/RCTSurfaceView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTTouchEvent.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Modules/RCTUIManager.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTRootView.h \

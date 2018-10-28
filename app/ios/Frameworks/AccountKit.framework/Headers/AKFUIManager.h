@@ -56,18 +56,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
   Returns a custom view to use above the scrollable content.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: a View or null for the default view
+ @return a View or null for the default view
  */
 - (nullable UIView *)actionBarViewForState:(AKFLoginFlowState)state;
 
 /**
   Returns a custom view for the body in the middle of the scrollable container.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: a View or null for the default view
+ @return a View or null for the default view
  */
 - (nullable UIView *)bodyViewForState:(AKFLoginFlowState)state;
 
@@ -77,27 +77,27 @@ NS_ASSUME_NONNULL_BEGIN
 
  This method is only called for PhoneLogin, EmailLogin and ConfirmationCode states.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: the button type for the state
+ @return the button type for the state
  */
 - (AKFButtonType)buttonTypeForState:(AKFLoginFlowState)state;
 
 /**
   Returns a custom view for the bottom of the content in the scrollable container.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: a View or null for the default view
+ @return a View or null for the default view
  */
 - (nullable UIView *)footerViewForState:(AKFLoginFlowState)state;
 
 /**
   Returns a custom view for the top of the content in the scrollable container.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: a View or null for the default view
+ @return a View or null for the default view
  */
 - (nullable UIView *)headerViewForState:(AKFLoginFlowState)state;
 
@@ -107,7 +107,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  This method will be called before any views are retrieved.
 
- - Parameter actionController: the action controller
+ @param actionController the action controller
  */
 - (void)setActionController:(nonnull id<AKFActionController>)actionController;
 
@@ -117,23 +117,23 @@ NS_ASSUME_NONNULL_BEGIN
 
  This method will be called before the views are retrieved.
 
- - Parameter error: the error
+ @param error the error
  */
 - (void)setError:(nonnull NSError *)error;
 
 /**
   Returns the position of the text relative to the content body view.
 
- - Parameter state: the current state of the login flow
+ @param state the current state of the login flow
 
- - Returns: a text position
+ @return a text position
  */
 - (AKFTextPosition)textPositionForState:(AKFLoginFlowState)state;
 
 /**
   Returns a theme for the current view.
 
- - Returns: a theme or null for the default theme
+ @return a theme or null for the default theme
  */
 - (nullable AKFTheme *)theme;
 @end

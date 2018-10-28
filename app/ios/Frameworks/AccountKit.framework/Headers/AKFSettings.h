@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
   Set the Account Kit Client Token used by the SDK.
 
- - Parameter clientToken: The Account Kit Client Token to be used by the SDK.
+ @param clientToken The Account Kit Client Token to be used by the SDK.
  */
 + (void)setClientToken:(NSString *)clientToken;
 

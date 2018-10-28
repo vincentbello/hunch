@@ -11,9 +11,9 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTFrameUpdate.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTInvalidating.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/ScrollView/RCTScrollableProtocol.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTComponent.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTBorderStyle.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTComponent.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTPointerEvents.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTConvert.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Views/RCTAnimationType.h \

@@ -12,4 +12,5 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextTransform.h

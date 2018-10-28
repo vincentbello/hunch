@@ -56,33 +56,33 @@
 /**
   Called when the login completes with an authorization code response type.
 
- - Parameter viewController: the AKFViewController that was used
- - Parameter code: the authorization code that can be exchanged for an access token with the app secret
- - Parameter state: the state param value that was passed in at the beginning of the flow
+ @param viewController the AKFViewController that was used
+ @param code the authorization code that can be exchanged for an access token with the app secret
+ @param state the state param value that was passed in at the beginning of the flow
  */
 - (void)viewController:(UIViewController<AKFViewController> *)viewController didCompleteLoginWithAuthorizationCode:(NSString *)code state:(NSString *)state;
 
 /**
   Called when the login completes with an access token response type.
 
- - Parameter viewController: the AKFViewController that was used
- - Parameter accessToken: the access token for the logged in account
- - Parameter state: the state param value that was passed in at the beginning of the flow
+ @param viewController the AKFViewController that was used
+ @param accessToken the access token for the logged in account
+ @param state the state param value that was passed in at the beginning of the flow
  */
 - (void)viewController:(UIViewController<AKFViewController> *)viewController didCompleteLoginWithAccessToken:(id<AKFAccessToken>)accessToken state:(NSString *)state;
 
 /**
   Called when the login failes with an error
 
- - Parameter viewController: the AKFViewController that was used
- - Parameter error: the error that occurred
+ @param viewController the AKFViewController that was used
+ @param error the error that occurred
  */
 - (void)viewController:(UIViewController<AKFViewController> *)viewController didFailWithError:(NSError *)error;
 
 /**
   Called when the login flow is cancelled through the UI.
 
- - Parameter viewController: the AKFViewController that was used
+ @param viewController the AKFViewController that was used
  */
 - (void)viewControllerDidCancel:(UIViewController<AKFViewController> *)viewController;
 

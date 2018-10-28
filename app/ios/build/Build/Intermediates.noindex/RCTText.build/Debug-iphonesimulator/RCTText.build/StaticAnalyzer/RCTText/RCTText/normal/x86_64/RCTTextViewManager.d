@@ -35,4 +35,5 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/Text/RCTTextShadowView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/BaseText/RCTBaseTextShadowView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextAttributes.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextTransform.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/Text/RCTTextView.h

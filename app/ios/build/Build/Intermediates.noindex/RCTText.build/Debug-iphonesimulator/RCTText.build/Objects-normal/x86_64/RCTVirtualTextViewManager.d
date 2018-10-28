@@ -29,4 +29,5 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLayout.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextAttributes.h
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextAttributes.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextTransform.h

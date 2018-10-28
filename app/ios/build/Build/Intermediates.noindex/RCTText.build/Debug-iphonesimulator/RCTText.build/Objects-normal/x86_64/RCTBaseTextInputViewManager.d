@@ -36,6 +36,7 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/TextInput/RCTBaseTextInputShadowView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/BaseText/RCTBaseTextShadowView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextAttributes.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/RCTTextTransform.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTView.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Text/TextInput/RCTBackedTextInputDelegate.h \

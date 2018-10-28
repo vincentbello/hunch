@@ -1,13 +1,13 @@
 dependencies: \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/Bits.cpp \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/Bits.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/Portability.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/portability/Config.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/CPortability.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/portability/Builtins.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/Assume.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/detail/BitsDetail.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/detail/BitIteratorDetail.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/Bits.cpp \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/Bits.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/Portability.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/portability/Config.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/CPortability.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/portability/Builtins.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/Assume.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/detail/BitsDetail.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/detail/BitIteratorDetail.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/iterator/iterator_adaptor.hpp \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/static_assert.hpp \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/config.hpp \
@@ -213,5 +213,5 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/mpl/aux_/preprocessed/gcc/template_arity.hpp \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/mpl/aux_/preprocessed/gcc/full_lambda.hpp \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/boost_1_63_0/boost/mpl/aux_/preprocessed/gcc/apply.hpp \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/Likely.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.09.26.00/folly/CpuId.h
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/Likely.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/third-party/folly-2016.10.31.00/folly/CpuId.h

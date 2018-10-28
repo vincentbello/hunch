@@ -1,8 +1,8 @@
 dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/Hunch/AppDelegate.m \
   /Users/vincebello/workspace/hunch/app/ios/Hunch/AppDelegate.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPushNotificationManager.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTEventEmitter.h \
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBundleURLProvider.h \
+  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
@@ -10,44 +10,51 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
   /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Modules/module.modulemap \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Modules/module.modulemap \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFWebViewAppLinkResolver.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFURL.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFMeasurementEvent.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLinkTarget.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLinkReturnToRefererView.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLinkReturnToRefererController.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLinkResolving.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLinkNavigation.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFAppLink.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFTaskCompletionSource.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFTask+Exceptions.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFTask.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFExecutor.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFCancellationTokenSource.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFCancellationTokenRegistration.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/BFCancellationToken.h \
-  /Users/vincebello/Documents/FacebookSDK/Bolts.framework/Headers/Bolts.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKProfilePictureView.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKProfile.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKMutableCopying.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKGraphErrorRecoveryProcessor.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKAppLinkUtility.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKAppLinkResolver.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKUtility.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKTestUsersManager.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKSettings.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKGraphRequestDataAttachment.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKGraphRequest.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKConstants.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKButton.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKApplicationDelegate.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKAppEvents.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKMacros.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKGraphRequestConnection.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKCopying.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKAccessToken.h \
-  /Users/vincebello/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKCoreKit.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBundleURLProvider.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Modules/module.modulemap \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Modules/module.modulemap \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFWebViewAppLinkResolver.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFURL.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFMeasurementEvent.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLinkTarget.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLinkReturnToRefererView.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLinkReturnToRefererController.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLinkResolving.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLinkNavigation.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFAppLink.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFTaskCompletionSource.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFTask.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFGeneric.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFExecutor.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFCancellationTokenSource.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFCancellationTokenRegistration.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/BFCancellationToken.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/Bolts.framework/Headers/Bolts.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKWebViewAppLinkResolver.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKURL.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKProfilePictureView.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKProfile.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKMutableCopying.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKMeasurementEvent.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKGraphErrorRecoveryProcessor.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkUtility.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkReturnToRefererView.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkReturnToRefererController.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkResolver.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkResolving.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkNavigation.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLinkTarget.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppLink.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKUtility.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKTestUsersManager.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKSettings.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKMacros.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKGraphRequestDataAttachment.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKGraphRequest.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKConstants.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKButton.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKApplicationDelegate.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAppEvents.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKGraphRequestConnection.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKCopying.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKAccessToken.h \
+  /Users/vincebello/workspace/hunch/app/ios/Frameworks/FBSDKCoreKit.framework/Headers/FBSDKCoreKit.h

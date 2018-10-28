@@ -16,8 +16,8 @@ dependencies: \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTLog.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTAssert.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Base/RCTUtils.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/DevSupport/RCTPackagerClient.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Profiler/RCTProfile.h \
+  /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/DevSupport/RCTPackagerClient.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/DevSupport/RCTPackagerConnection.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/DevSupport/RCTInspectorDevServerHelper.h \
   /Users/vincebello/workspace/hunch/app/node_modules/react-native/React/Inspector/RCTInspectorPackagerConnection.h
