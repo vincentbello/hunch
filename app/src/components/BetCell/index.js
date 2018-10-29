@@ -4,8 +4,6 @@ import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-na
 import { Actions } from 'react-native-router-flux';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
 
-import Icon from 'react-native-vector-icons/Feather';
-
 import { type Bet } from 'types/bet';
 
 import Colors from 'theme/colors';

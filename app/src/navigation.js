@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { Actions, ActionConst, Scene, Stack, Lightbox, Modal } from 'react-native-router-flux';
+import { Actions, ActionConst, Scene, Stack, Lightbox, Modal, Tabs } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Feather';
 
 import AppConfig from 'constants/navigation';
 
@@ -11,7 +12,11 @@ import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
 import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
+import UserContainer from 'containers/User';
 import NavButton from 'components/NavButton';
+import TabbarIcon from 'components/TabbarIcon';
+
+import Colors from 'theme/colors';
 
 /* Routes ==================================================================== */
 export default Actions.create(
@@ -26,28 +31,35 @@ export default Actions.create(
 
         {/* Main App */}
         <Scene key="main" type={ActionConst.REPLACE} hideNavBar>
-          <Scene
-            key="bets"
-            {...AppConfig.navbarProps}
-            title="My Bets"
-            component={BetsContainer}
-            renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
-            renderRightButton={<InboxButtonContainer />}
-          />
+          <Tabs activeTintColor={Colors.brand.primary} key="tabbar" hideNavBar>
+            <Scene key="betsTab" hideNavBar icon={props => <TabbarIcon focused={props.focused} name="dollar-sign" />} tabBarLabel="Bets">
+              <Scene
+                key="bets"
+                {...AppConfig.navbarProps}
+                title="My Bets"
+                component={BetsContainer}
+                renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
+                renderRightButton={<InboxButtonContainer />}
+              />
 
-          <Scene
-            key="requestedBets"
-            {...AppConfig.navbarProps}
-            title="My Bet Requests"
-            component={BetRequestsContainer}
-          />
+              <Scene
+                key="requestedBets"
+                {...AppConfig.navbarProps}
+                title="My Bet Requests"
+                component={BetRequestsContainer}
+              />
 
-          <Scene
-            key="betCard"
-            {...AppConfig.navbarProps}
-            title="Bet"
-            component={BetCardContainer}
-          />
+              <Scene
+                key="betCard"
+                {...AppConfig.navbarProps}
+                title="Bet"
+                component={BetCardContainer}
+              />
+            </Scene>
+            <Scene key="userTab" icon={props => <TabbarIcon focused={props.focused} name="user" />} tabBarLabel="Me">
+              <Scene key="user" title="My Account" component={UserContainer} />
+            </Scene>
+          </Tabs>
         </Scene>
       </Stack>
     </Lightbox>

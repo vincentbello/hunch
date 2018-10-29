@@ -11,5 +11,11 @@ export const SplashStyles = {
 
 export const SplashStylesWithNav = {
   ...SplashStyles,
-  height: AppSizes.screen.height - AppSizes.statusBarHeight - AppSizes.navbarHeight - AppSizes.homeIndicatorHeight,
+  height: AppSizes.screen.height - AppSizes.statusBarHeight - AppSizes.navbarHeight - AppSizes.homeIndicatorHeight - AppSizes.tabbarHeight,
+};
+
+export const BoxStyles = {
+  backgroundColor: 'white',
+  borderRadius: 2,
+  padding: 4,
 };
