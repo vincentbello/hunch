@@ -2,9 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LastAccessedDate</key>
-	<date>2018-10-31T00:34:34Z</date>
-	<key>WorkspacePath</key>
-	<string>/Users/vincentbello/workspace/hunch/app/ios/Hunch.xcodeproj</string>
+	<key>aps-environment</key>
+	<string>development</string>
 </dict>
 </plist>

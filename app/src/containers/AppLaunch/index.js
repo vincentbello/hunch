@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { AsyncStorage, View, StyleSheet, Text } from 'react-native';
+import { Alert, AsyncStorage, View, StyleSheet, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import { connect } from 'react-redux';
@@ -56,10 +56,7 @@ class AppLaunchContainer extends React.Component<Props> {
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.user.data === null && this.props.user.data !== null) {
-      new NotificationService((token) => {
-        console.log(token);
-        this.props.actions.registerDevice();
-      });
+      new NotificationService(({ os, token }): void => this.props.actions.registerDevice(os, token));
       return Actions.main();
     }
     if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();

@@ -2,6 +2,7 @@
 import { Actions } from 'react-native-router-flux';
 import Api from 'api';
 
+import { type Os } from 'types/device';
 import { type Action } from 'types/redux';
 
 export const AUTHENTICATE = 'USER/AUTHENTICATE';
@@ -47,7 +48,7 @@ export const refreshAuth = (refreshToken: string): Action => {
   });
 };
 
-export const registerDevice = (deviceToken: string): Action => ({
+export const registerDevice = (os: Os, token: string): Action => ({
   type: REGISTER_DEVICE,
-  promiseFn: () => Api.registerDevice(deviceToken),
+  promiseFn: () => Api.registerDevice(os, token),
 });

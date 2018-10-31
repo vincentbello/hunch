@@ -409,7 +409,9 @@ class CreateBetContainer extends React.Component<Props, State> {
         <TouchableOpacity disabled={isCreateButtonDisabled} onPress={this.create}>
           <View style={[styles.Create__button, isCreateButtonDisabled && styles.Create__button_disabled]}>
             <Icon name="send" size={24} color={Colors.white} />
-            <Text style={styles.Create__buttonText}>{creationPromiseState.isLoading ? 'Sending...' : 'Send Bet Request'}</Text>
+            <Text style={styles.Create__buttonText}>
+              {creationPromiseState.isLoading ? 'Sending...' : `Send ${bettee ? `${bettee.firstName} a` : ''} Bet Request`}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
