@@ -1,6 +1,4 @@
 'use strict';
-import Team from './team';
-
 module.exports = (sequelize, DataTypes) => {
   const Game = sequelize.define('Game', {
     league: DataTypes.ENUM('NBA'),

@@ -1,6 +1,4 @@
 'use strict';
-import User from './User';
-
 module.exports = (sequelize, DataTypes) => {
   const Device = sequelize.define('Device', {
     type: DataTypes.ENUM('ANDROID', 'IOS'),

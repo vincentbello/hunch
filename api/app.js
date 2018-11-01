@@ -5,9 +5,11 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import sassMiddleware from 'node-sass-middleware';
+import { ApolloServer } from 'apollo-server-express';
 
 import authMiddleware from './middleware/auth';
 import setupPassport from './utils/passport';
+import schema from './schema';
 import UserSerializer from './serialization/User';
 
 import indexRouter from './routes/index';
@@ -19,6 +21,7 @@ import usersRouter from './routes/users';
 setupPassport();
 
 const app = express();
+const GRAPHQL_PATH = '/graphql';
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -45,5 +48,13 @@ app.use('/auth', authRouter);
 app.use('/bets', authMiddleware, betsRouter);
 app.use('/games', authMiddleware, gamesRouter);
 app.use('/users', authMiddleware, usersRouter);
+
+const apolloServer = new ApolloServer({
+  schema,
+  context: ({ req, res }) => ({ userId: req.auth.id }),
+});
+// apolloServer.applyMiddleware({ app });
+app.use(GRAPHQL_PATH, authMiddleware);
+apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH });
 
 export default app;

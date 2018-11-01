@@ -5,6 +5,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 import dbConfig from '../../config/db';
 const config = dbConfig[env];
+const MODEL_DIR_REGEX = /^[A-Z][a-z]+(?:[A-Z][a-z]+)*$/;
 
 const db = {};
 
@@ -15,11 +16,10 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
+export const getModelDirs = () => fs.readdirSync(__dirname).filter(dir => MODEL_DIR_REGEX.test(dir));
+
+getModelDirs()
+  .map(dir => path.join(dir, 'index.js'))
   .forEach(file => {
     const model = sequelize['import'](path.join(__dirname, file));
     db[model.name] = model;
