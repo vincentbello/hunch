@@ -1,0 +1,28 @@
+fragment teamFields on Team {
+  id
+  firstName
+  lastName
+  abbreviation
+  imageUrl
+  conference
+  division
+}
+
+query UpcomingGames($date: String!, $league: String!) {
+  upcomingGames(date: $date, league: $league) {
+    id
+    seasonType
+    homeScore
+    awayScore
+    startDate
+    awayTeam {
+      ...teamFields
+    }
+    homeTeam {
+      ...teamFields
+      site
+      city
+      state
+    }
+  }
+}

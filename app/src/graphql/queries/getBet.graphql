@@ -1,0 +1,31 @@
+fragment userFields on User {
+  id
+  firstName
+  lastName
+  imageUrl
+  gender
+}
+
+query Bet($id: Int!) {
+  bet(id: $id) {
+    id
+    type
+    amount
+    wager
+    responded
+    accepted
+    active
+    winnerId
+    resolvedAt
+    lastRemindedAt
+    game {
+      league
+    }
+    bettor {
+      ...userFields
+    }
+    bettee {
+      ...userFields
+    }
+  }
+}

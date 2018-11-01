@@ -1,43 +1,41 @@
 import { GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
-// import { Op: {iLike} } from 'sequelize';
+import { Op } from 'sequelize';
+import { endOfDay, max, startOfDay } from 'date-fns';
 import { resolver } from 'graphql-sequelize';
-import gameType from './type';
+import GameType from './type';
 
 export default models => ({
-  // team: {
-  //   type: teamType,
-  //   args: {
-  //     id: {
-  //       description: 'ID of team',
-  //       type: new GraphQLNonNull(GraphQLString),
-  //     },
-  //   },
-  //   resolve: resolver(models.Team, {
-  //     after: result => result.length ? result[0] : result
-  //   }),
-  // },
-  // wallets: {
-  //   type: new GraphQLList(walletType),
-  //   resolve: resolver(Wallet)
-  // },
-  // walletSearch: {
-  //   type: new GraphQLList(walletType),
-  //   args: {
-  //     query: {
-  //       description: 'Fuzzy-matched name of wallet',
-  //       type: new GraphQLNonNull(GraphQLString)
-  //     }
-  //   },
-  //   resolve: resolver(Wallet, {
-  //     dataLoader: false,
-  //     before: (findOptions, args) => ({
-  //       where: {
-  //         name: { [iLike]: `%${args.query}%` },
-  //       },
-  //       order: [['name', 'ASC']],
-  //       ...findOptions
-  //     }),
-  //     after: sort
-  //   })
-  // }
+  upcomingGames: {
+    type: new GraphQLList(GameType),
+    args: {
+      date: {
+        description: 'Day to fetch games for, in MMDDYYYY format',
+        type: GraphQLNonNull(GraphQLString),
+      },
+      league: {
+        description: 'League to fetch games for',
+        type: GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: resolver(models.Game, {
+      before: (findOptions, { date, league }) => {
+        const dateObj = new Date(date.substr(4), parseInt(date.substr(0, 2), 10) - 1, date.substr(2, 2));
+        return {
+          ...findOptions,
+          where: {
+            startDate: {
+              [Op.gte]: max(startOfDay(dateObj), new Date()),
+              [Op.lte]: endOfDay(dateObj),
+            },
+            league,
+          },
+          order: [['startDate', 'ASC']],
+          include: [
+            { model: models.Team, as: 'homeTeam' },
+            { model: models.Team, as: 'awayTeam' },
+          ],
+        };
+      },
+    }),
+  },
 });

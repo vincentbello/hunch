@@ -1,9 +1,29 @@
-import { GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 import { Op } from 'sequelize';
 import { resolver } from 'graphql-sequelize';
 import BetType, { BetListType } from './type';
 
 export default models => ({
+  bet: {
+    type: BetType,
+    args: {
+      id: {
+        description: 'ID of bet',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: resolver(models.Bet, {
+      before: (findOptions, args, context) => ({
+        ...findOptions,
+        include: [
+          { model: models.Game, as: 'game' },
+          { model: models.User, as: 'bettor' },
+          { model: models.User, as: 'bettee' },
+        ],
+      }),
+    }),
+  },
+
   bets: {
     type: new GraphQLList(BetType),
     args: {
@@ -13,8 +33,14 @@ export default models => ({
       },
     },
     resolve: resolver(models.Bet, {
-      before: (findOptions, args, context) => {
-        const where = {
+      before: (findOptions, args, context) => ({
+        ...findOptions,
+        include: [
+          { model: models.Game, as: 'game' },
+          { model: models.User, as: 'bettor' },
+          { model: models.User, as: 'bettee' },
+        ],
+        where: {
           ACTIVE: {
             active: true,
             [Op.or]: [
@@ -38,9 +64,8 @@ export default models => ({
             betteeId: context.userId,
             responded: false,
           },
-        }[args.betListType] || {};
-        return { ...findOptions, where };
-      },
+        }[args.betListType] || {},
+      }),
     }),
   },
 });
