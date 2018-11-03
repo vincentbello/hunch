@@ -1,24 +1,24 @@
 dependencies: \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTFileReaderModule.m \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTFileReaderModule.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
-  /Users/vincebello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTBlobManager.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTURLRequestHandler.h \
-  /Users/vincebello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTURLRequestDelegate.h
+  /Users/vincentbello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTFileReaderModule.m \
+  /Users/vincentbello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTFileReaderModule.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/vincentbello/workspace/hunch/app/node_modules/react-native/Libraries/Blob/RCTBlobManager.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTURLRequestHandler.h \
+  /Users/vincentbello/workspace/hunch/app/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTURLRequestDelegate.h

@@ -2,13 +2,14 @@
 import axios from 'axios';
 import { stringify } from 'qs';
 import { AsyncStorage } from 'react-native';
+import { API_URL } from 'react-native-dotenv';
 
 import { type Os } from 'types/device';
 import { type Bet } from 'types/bet';
 import { type Game } from 'types/game';
 import { type User as UserPayload, type UserGroupType } from 'types/user';
 
-const API_URL = 'http://vincents-macbook-pro.local:3000'; // 'http://localhost:3000';
+// const API_URL = 'http://vincents-macbook-pro.local:3000'; // 'http://localhost:3000';
 
 export default class Api {
   // TODO

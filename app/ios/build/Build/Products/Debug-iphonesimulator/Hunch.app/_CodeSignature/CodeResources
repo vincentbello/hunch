@@ -6,23 +6,27 @@
 	<dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		3pYiSF6Lt//sm7A9I3oCqU1fmSQ=
+		N0pqLYaahHYzA0vhBdoy07oq9DM=
 		</data>
 		<key>Feather.ttf</key>
 		<data>
 		N8tVG0ETiQxSP0aeapsrKcTEm+Q=
 		</data>
+		<key>FontAwesome.ttf</key>
+		<data>
+		E7HqtlqYPHpzvHmXxHnWaUP3xss=
+		</data>
 		<key>Frameworks/XCTest.framework/Info.plist</key>
 		<data>
-		SdjOzThclNXu4KLO5h40hBctROA=
+		DQ4GPJ7FuM6H+FaCC/2wxhPSGCQ=
 		</data>
 		<key>Frameworks/XCTest.framework/XCTest</key>
 		<data>
-		xMkt3jnDeDc78TRXd0+2Z35KQLI=
+		HK6asLJ70IK7E4e83e8R1gxACHo=
 		</data>
 		<key>Frameworks/XCTest.framework/_CodeSignature/CodeResources</key>
 		<data>
-		PWtqWHkq/t3jE+e2ENvRUxmH79A=
+		/8LQToTPOL9FsEsYDaACQ21Day0=
 		</data>
 		<key>Frameworks/XCTest.framework/en.lproj/InfoPlist.strings</key>
 		<dict>
@@ -35,15 +39,15 @@
 		</dict>
 		<key>Frameworks/XCTest.framework/version.plist</key>
 		<data>
-		5cRzPtVUKIvxWWkMzFSgiTN1GL4=
+		P6P66kW7+LvLIo4WHjXGltpT8CA=
 		</data>
 		<key>Frameworks/libXCTestBundleInject.dylib</key>
 		<data>
-		kh3DL7UnDxrEpeLfSkD0a5DyoqA=
+		xKX69bDGMJa2TcU/BC9ypZ06rsI=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		UgbwEiwmsvR1uVXdq4k4g8LBP3g=
+		AioLaLdtkEK+PAG0jo2BpwssM30=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -55,19 +59,19 @@
 		</data>
 		<key>PlugIns/HunchTests.xctest.dSYM/Contents/Resources/DWARF/HunchTests</key>
 		<data>
-		RcZKzapM3y47xkO4lJhVHJNRhPs=
+		xBEoIlMmWZKIxVGCt7LhkdxZqE0=
 		</data>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<data>
-		K/cp3HaaYDXT311gnrmney1CiE4=
+		DMIsrmaZiA98BotK8D3CdNeE3oQ=
 		</data>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>
 		<data>
-		7c7HkQiqbqUkSTILPNSgzOUgXCA=
+		4iDgNOQEF+Cfl7x2FReL/HpCL5M=
 		</data>
 		<key>PlugIns/HunchTests.xctest/_CodeSignature/CodeResources</key>
 		<data>
-		eLvhWLfpL4rI3wfljDxg34025sQ=
+		ToQV5C9015Ds3X4qpog/Nxr0EFA=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -76,11 +80,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3pYiSF6Lt//sm7A9I3oCqU1fmSQ=
+			N0pqLYaahHYzA0vhBdoy07oq9DM=
 			</data>
 			<key>hash2</key>
 			<data>
-			MciJVXmtQhye3FWOrLWtmaKrYSqFSZOmaFELE+uKssU=
+			1/VVM3OqySlvgC9wBLo36AygxV7ORNRJOfmbJXPC0vY=
 			</data>
 		</dict>
 		<key>Feather.ttf</key>
@@ -94,37 +98,48 @@
 			vJZj1K7YcJfMyjc62U/QjeJKxKNRAOPfO30oFCyQCUo=
 			</data>
 		</dict>
+		<key>FontAwesome.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			E7HqtlqYPHpzvHmXxHnWaUP3xss=
+			</data>
+			<key>hash2</key>
+			<data>
+			qljzPyOaD7AvXHpsRcBD16msmgkzNYBmlOzW1O3A1qg=
+			</data>
+		</dict>
 		<key>Frameworks/XCTest.framework/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SdjOzThclNXu4KLO5h40hBctROA=
+			DQ4GPJ7FuM6H+FaCC/2wxhPSGCQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			2/iVpBjFB5Eb15yfj958wukO7l5pj6EewJRCoeXdZ+Q=
+			VfVpYXVjG5OK2j8J39CP2mIMg1P5eFaYkRIJ/Hb2RSQ=
 			</data>
 		</dict>
 		<key>Frameworks/XCTest.framework/XCTest</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			xMkt3jnDeDc78TRXd0+2Z35KQLI=
+			HK6asLJ70IK7E4e83e8R1gxACHo=
 			</data>
 			<key>hash2</key>
 			<data>
-			PbtcN1sDyKXVhsFpxcKSZjD2kcyQaK1dyQLcNorCDHY=
+			olgg9NXiZ2M1ifvjBR8uTJxtXlM5EacLdDrNxfmImoY=
 			</data>
 		</dict>
 		<key>Frameworks/XCTest.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PWtqWHkq/t3jE+e2ENvRUxmH79A=
+			/8LQToTPOL9FsEsYDaACQ21Day0=
 			</data>
 			<key>hash2</key>
 			<data>
-			6uvXQHQXgm9gxM9mblxuWfx3k/K7uR1puBprmwDR7V4=
+			C7sJpbu4qpi8/rH5JYpdQYncotP69JQ9Fiu8jrHXYvU=
 			</data>
 		</dict>
 		<key>Frameworks/XCTest.framework/en.lproj/InfoPlist.strings</key>
@@ -144,22 +159,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5cRzPtVUKIvxWWkMzFSgiTN1GL4=
+			P6P66kW7+LvLIo4WHjXGltpT8CA=
 			</data>
 			<key>hash2</key>
 			<data>
-			ygI1wWTyE9+SYWsvtxZwy/ZZDORcDcIarh3Yo7p2JWY=
+			2BV684CZjHtMZHxSiwC5qc/DGXv9WIOWUc9dEU/Q1pw=
 			</data>
 		</dict>
 		<key>Frameworks/libXCTestBundleInject.dylib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			kh3DL7UnDxrEpeLfSkD0a5DyoqA=
+			xKX69bDGMJa2TcU/BC9ypZ06rsI=
 			</data>
 			<key>hash2</key>
 			<data>
-			fpOt7HUuqY2ezAoc4Q2s/uCD+QmTqmstpUSS9I8nCoE=
+			jJ/zKe1SwWk9KkZ4MXV01NPW4QiHpU1aZhpfTDknkp0=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest.dSYM/Contents/Info.plist</key>
@@ -177,44 +192,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RcZKzapM3y47xkO4lJhVHJNRhPs=
+			xBEoIlMmWZKIxVGCt7LhkdxZqE0=
 			</data>
 			<key>hash2</key>
 			<data>
-			16QAheVNd0aLwd8L82FFFlGs1Y4AYv/6+A8Iv8nzyrI=
+			pGdF9EHcQ/bOeHSyz1vqtm+ZFzdE4HZ1zyLVasYGkkc=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			K/cp3HaaYDXT311gnrmney1CiE4=
+			DMIsrmaZiA98BotK8D3CdNeE3oQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			5mm77qvT5/oCMJcvNp9L8VpkbwQbBWw9yhrq0w5k0Bo=
+			wZN+Q9w84J8FP9WYwC3VIusxnzItSX5uaq1dDr7cAxo=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			7c7HkQiqbqUkSTILPNSgzOUgXCA=
+			4iDgNOQEF+Cfl7x2FReL/HpCL5M=
 			</data>
 			<key>hash2</key>
 			<data>
-			fsq1C55tv/M9xFOl+l1j7nbBK6PX7Ul3+iGduS7P3cw=
+			dhGVG2wJNFLFO1b32w+Wsb1u48ZG3FYPM2J27XOYwpA=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			eLvhWLfpL4rI3wfljDxg34025sQ=
+			ToQV5C9015Ds3X4qpog/Nxr0EFA=
 			</data>
 			<key>hash2</key>
 			<data>
-			/dXdlJ4d47UsxxqewfaqQ1cEbtpXyBuGBsLozn7c4NU=
+			/qyvg4fqLd6rGCYqORvf38tBxX+TcmJxIsWSivzymmI=
 			</data>
 		</dict>
 	</dict>

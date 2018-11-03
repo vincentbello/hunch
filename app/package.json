@@ -4,19 +4,23 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "ios": "react-native run-ios --simulator=\"iPhone X\"",
+    "ios": "rm -rf ./node_modules/.cache/babel-loader && react-native run-ios --simulator=\"iPhone X\"",
     "test": "jest"
   },
   "dependencies": {
     "adm-zip": "^0.4.11",
+    "apollo-boost": "^0.1.19",
     "asap": "^2.0.6",
     "axios": "^0.18.0",
     "date-fns": "^1.29.0",
     "dot-prop-immutable": "^1.5.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
     "plist": "^3.0.1",
     "qs": "^6.5.2",
     "query-string": "^6.2.0",
     "react": "16.6.0-alpha.8af6728",
+    "react-apollo": "^2.2.4",
     "react-native": "0.57.4",
     "react-native-elements": "^0.19.1",
     "react-native-fbsdk": "^0.8.0",
@@ -38,6 +42,7 @@
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.48.2",
+    "react-native-dotenv": "^0.2.0",
     "react-test-renderer": "16.6.0-alpha.8af6728",
     "redux-logger": "^3.0.6"
   },

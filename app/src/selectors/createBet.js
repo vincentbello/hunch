@@ -12,17 +12,12 @@ import { type ReduxState } from 'types/state';
 
 const getEntities = (state: ReduxState): AllEntities => state.entities;
 const getTeamEntities = (state: ReduxState): TeamEntities => state.entities.teams;
-const getUserEntities = (state: ReduxState): UserEntities => state.entities.users;
 
 export const getBetAmount = (state: ReduxState): number => state.views.createBet.amount;
 export const getCreationPromiseState = (state: ReduxState): PromiseState<> => state.views.createBet.creation;
 export const getDateViewIndex = (state: ReduxState): number => state.views.createBet.dateViewIndex;
 
-export const getBettee = createSelector(
-  getUserEntities,
-  (state: ReduxState): number | null => state.views.createBet.betteeId,
-  getEntity
-);
+export const getBettee = (state: ReduxState): User | null => state.views.createBet.bettee;
 
 export const getBettorPickTeam = createSelector(
   getTeamEntities,
@@ -41,15 +36,6 @@ export const getGame = createSelector(
     if (gameId === null) return null;
     return getEntity(entities.games, gameId, { homeTeam: 'teams', awayTeam: 'teams' }, entities);
   }
-);
-
-export const getNewBetUsers = createSelector(
-  getUserEntities,
-  (state: ReduxState): PromiseState<Array<number>> => state.views.createBet.users,
-  (users: UserEntities, usersPS: PromiseState<Array<number>>): PromiseState<Array<User>> => {
-    if (usersPS.data === null) return usersPS;
-    return { ...usersPS, data: idsToList(users, usersPS.data) };
-  },
 );
 
 export const getGames = createSelector(

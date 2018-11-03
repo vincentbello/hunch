@@ -4,16 +4,16 @@ import { ActivityIndicator, Button, FlatList, View, Text, TextInput, TouchableOp
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import { Query } from 'react-apollo';
 import Icon from 'react-native-vector-icons/Feather';
+import gql from 'graphql-tag';
 
 import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { fetchBets } from 'actions/bets';
 import { fetchUpcomingGames } from 'actions/games';
-import { fetchUsers } from 'actions/users';
 import { createBet, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame } from 'actions/createBet';
-import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, getDateViewIndex, getDateViewType, getGame, getGames,
-  getNewBetUsers } from 'selectors/createBet';
+import { getBetAmount, getBettee, getBettorPickTeam, getCreationPromiseState, getDateViewIndex, getDateViewType, getGame,
+  getGames } from 'selectors/createBet';
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
 import PromiseStateSplash from 'components/PromiseStateSplash';
@@ -34,6 +34,18 @@ import { SplashStyles } from 'theme/app';
 import Sizes from 'theme/sizes';
 import Typography from 'theme/typography';
 
+const GET_USERS = gql`
+  query UserLists($userListType: UserListType) {
+    users(userListType: $userListType) {
+      id
+      firstName
+      lastName
+      imageUrl
+      gender
+    }
+  }
+`;
+
 type ReduxProps = {
   betAmount: number,
   bettee: User,
@@ -44,7 +56,6 @@ type ReduxProps = {
   game: Game | null,
   games: PromiseState<Array<Game>>,
   user: UserState,
-  users: PromiseState<Array<User>>,
 };
 
 // What data from the store shall we send to the component?
@@ -58,7 +69,6 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
   game: getGame(state),
   games: getGames(state),
   user: state.user,
-  users: getNewBetUsers(state),
 });
 
 // Any actions to map to the component?
@@ -68,7 +78,6 @@ const mapDispatchToProps = (dispatch: Action => any) => ({
       createBet,
       fetchBets,
       fetchUpcomingGames,
-      fetchUsers,
       setBetAmount,
       setBettee,
       setBettorPickTeam,
@@ -83,9 +92,8 @@ type Props = ReduxProps & {
     createBet: (betteeId: number, amount: number, gameId: number, bettorPickTeamId: number) => void,
     fetchBets: (viewType: ViewType) => void,
     fetchUpcomingGames: (league: string, date: string) => void,
-    fetchUsers: (type: UserGroupType) => void,
     setBetAmount: (amount: number) => void,
-    setBettee: (betteeId: number | null) => void,
+    setBettee: (bettee: User | null) => void,
     setBettorPickTeam: (bettorPickTeamId: number | null) => void,
     setDateViewIndex: (dateViewIndex: number) => void,
     setGame: (gameId: number | null) => void,
@@ -182,10 +190,6 @@ class CreateBetContainer extends React.Component<Props, State> {
     betteeInputText: '',
   };
 
-  componentWillMount() {
-    if (!this.props.users.didFetch) this.props.actions.fetchUsers('friends');
-  }
-
   componentDidUpdate(prevProps: Props) {
     if (prevProps.dateViewType !== this.props.dateViewType && !this.props.games.didFetch) {
       this.fetchGames();
@@ -212,18 +216,6 @@ class CreateBetContainer extends React.Component<Props, State> {
     );
   }
 
-  get filteredUsers(): Array<User> {
-    const { data } = this.props.users;
-    if (!data) return [];
-
-    const filterStr = this.state.betteeInputText.trim().toLowerCase();
-    if (filterStr.length === 0) return data;
-
-    return data.filter((user: User): boolean => (
-      user.firstName.toLowerCase().startsWith(filterStr) || user.lastName.toLowerCase().startsWith(filterStr)
-    ));
-  }
-
   onAmountInputChange = (amountInputText: string) => {
     this.props.actions.setBetAmount(parseInt(amountInputText, 10) || 0);
   };
@@ -243,9 +235,9 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   removeBettee = (): void => this.props.actions.setBettee(null);
 
-  selectBettee = (userId: number) => {
+  selectBettee = (user: User) => {
     this.setState({ betteeInputText: '' });
-    this.props.actions.setBettee(userId);
+    this.props.actions.setBettee(user);
 
     if (!this.props.games.didFetch) this.fetchGames();
   };
@@ -352,21 +344,31 @@ class CreateBetContainer extends React.Component<Props, State> {
   };
 
   renderUsers = (): React.Node => (
-    <FlatList
-      data={this.filteredUsers}
-      keyExtractor={(user: User): string => `${user.id}`}
-      renderItem={({ item }): React.Node => (
-        <UserCell
-          user={item}
-          onPress={(): void => this.selectBettee(item.id)}
-        />
+    <Query query={GET_USERS} variables={{ userListType: 'FRIENDS' }}>
+      {({ loading, error, data: { users } }): React.Node => (
+        <PromiseStateSplash
+          promiseState={{ didFetch: true, isLoading: loading, hasError: Boolean(error) }}
+        >
+          {users && (
+            <FlatList
+              data={users}
+              keyExtractor={(user: User): string => `${user.id}`}
+              renderItem={({ item }): React.Node => (
+                <UserCell
+                  user={item}
+                  onPress={(): void => this.selectBettee(item)}
+                />
+              )}
+            />
+          )}
+        </PromiseStateSplash>
       )}
-    />
+    </Query>
   );
 
   render(): React.Node {
     const { isCreateButtonDisabled } = this;
-    const { betAmount, bettee, creationPromiseState, game, games, users } = this.props;
+    const { betAmount, bettee, creationPromiseState, game, games } = this.props;
     return (
       <View style={styles.Create}>
         {bettee ? (
@@ -374,7 +376,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             <View style={styles.Create__headerMain}>
               <Pill
                 canRemove
-                label={bettee.fullName}
+                label={`${bettee.firstName} ${bettee.lastName}`}
                 onRemove={this.removeBettee}
               />
             </View>
@@ -399,18 +401,19 @@ class CreateBetContainer extends React.Component<Props, State> {
             onChangeText={this.onBetteeInputChange}
           />
         )}
-        <View style={[styles.Create__container, (users.isLoading || games.isLoading) && SplashStyles]}>
-          {(users.isLoading || games.isLoading) ? (
+        <View style={[styles.Create__container, games.isLoading && SplashStyles]}>
+          {bettee ? this.renderGameSelection() : this.renderUsers()}
+          {/* {(users.isLoading || games.isLoading) ? (
             <ActivityIndicator size="large" color={Colors.brand.primary} />
           ) : (
             bettee ? this.renderGameSelection() : this.renderUsers()
-          )}
+          )} */}
         </View>
         <TouchableOpacity disabled={isCreateButtonDisabled} onPress={this.create}>
           <View style={[styles.Create__button, isCreateButtonDisabled && styles.Create__button_disabled]}>
             <Icon name="send" size={24} color={Colors.white} />
             <Text style={styles.Create__buttonText}>
-              {creationPromiseState.isLoading ? 'Sending...' : `Send ${bettee ? `${bettee.firstName} a` : ''} Bet Request`}
+              {creationPromiseState.isLoading ? 'Sending...' : `Send${bettee ? ` ${bettee.firstName} a` : ''} Bet Request`}
             </Text>
           </View>
         </TouchableOpacity>
