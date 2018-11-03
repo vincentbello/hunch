@@ -21,7 +21,7 @@ import TabView from 'components/TabView';
 import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
 
-import { type ViewType } from 'types/bet';
+import { type BetListType } from 'types/bet';
 import { type Game } from 'types/game';
 import { type Action, type PromiseState } from 'types/redux';
 import { type Team } from 'types/team';
@@ -39,7 +39,7 @@ const GET_USERS = gql`
     users(userListType: $userListType) {
       id
       firstName
-      lastName
+      fullName
       imageUrl
       gender
     }
@@ -90,7 +90,7 @@ const mapDispatchToProps = (dispatch: Action => any) => ({
 type Props = ReduxProps & {
   actions: {
     createBet: (betteeId: number, amount: number, gameId: number, bettorPickTeamId: number) => void,
-    fetchBets: (viewType: ViewType) => void,
+    fetchBets: (betListType: BetListType) => void,
     fetchUpcomingGames: (league: string, date: string) => void,
     setBetAmount: (amount: number) => void,
     setBettee: (bettee: User | null) => void,
@@ -376,7 +376,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             <View style={styles.Create__headerMain}>
               <Pill
                 canRemove
-                label={`${bettee.firstName} ${bettee.lastName}`}
+                label={bettee.fullName}
                 onRemove={this.removeBettee}
               />
             </View>

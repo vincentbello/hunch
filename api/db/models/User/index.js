@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     loginCount: DataTypes.INTEGER,
     accessToken: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
+    fullName: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
+      }
+    },
   }, {});
   User.associate = function(models) {
   };

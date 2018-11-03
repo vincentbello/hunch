@@ -2,6 +2,7 @@ fragment userFields on User {
   id
   firstName
   lastName
+  fullName
   imageUrl
   gender
 }

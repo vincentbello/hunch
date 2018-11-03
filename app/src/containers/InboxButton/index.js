@@ -25,7 +25,7 @@ type ReduxProps = {
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
-  numRequests: getNumBets(state, { viewType: 'requested' }),
+  numRequests: getNumBets(state, { betListType: 'requested' }),
 });
 
 type Props = ReduxProps;

@@ -144,7 +144,7 @@ export default class BetCell extends React.PureComponent<Props> {
 
   get isInvolved(): boolean {
     const { bet, userId } = this.props;
-    return userId === bet.bettorId || userId === bet.betteeId;
+    return userId === bet.bettor.id || userId === bet.bettee.id;
   }
 
   get betOutcome(): string {

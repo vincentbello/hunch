@@ -38,7 +38,7 @@ export default function betListsReducer(state: ReduxState = initialState, action
 
     case FETCH_BETS:
       return handlePromise(state, action, {
-        rootPath: action.meta.viewType,
+        rootPath: action.meta.betListType,
         cacheData: true,
         parseData: (data: Array<Bet>): Array<number> => toList(data),
       });

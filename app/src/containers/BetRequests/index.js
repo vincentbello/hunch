@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { getBets, getRespondingBetId } from 'selectors/bets';
 import { fetchBets, respondToBet } from 'actions/bets';
 
-import { type Bet, type ViewType } from 'types/bet';
+import { type Bet, type BetListType } from 'types/bet';
 import { type Action, type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
@@ -28,7 +28,7 @@ type ReduxProps = {
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
-  bets: getBets(state, { viewType: 'requested' }),
+  bets: getBets(state, { betListType: 'REQUESTED' }),
   respondingBetId: getRespondingBetId(state),
   user: state.user,
 });
@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch: Action => any) => ({
 
 type Props = ReduxProps & {
   actions: {
-    fetchBets: (viewType: ViewType) => void,
+    fetchBets: (betListType: BetListType) => void,
     respondToBet: (betId: number, index: number, accepted: boolean) => void,
   },
 };

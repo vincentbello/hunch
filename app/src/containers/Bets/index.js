@@ -4,12 +4,14 @@ import { ActivityIndicator, FlatList, Image, StyleSheet, View, Text } from 'reac
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { BET_VIEW_TYPES } from 'constants/view-types';
-import { getBets, getViewIndex, getViewType } from 'selectors/bets';
+import { getBets, getViewIndex, getBetListType } from 'selectors/bets';
 import { cancelRequest, fetchBets, remind, setViewIndex } from 'actions/bets';
 
-import { type Bet, type ViewType } from 'types/bet';
+import { type Bet, type BetListType } from 'types/bet';
 import { type Action, type PromiseState } from 'types/redux';
 import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
@@ -19,23 +21,58 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
 import BetCell from 'components/BetCell';
+import DerivedStateSplash from 'components/DerivedStateSplash';
 import PromiseStateSplash from 'components/PromiseStateSplash';
 import TabView from 'components/TabView';
 import Splash from 'components/Splash';
+
+const GET_BETS = gql`
+  fragment userFields on User {
+    id
+    fullName
+    imageUrl
+    gender
+  }
+
+  query BetLists($betListType: BetListType) {
+    bets(betListType: $betListType) {
+      id
+      type
+      amount
+      wager
+      responded
+      accepted
+      active
+      winnerId
+      resolvedAt
+      createdAt
+      lastRemindedAt
+      game {
+        league
+      }
+      bettor {
+        ...userFields
+      }
+      bettee {
+        ...userFields
+      }
+    }
+  }
+`;
 
 type ReduxProps = {
   bets: PromiseState<Array<Bet>>,
   user: UserState,
   viewIndex: number,
-  viewType: ViewType,
+  betListType: BetListType,
 };
 
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxState): ReduxProps => ({
-  bets: getBets(state),
+  // bets: getBets(state),
+  betListType: getBetListType(state),
   user: state.user,
   viewIndex: getViewIndex(state),
-  viewType: getViewType(state),
 });
 
 // Any actions to map to the component?
@@ -48,7 +85,7 @@ const mapDispatchToProps = (dispatch: Action => any) => ({
 type Props = ReduxProps & {
   actions: {
     cancelRequest: (betId: number, index: number) => void,
-    fetchBets: (viewType: ViewType) => void,
+    fetchBets: (betListType: BetListType) => void,
     remind: (betId: number) => void,
     setViewIndex: (viewIndex: number) => void,
   },
@@ -64,29 +101,28 @@ class BetsContainer extends React.Component<Props> {
   static displayName = 'BetsContainer';
 
   componentWillMount() {
-    this.props.actions.fetchBets('requested');
-    if (!this.props.bets.didFetch) this.fetchBets();
+    // this.props.actions.fetchBets('requested');
+    // if (!this.props.bets.didFetch) this.fetchBets();
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.viewType !== this.props.viewType && !this.props.bets.didFetch) this.fetchBets();
+    // if (prevProps.betListType !== this.props.betListType && !this.props.bets.didFetch) this.fetchBets();
   }
 
   fetchBets = (): void => {
-    this.props.actions.fetchBets(this.props.viewType);
+    this.props.actions.fetchBets(this.props.betListType);
   };
 
-  renderBets = (): React.Node => {
-    const { actions, bets, user, viewType } = this.props;
-    if (bets.data === null) return null;
-    if (bets.data.length === 0) return <Splash heading={`You have no ${viewType} bets.`} iconName="slash" />;
-
+  renderBets = (bets: Array<Bet>): React.Node => {
+    const { actions, betListType, user } = this.props;
+    if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
+    console.log(bets);
     return (
       <FlatList
-        data={bets.data}
+        data={bets}
         keyExtractor={(bet: Bet): string => `${bet.id}`}
-        onRefresh={this.fetchBets}
-        refreshing={bets.isLoading}
+        // onRefresh={this.fetchBets}
+        // refreshing={bets.isLoading}
         renderItem={({ item, index }): React.Node => (
           <BetCell
             bet={item}
@@ -100,10 +136,8 @@ class BetsContainer extends React.Component<Props> {
     );
   };
 
-  renderView = (): React.Node => <PromiseStateSplash promiseState={this.props.bets}>{this.renderBets()}</PromiseStateSplash>;
-
   render(): React.Node {
-    const { actions, bets, viewIndex, viewType } = this.props;
+    const { actions, betListType, viewIndex } = this.props;
     return (
       <TabView
         navigationState={{
@@ -111,7 +145,15 @@ class BetsContainer extends React.Component<Props> {
           routes: BET_VIEW_TYPES,
         }}
         onIndexChange={actions.setViewIndex}
-        renderScene={this.renderView}
+        renderScene={(): React.Node => (
+          <Query query={GET_BETS} variables={{ betListType }}>
+            {({ loading, error, data }): React.Node => (
+              <DerivedStateSplash error={error} loading={loading}>
+                {data && data.bets && this.renderBets(data.bets)}
+              </DerivedStateSplash>
+            )}
+          </Query>
+        )}
       />
     );
   }

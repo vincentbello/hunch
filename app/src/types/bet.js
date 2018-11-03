@@ -25,4 +25,4 @@ export type Bet = {
   bettorPickTeam: Team,
 };
 
-export type ViewType = 'active' | 'completed' | 'pending' | 'requested';
+export type BetListType = 'ACTIVE' | 'COMPLETED' | 'PENDING' | 'REQUESTED';

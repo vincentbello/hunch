@@ -41,7 +41,7 @@ const UserCell = ({ user, onPress }: Props): React.Node => (
     <View style={styles.User}>
       <Image rounded size="small" url={user.imageUrl} />
       <View style={styles.User__content}>
-        <Text>{`${user.firstName} ${user.lastName}`}</Text>
+        <Text>{user.fullName}</Text>
       </View>
     </View>
   </TouchableOpacity>

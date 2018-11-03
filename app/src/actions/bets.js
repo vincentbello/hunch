@@ -1,7 +1,7 @@
 // @flow
 import Api from 'api';
 
-import { type ViewType } from 'types/bet';
+import { type BetListType } from 'types/bet';
 import { type Action } from 'types/redux';
 
 export const CANCEL_REQUEST = 'BETS/CANCEL_REQUEST';
@@ -22,10 +22,10 @@ export const fetchBet = (betId: number): Action => ({
   promiseFn: () => Api.fetchBet(betId),
 });
 
-export const fetchBets = (viewType: ViewType = 'active'): Action => ({
+export const fetchBets = (betListType: BetListType = 'active'): Action => ({
   type: FETCH_BETS,
-  promiseFn: () => Api.fetchBets(viewType),
-  meta: { viewType },
+  promiseFn: () => Api.fetchBets(betListType),
+  meta: { betListType },
 });
 
 export const remind = (betId: number): Action => ({

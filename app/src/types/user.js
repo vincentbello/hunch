@@ -3,6 +3,7 @@ export type User = {
   id: number,
   firstName: string,
   lastName: string,
+  fullName: string,
   imageUrl: null | string,
 };
 

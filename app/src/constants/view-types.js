@@ -1,9 +1,9 @@
 import { addDays, format } from 'date-fns';
 
 export const BET_VIEW_TYPES = [
-  { key: 'active', title: 'Active' },
-  { key: 'completed', title: 'Completed' },
-  { key: 'pending', title: 'Pending' },
+  { key: 'ACTIVE', title: 'Active' },
+  { key: 'COMPLETED', title: 'Completed' },
+  { key: 'PENDING', title: 'Pending' },
 ];
 
 const now = new Date();
