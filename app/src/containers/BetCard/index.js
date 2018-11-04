@@ -4,6 +4,8 @@ import { ActivityIndicator, FlatList, StyleSheet, View, Text } from 'react-nativ
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import gql from 'graphql-tag';
+import betFragment from 'graphql/fragments/bet';
 
 import { getBet } from 'selectors/bets';
 import { fetchBet } from 'actions/bets';
@@ -20,35 +22,28 @@ import Typography from 'theme/typography';
 import AppSizes from 'theme/sizes';
 
 import Image from 'components/Image';
-import PromiseStateSplash from 'components/PromiseStateSplash';
+import DerivedStateSplash from 'components/DerivedStateSplash';
+import { Query } from 'react-apollo';
 
-type ReduxProps = {
-  bet: PromiseState<Bet>,
-  user: UserState,
-};
+const GET_BET = gql`
+  ${betFragment}
+
+  query Bet($betId: Int!) {
+    bet(id: $betId) {
+      ...betFields
+    }
+  }
+`;
+
+type ReduxProps = { user: UserState };
 
 type ExternalProps = {
   betId: number,
 };
 
-// What data from the store shall we send to the component?
-const mapStateToProps = (state: ReduxState, props: ExternalProps): ReduxProps => ({
-  bet: getBet(state, props),
-  user: state.user,
-});
+const mapStateToProps = ({ user }: ReduxState): ReduxProps => ({ user });
 
-// Any actions to map to the component?
-const mapDispatchToProps = (dispatch: Action => any) => ({
-  actions: {
-    ...bindActionCreators({ fetchBet }, dispatch),
-  }
-});
-
-type Props = ExternalProps & ReduxProps & {
-  actions: {
-    fetchBet: (betId: number) => void,
-  },
-};
+type Props = ExternalProps & ReduxProps;
 
 const styles = StyleSheet.create({
   Bet: {
@@ -97,12 +92,16 @@ const styles = StyleSheet.create({
 class BetCardContainer extends React.Component<Props> {
   static displayName = 'BetCardContainer';
 
-  componentWillMount() {
-    if (this.props.betId && this.props.bet.data === null) this.props.actions.fetchBet(this.props.betId);
-  }
-
-  renderBet = (): React.Node => this.props.bet.data && (
-    <Text>{this.props.bet.data.wager}</Text>
+  renderBet = (bet: Bet): React.Node => (
+    <View style={styles.Bet}>
+      <View style={styles.Bet__header}>
+        {this.renderUser(bet.bettor, true)}
+        <View style={styles.Bet__main}>
+          <Text>{bet.wager}</Text>
+        </View>
+        {this.renderUser(bet.bettee)}
+      </View>
+    </View>
   );
 
   renderUser = (user: User, isBettor: boolean = false): React.Node => (
@@ -119,23 +118,17 @@ class BetCardContainer extends React.Component<Props> {
   );
 
   render(): React.Node {
-    const { bet } = this.props;
+    const { betId } = this.props;
     return (
-      <PromiseStateSplash promiseState={bet}>
-        {bet.data !== null && (
-          <View style={styles.Bet}>
-            <View style={styles.Bet__header}>
-              {this.renderUser(bet.data.bettor, true)}
-              <View style={styles.Bet__main}>
-                <Text>{bet.data.wager}</Text>
-              </View>
-              {this.renderUser(bet.data.bettee)}
-            </View>
-          </View>
+      <Query query={GET_BET} variables={{ betId }}>
+        {({ loading, error, data }): React.Node => (
+          <DerivedStateSplash error={error} loading={loading}>
+            {data && data.bet && this.renderBet(data.bet)}
+          </DerivedStateSplash>
         )}
-      </PromiseStateSplash>
+      </Query>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BetCardContainer);
+export default connect(mapStateToProps)(BetCardContainer);

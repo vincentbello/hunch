@@ -2,8 +2,11 @@ const { default: models, getModelDirs } = require('./');
 
 module.exports = getModelDirs().reduce(({ queries, mutations }, model) => ({
   queries: {
-    ...require(`./${model}/queries`).default(models),
     ...queries,
+    ...require(`./${model}/queries`).default(models),
   },
-  mutations: {},
+  mutations: {
+    ...mutations,
+    ...require(`./${model}/mutations`).default(models),
+  },
 }), { queries: {}, mutations: {} });

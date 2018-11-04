@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     accessToken: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
     fullName: {
-      type: DataTypes.VIRTUAL,
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ['firstName', 'lastName']),
       get() {
         return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
       }

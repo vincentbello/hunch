@@ -6,8 +6,8 @@ export default new GraphQLSchema({
     name: 'RootQuery',
     fields: () => queries,
   }),
-  // mutation: new GraphQLObjectType({
-  //   name: 'RootMutation',
-  //   fields: () => mutations,
-  // })
+  mutation: new GraphQLObjectType({
+    name: 'RootMutation',
+    fields: () => mutations,
+  })
 });
