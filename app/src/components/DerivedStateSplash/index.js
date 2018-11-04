@@ -28,7 +28,7 @@ type Props = {
   loading: boolean,
 };
 
-const PromiseStateSplash = ({ children, error, loading }: Props): React.Node => {
+const DerivedStateSplash = ({ children, error, loading }: Props): React.Node => {
   if (loading) return (
     <View style={styles.Splash}>
       <ActivityIndicator size="large" color={Colors.brand.primary} />
@@ -40,9 +40,9 @@ const PromiseStateSplash = ({ children, error, loading }: Props): React.Node => 
   ) : children;
 };
 
-PromiseStateSplash.defaultProps = {
+DerivedStateSplash.defaultProps = {
   loading: false,
   error: undefined,
 };
-PromiseStateSplash.displayName = 'PromiseStateSplash';
-export default PromiseStateSplash;
+DerivedStateSplash.displayName = 'DerivedStateSplash';
+export default DerivedStateSplash;

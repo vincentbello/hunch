@@ -169,9 +169,19 @@ class BetCell extends React.PureComponent<Props> {
     return `${bet.winnerId === userId ? 'Won' : 'Lost'} ${amount}`;
   }
 
-  get secondaryAction(): () => void {
-    return this.isBettor ? this.props.cancelRequest : (): void => this.props.respond(false);
+  get primaryAction(): () => void {
+    const { remind, respond } = this.props;
+    const { id } = this.props.bet;
+    return this.isBettor ? this.remind : this.respond(true);
   }
+
+  get secondaryAction(): () => void {
+    return this.isBettor ? this.props.cancelRequest : this.respond(false);
+  }
+
+  remind = (): void => this.props.remind({ variables: { id: this.props.bet.id } });
+
+  respond = (accepted: boolean): (() => void) => (): void => this.props.respond({ variables: { id: this.props.bet.id, accepted } });
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
@@ -212,7 +222,7 @@ class BetCell extends React.PureComponent<Props> {
                       {bet.lastRemindedAt === bet.createdAt ? 'Created' : 'Reminded'} {distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}
                     </Text>
                   ) : (
-                    <TouchableOpacity onPress={this.isBettor ? () => remind({ variables: { id: bet.id } }) : () => this.props.respond(true)} style={styles.Bet__buttonContainer}>
+                    <TouchableOpacity onPress={this.primaryAction} style={styles.Bet__buttonContainer}>
                       <View style={[styles.Bet__button, styles.Bet__button_primary]}>
                         <Text style={[styles.Bet__buttonText, styles.Bet__buttonText_primary]}>{isBettor ? 'Remind' : 'Accept'}</Text>
                       </View>
