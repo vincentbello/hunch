@@ -6,8 +6,7 @@ import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
 import { Query } from 'react-apollo';
 import Icon from 'react-native-vector-icons/Feather';
-import gql from 'graphql-tag';
-import userFragment from 'graphql/fragments/user';
+import GET_USERS from 'graphql/queries/getUsers';
 
 import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { fetchBets } from 'actions/bets';
@@ -34,16 +33,6 @@ import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
 import Sizes from 'theme/sizes';
 import Typography from 'theme/typography';
-
-const GET_USERS = gql`
-  ${userFragment}
-
-  query UserLists($userListType: UserListType) {
-    users(userListType: $userListType) {
-      ...userFields
-    }
-  }
-`;
 
 type ReduxProps = {
   betAmount: number,

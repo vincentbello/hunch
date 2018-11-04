@@ -4,9 +4,9 @@ import { ActivityIndicator, FlatList, Image, StyleSheet, View, Text } from 'reac
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Mutation, Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import betFragment from 'graphql/fragments/bet';
+import { Query } from 'react-apollo';
+
+import GET_BETS from 'graphql/queries/getBets';
 
 import { BET_VIEW_TYPES } from 'constants/view-types';
 import { getBets, getViewIndex, getBetListType } from 'selectors/bets';
@@ -26,26 +26,6 @@ import DerivedStateSplash from 'components/DerivedStateSplash';
 import PromiseStateSplash from 'components/PromiseStateSplash';
 import TabView from 'components/TabView';
 import Splash from 'components/Splash';
-
-const GET_BETS = gql`
-  ${betFragment}
-
-  query BetLists($betListType: BetListType) {
-    bets(betListType: $betListType) {
-      ...betFields
-    }
-  }
-`;
-
-const REMIND_BET_REQUEST = gql`
-  ${betFragment}
-
-  mutation RemindBetRequest($id: Int!) {
-    remindBetRequest(id: $id) {
-      ...betFields
-    }
-  }
-`;
 
 type ReduxProps = {
   bets: PromiseState<Array<Bet>>,
@@ -104,25 +84,20 @@ class BetsContainer extends React.Component<Props> {
     const { actions, betListType, user } = this.props;
     if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
     return (
-      <Mutation mutation={REMIND_BET_REQUEST}>
-        {(remindBetRequest): React.Node => (
-          <FlatList
-            data={bets}
-            keyExtractor={(bet: Bet): string => `${bet.id}`}
-            // onRefresh={this.fetchBets}
-            // refreshing={bets.isLoading}
-            renderItem={({ item, index }): React.Node => (
-              <BetCell
-                bet={item}
-                userId={user.data.id}
-                onPress={(): void => Actions.betCard({ betId: item.id })}
-                cancelRequest={(): void => actions.cancelRequest(item.id, index)}
-                remind={(): void => remindBetRequest({ variables: { id: item.id } })}
-              />
-            )}
+      <FlatList
+        data={bets}
+        keyExtractor={(bet: Bet): string => `${bet.id}`}
+        // onRefresh={this.fetchBets}
+        // refreshing={bets.isLoading}
+        renderItem={({ item, index }): React.Node => (
+          <BetCell
+            bet={item}
+            userId={user.data.id}
+            onPress={(): void => Actions.betCard({ betId: item.id })}
+            cancelRequest={(): void => actions.cancelRequest(item.id, index)}
           />
         )}
-      </Mutation>
+      />
     );
   };
 

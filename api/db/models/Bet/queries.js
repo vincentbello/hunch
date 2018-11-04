@@ -13,7 +13,7 @@ export default models => ({
       },
     },
     resolve: resolver(models.Bet, {
-      before: (findOptions, args, context) => ({
+      before: findOptions => ({
         ...findOptions,
         include: [
           { model: models.Game, as: 'game' },

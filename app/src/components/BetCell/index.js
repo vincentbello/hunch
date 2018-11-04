@@ -1,8 +1,13 @@
 // @flow
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
+import { Mutation } from 'react-apollo';
+import betFragment from 'graphql/fragments/bet';
+import REMIND_BET_REQUEST from 'graphql/mutations/remindBetRequest';
+import RESPOND_TO_BET from 'graphql/mutations/respondToBet';
 
 import { type Bet } from 'types/bet';
 
@@ -13,6 +18,15 @@ import Typography from 'theme/typography';
 import Image from 'components/Image';
 
 const NOW = new Date();
+
+const onBetUpdate = (mutationKey: string) => (cache, { data }) => {
+  const mutationData = data[mutationKey];
+  cache.writeFragment({
+    id,
+    fragment: betFragment,
+    data: { __typename: 'Bet', ...mutationData },
+  });
+};
 
 const styles = StyleSheet.create({
   Bet: {
@@ -123,7 +137,7 @@ type Props = {
   respond: (accept: boolean) => void,
 };
 
-export default class BetCell extends React.PureComponent<Props> {
+class BetCell extends React.PureComponent<Props> {
   static defaultProps = {
     disabled: false,
     isResponding: false,
@@ -155,17 +169,13 @@ export default class BetCell extends React.PureComponent<Props> {
     return `${bet.winnerId === userId ? 'Won' : 'Lost'} ${amount}`;
   }
 
-  get primaryAction(): () => void {
-    return this.isBettor ? this.props.remind : (): void => this.props.respond(true);
-  }
-
   get secondaryAction(): () => void {
     return this.isBettor ? this.props.cancelRequest : (): void => this.props.respond(false);
   }
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
-    const { bet, disabled, isResponding, userId, onPress } = this.props;
+    const { bet, disabled, isResponding, userId, remind, onPress } = this.props;
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
@@ -202,7 +212,7 @@ export default class BetCell extends React.PureComponent<Props> {
                       {bet.lastRemindedAt === bet.createdAt ? 'Created' : 'Reminded'} {distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}
                     </Text>
                   ) : (
-                    <TouchableOpacity onPress={this.primaryAction} style={styles.Bet__buttonContainer}>
+                    <TouchableOpacity onPress={this.isBettor ? () => remind({ variables: { id: bet.id } }) : () => this.props.respond(true)} style={styles.Bet__buttonContainer}>
                       <View style={[styles.Bet__button, styles.Bet__button_primary]}>
                         <Text style={[styles.Bet__buttonText, styles.Bet__buttonText_primary]}>{isBettor ? 'Remind' : 'Accept'}</Text>
                       </View>
@@ -217,3 +227,8 @@ export default class BetCell extends React.PureComponent<Props> {
     );
   }
 }
+
+export default compose(
+  graphql(REMIND_BET_REQUEST, { name: 'remind', update: onBetUpdate('remindBetRequest') }),
+  graphql(RESPOND_TO_BET, { name: 'respond', update: onBetUpdate('respondToBet') })
+)(BetCell);

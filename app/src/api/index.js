@@ -52,7 +52,7 @@ export default class Api {
     return axios.get(`${API_URL}/bets?${stringify({ type })}`);
   }
 
-  // TODO
+  // DONE
   static remindBetRequest(betId: number): Promise<Bet> {
     return axios.patch(`${API_URL}/bets/${betId}/remind`);
   }
