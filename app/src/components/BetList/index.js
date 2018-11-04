@@ -21,6 +21,8 @@ type Props = {
     loading: boolean,
     error: Error,
     data: Array<Bet>,
+    networkStatus: number,
+    refetch: () => void,
   },
   betListType: BetListType,
   user: User,
@@ -28,13 +30,14 @@ type Props = {
 
 function BetList({ betsQuery, betListType, user }: Props) {
   const renderBets = (bets: Array<Bet>): React.Node => {
+    console.log('RENDER BETS');
     if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
     return (
       <FlatList
         data={bets}
         keyExtractor={(bet: Bet): string => `${bet.id}`}
-        // onRefresh={this.fetchBets}
-        // refreshing={bets.isLoading}
+        onRefresh={betsQuery.refetch}
+        refreshing={betsQuery.networkStatus === 4}
         renderItem={({ item, index }): React.Node => (
           <BetCell
             bet={item}
@@ -48,8 +51,8 @@ function BetList({ betsQuery, betListType, user }: Props) {
   };
 
   return (
-    <DerivedStateSplash error={betsQuery.error} loading={betsQuery.loading}>
-      {betsQuery.bets && renderBets(betsQuery.bets)}
+    <DerivedStateSplash error={betsQuery.error} loading={betsQuery.loading} withCachedData={Boolean(betsQuery.bets)}>
+      {Boolean(betsQuery.bets) && renderBets(betsQuery.bets)}
     </DerivedStateSplash>
   );
 }
@@ -57,5 +60,8 @@ BetList.displayName = 'BetList';
 
 export default graphql(GET_BETS, {
   name: 'betsQuery',
-  options: ({ betListType }) => ({ variables: { betListType } }),
+  options: ({ betListType }) => ({
+    notifyOnNetworkStatusChange: true,
+    variables: { betListType },
+  }),
 })(BetList);

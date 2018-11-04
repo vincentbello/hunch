@@ -4,8 +4,7 @@ import { ActivityIndicator, FlatList, StyleSheet, View, Text } from 'react-nativ
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import gql from 'graphql-tag';
-import betFragment from 'graphql/fragments/bet';
+import GET_BET from 'graphql/queries/getBet';
 
 import { getBet } from 'selectors/bets';
 import { fetchBet } from 'actions/bets';
@@ -24,16 +23,6 @@ import AppSizes from 'theme/sizes';
 import Image from 'components/Image';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import { Query } from 'react-apollo';
-
-const GET_BET = gql`
-  ${betFragment}
-
-  query Bet($betId: Int!) {
-    bet(id: $betId) {
-      ...betFields
-    }
-  }
-`;
 
 type ReduxProps = { user: UserState };
 

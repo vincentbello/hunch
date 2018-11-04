@@ -6,6 +6,8 @@ import { Actions } from 'react-native-router-flux';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
 import { Mutation } from 'react-apollo';
 import betFragment from 'graphql/fragments/bet';
+import GET_BET from 'graphql/queries/getBet';
+import GET_BETS from 'graphql/queries/getBets';
 import REMIND_BET_REQUEST from 'graphql/mutations/remindBetRequest';
 import RESPOND_TO_BET from 'graphql/mutations/respondToBet';
 
@@ -19,13 +21,34 @@ import Image from 'components/Image';
 
 const NOW = new Date();
 
-const onBetUpdate = (mutationKey: string) => (cache, { data }) => {
-  const mutationData = data[mutationKey];
-  cache.writeFragment({
-    id,
-    fragment: betFragment,
-    data: { __typename: 'Bet', ...mutationData },
+// const onBetUpdate = (mutationKey: string) => (cache, { data }) => {
+//   console.log('ON BET UPDATE');
+//   const mutationData = data[mutationKey];
+//   cache.writeFragment({
+//     id,
+//     fragment: betFragment,
+//     data: { __typename: 'Bet', ...mutationData },
+//   });
+// };
+
+const onBetRespond = (cache, { data: { respondToBet } }) => {
+  console.log('ON BET RESPOND', respondToBet);
+  const activeBetsQuery = { query: GET_BETS, variables: { betListType: 'ACTIVE' } };
+  const requestedBetsQuery = { query: GET_BETS, variables: { betListType: 'REQUESTED' } };
+  const newBet = cache.readQuery({ query: GET_BET, variables: { betId: respondToBet.id } });
+  console.log('new bet', newBet);
+  const { bets: activeBets } = cache.readQuery(activeBetsQuery);
+  // const { bets: requestedBets } = cache.readQuery(requestedBetsQuery);
+  console.log('active bets', activeBets);
+  // console.log('requested bets', requestedBets);
+  cache.writeQuery({
+    ...activeBetsQuery,
+    // bets: [...activeBets, newBet], // TODO: Figure this out!!
   });
+  // cache.writeQuery({
+  //   ...requestedBetsQuery,
+  //   data: { __typename: 'Bet', bets: requestedBets.filter(bet => bet.id !== respondToBet.id) },
+  // });
 };
 
 const styles = StyleSheet.create({
@@ -239,6 +262,6 @@ class BetCell extends React.PureComponent<Props> {
 }
 
 export default compose(
-  graphql(REMIND_BET_REQUEST, { name: 'remind', update: onBetUpdate('remindBetRequest') }),
-  graphql(RESPOND_TO_BET, { name: 'respond', update: onBetUpdate('respondToBet') })
+  graphql(REMIND_BET_REQUEST, { name: 'remind' }),
+  graphql(RESPOND_TO_BET, { name: 'respond', options: { update: onBetRespond } })
 )(BetCell);

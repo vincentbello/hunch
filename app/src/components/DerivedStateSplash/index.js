@@ -26,9 +26,12 @@ type Props = {
   children: React.Node,
   error?: Error,
   loading: boolean,
+  withCachedData: boolean,
 };
 
-const DerivedStateSplash = ({ children, error, loading }: Props): React.Node => {
+const DerivedStateSplash = ({ children, error, loading, withCachedData }: Props): React.Node => {
+  if (withCachedData) return children;
+
   if (loading) return (
     <View style={styles.Splash}>
       <ActivityIndicator size="large" color={Colors.brand.primary} />
@@ -43,6 +46,7 @@ const DerivedStateSplash = ({ children, error, loading }: Props): React.Node => 
 DerivedStateSplash.defaultProps = {
   loading: false,
   error: undefined,
+  withCachedData: false,
 };
 DerivedStateSplash.displayName = 'DerivedStateSplash';
 export default DerivedStateSplash;
