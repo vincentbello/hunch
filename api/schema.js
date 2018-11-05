@@ -9,5 +9,5 @@ export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutation',
     fields: () => mutations,
-  })
+  }),
 });
