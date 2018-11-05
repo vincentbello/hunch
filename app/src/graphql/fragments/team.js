@@ -1,11 +1,13 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  fragment userFields on User {
+  fragment teamFields on Team {
     id
     firstName
-    fullName
+    lastName
+    abbreviation
     imageUrl
-    gender
+    conference
+    division
   }
 `;

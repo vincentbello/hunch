@@ -4,6 +4,74 @@ import { resolver } from 'graphql-sequelize';
 import BetType, { BetListType } from './type';
 
 export default models => ({
+  cancelBetRequest: {
+    type: new GraphQLNonNull(GraphQLInt),
+    args: {
+      id: {
+        description: 'ID of bet',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: async function (_, { id }) {
+      await models.Bet.destroy({ where: { id } });
+      return id;
+    },
+  },
+
+  createBetRequest: {
+    type: BetType,
+    args: {
+      amount: {
+        description: 'Bet amount',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      betteeId: {
+        description: 'ID of bettee',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      gameId: {
+        description: 'ID of game',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      bettorPickTeamId: {
+        description: 'ID of bettor\'s picked team',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      type: {
+        description: 'Type of bet',
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      wager: {
+        description: 'Bet wager',
+        type: GraphQLString,
+      },
+    },
+    resolve: async function (_, { amount, betteeId, gameId, bettorPickTeamId, type, wager }, context, ...args) {
+      console.log(amount, betteeId, gameId, bettorPickTeamId, type, wager);
+      const bet = await models.Bet.create({
+        type,
+        amount,
+        wager,
+        active: false,
+        lastRemindedAt: new Date(),
+        gameId,
+        bettorId: context.userId,
+        betteeId: betteeId,
+        bettorPickTeamId,
+      });
+      return await resolver(models.Bet, {
+        before: (findOptions, args, context) => ({
+          ...findOptions,
+          include: [
+            { model: models.Game, as: 'game' },
+            { model: models.User, as: 'bettor' },
+            { model: models.User, as: 'bettee' },
+          ],
+        }),
+      })(_, { id: bet.id }, context, ...args);
+    },
+  },
+
   remindBetRequest: {
     type: BetType,
     args: {

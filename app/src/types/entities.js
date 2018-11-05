@@ -12,10 +12,3 @@ export type BetEntities = Entities<Bet>;
 export type GameEntities = Entities<Game>;
 export type TeamEntities = Entities<Team>;
 export type UserEntities = Entities<User>;
-
-export type AllEntities = {
-  bets: BetEntities,
-  games: GameEntities,
-  teams: TeamEntities,
-  users: UserEntities,
-};

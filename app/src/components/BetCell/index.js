@@ -1,54 +1,36 @@
 // @flow
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
-import { Mutation } from 'react-apollo';
-import betFragment from 'graphql/fragments/bet';
 import GET_BET from 'graphql/queries/getBet';
 import GET_BETS from 'graphql/queries/getBets';
+import CANCEL_BET_REQUEST from 'graphql/mutations/cancelBetRequest';
 import REMIND_BET_REQUEST from 'graphql/mutations/remindBetRequest';
 import RESPOND_TO_BET from 'graphql/mutations/respondToBet';
 
 import { type Bet } from 'types/bet';
 
 import Colors from 'theme/colors';
-import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
 import Image from 'components/Image';
 
-const NOW = new Date();
-
-// const onBetUpdate = (mutationKey: string) => (cache, { data }) => {
-//   console.log('ON BET UPDATE');
-//   const mutationData = data[mutationKey];
-//   cache.writeFragment({
-//     id,
-//     fragment: betFragment,
-//     data: { __typename: 'Bet', ...mutationData },
-//   });
-// };
+const onBetCancel = (cache, { data: { cancelBetRequest: id } }) => {
+  const pendingBetsQuery = { query: GET_BETS, variables: { betListType: 'PENDING' } };
+  const { bets: pendingBets } = cache.readQuery(pendingBetsQuery);
+  cache.writeQuery({ ...pendingBetsQuery, data: { bets: pendingBets.filter((bet: Bet): boolean => bet.id !== id) } });
+  cache.data.delete(`Bet:${id}`);
+};
 
 const onBetRespond = (cache, { data: { respondToBet } }) => {
-  console.log('ON BET RESPOND', respondToBet);
   const activeBetsQuery = { query: GET_BETS, variables: { betListType: 'ACTIVE' } };
   const requestedBetsQuery = { query: GET_BETS, variables: { betListType: 'REQUESTED' } };
-  const newBet = cache.readQuery({ query: GET_BET, variables: { betId: respondToBet.id } });
-  console.log('new bet', newBet);
+  const { bet: newBet } = cache.readQuery({ query: GET_BET, variables: { betId: respondToBet.id } });
   const { bets: activeBets } = cache.readQuery(activeBetsQuery);
-  // const { bets: requestedBets } = cache.readQuery(requestedBetsQuery);
-  console.log('active bets', activeBets);
-  // console.log('requested bets', requestedBets);
-  cache.writeQuery({
-    ...activeBetsQuery,
-    // bets: [...activeBets, newBet], // TODO: Figure this out!!
-  });
-  // cache.writeQuery({
-  //   ...requestedBetsQuery,
-  //   data: { __typename: 'Bet', bets: requestedBets.filter(bet => bet.id !== respondToBet.id) },
-  // });
+  const { bets: requestedBets } = cache.readQuery(requestedBetsQuery);
+  cache.writeQuery({ ...activeBetsQuery, data: { bets: [...activeBets, newBet] } });
+  cache.writeQuery({ ...requestedBetsQuery, data: { bets: requestedBets.filter((bet: Bet): boolean => bet.id !== respondToBet.id) } });
 };
 
 const styles = StyleSheet.create({
@@ -155,7 +137,7 @@ type Props = {
   isResponding: boolean,
   userId: number,
   onPress: () => void,
-  cancelRequest: () => void,
+  cancel: () => void,
   remind: () => void,
   respond: (accept: boolean) => void,
 };
@@ -165,7 +147,7 @@ class BetCell extends React.PureComponent<Props> {
     disabled: false,
     isResponding: false,
     onPress() {},
-    cancelRequest() {},
+    cancel() {},
     remind() {},
     respond() {},
   };
@@ -193,22 +175,20 @@ class BetCell extends React.PureComponent<Props> {
   }
 
   get primaryAction(): () => void {
-    const { remind, respond } = this.props;
-    const { id } = this.props.bet;
     return this.isBettor ? this.remind : this.respond(true);
   }
 
   get secondaryAction(): () => void {
-    return this.isBettor ? this.props.cancelRequest : this.respond(false);
+    return this.isBettor ? this.cancel : this.respond(false);
   }
 
+  cancel = (): void => this.props.cancel({ variables: { id: this.props.bet.id } });
   remind = (): void => this.props.remind({ variables: { id: this.props.bet.id } });
-
   respond = (accepted: boolean): (() => void) => (): void => this.props.respond({ variables: { id: this.props.bet.id, accepted } });
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
-    const { bet, disabled, isResponding, userId, remind, onPress } = this.props;
+    const { bet, disabled, isResponding, userId, onPress } = this.props;
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
@@ -262,6 +242,7 @@ class BetCell extends React.PureComponent<Props> {
 }
 
 export default compose(
+  graphql(CANCEL_BET_REQUEST, { name: 'cancel', options: { update: onBetCancel } }),
   graphql(REMIND_BET_REQUEST, { name: 'remind' }),
-  graphql(RESPOND_TO_BET, { name: 'respond', options: { update: onBetRespond } })
+  graphql(RESPOND_TO_BET, { name: 'respond', options: { update: onBetRespond } }),
 )(BetCell);

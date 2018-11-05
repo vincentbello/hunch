@@ -17,6 +17,7 @@ export default gql`
     createdAt
     lastRemindedAt
     game {
+      id
       league
     }
     bettor {

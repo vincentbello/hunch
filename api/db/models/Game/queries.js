@@ -1,10 +1,29 @@
-import { GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 import { Op } from 'sequelize';
 import { endOfDay, max, startOfDay } from 'date-fns';
 import { resolver } from 'graphql-sequelize';
 import GameType from './type';
 
 export default models => ({
+  game: {
+    type: GameType,
+    args: {
+      id: {
+        description: 'ID of game',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: resolver(models.Game, {
+      before: findOptions => ({
+        ...findOptions,
+        include: [
+          { model: models.Team, as: 'homeTeam' },
+          { model: models.Team, as: 'awayTeam' },
+        ],
+      }),
+    }),
+  },
+
   upcomingGames: {
     type: new GraphQLList(GameType),
     args: {

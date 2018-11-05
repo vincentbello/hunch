@@ -1,9 +1,0 @@
-query UserLists($userListType: UserListType) {
-  users(userListType: $userListType) {
-    id
-    firstName
-    lastName
-    imageUrl
-    gender
-  }
-}
