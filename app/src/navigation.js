@@ -12,6 +12,7 @@ import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
 import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
+import LogoutButtonContainer from 'containers/LogoutButton';
 import UserContainer from 'containers/User';
 import NavButton from 'components/NavButton';
 import TabbarIcon from 'components/TabbarIcon';
@@ -57,7 +58,12 @@ export default Actions.create(
               />
             </Scene>
             <Scene key="userTab" icon={props => <TabbarIcon focused={props.focused} name="user" />} tabBarLabel="Me">
-              <Scene key="user" title="My Account" component={UserContainer} />
+              <Scene
+                key="user"
+                title="My Account"
+                component={UserContainer}
+                renderRightButton={() => <LogoutButtonContainer />}
+              />
             </Scene>
           </Tabs>
         </Scene>

@@ -36,9 +36,10 @@ type Props = {
   iconName: string,
   leftBadge: boolean,
   targetScene: string,
+  onClick: () => void,
 };
 
-const NavButton = ({ badgeCount, leftBadge, iconName, targetScene }: Props): React.Node => (
+const NavButton = ({ badgeCount, leftBadge, iconName, targetScene, onClick }: Props): React.Node => (
   <View>
     <Icon.Button
       backgroundColor="transparent"
@@ -46,7 +47,7 @@ const NavButton = ({ badgeCount, leftBadge, iconName, targetScene }: Props): Rea
       iconStyle={{ marginRight: 4, marginLeft: 4 }}
       name={iconName}
       size={24}
-      onPress={Actions[targetScene]}
+      onPress={targetScene ? Actions[targetScene] : onClick}
     />
     {badgeCount > 0 && (
       <View style={[styles.Badge, leftBadge && styles.Badge_left]}>
@@ -59,6 +60,7 @@ const NavButton = ({ badgeCount, leftBadge, iconName, targetScene }: Props): Rea
 NavButton.defaultProps = {
   badgeCount: 0,
   leftBadge: false,
+  onClick() {},
 };
 
 export default NavButton;
