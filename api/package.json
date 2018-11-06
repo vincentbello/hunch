@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www --exec babel-node"
+    "start": "nodemon ./bin/www --exec \"babel-node --inspect\""
   },
   "dependencies": {
     "apollo-server-express": "^2.1.0",

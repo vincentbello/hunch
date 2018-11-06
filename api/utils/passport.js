@@ -9,11 +9,13 @@ export default () => {
   passport.use(new FacebookTokenStrategy({
     clientID: process.env.FB_CLIENT_ID,
     clientSecret: process.env.FB_CLIENT_SECRET,
-  }, (accessToken, refreshToken, profile, done) => {
+    profileFields: ['id', 'displayName', 'name', 'emails', 'friends'],
+  }, (fbAccessToken, refreshToken, profile, done) => {
     models.User.findOrBuild({ where: { fbId: profile.id } }).spread((instance, initialized) => {
-      const { id, gender, emails, photos, name: { familyName: lastName, givenName: firstName } } = profile;
+      const { id, gender, emails, photos, name: { familyName: lastName, givenName: firstName }, friends, _json } = profile;
       const newProfile = {
         fbId: id,
+        fbAccessToken,
         gender,
         firstName,
         lastName,
@@ -34,7 +36,10 @@ export default () => {
         accessToken: jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }),
         // Refresh token: expires in 90 days
         refreshToken: jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN_KEY, { expiresIn: 60 * 60 * 24 * 90 }),
-      }).then(newUser => done(null, newUser)));
+      }).then(newUser => {
+        models.User.populateFbFriendships(newUser.id, _json.friends.data.map(friend => friend.id));
+        return done(null, newUser);
+      }));
     });
   }));
 };

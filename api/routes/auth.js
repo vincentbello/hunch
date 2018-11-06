@@ -11,7 +11,6 @@ const now = new Date();
 
 router.post('/device', authMiddleware, function (req, res, next) {
   const { os, token } = req.body;
-  console.log('DEVICE TOKEN', token);
   models.Device.findOrBuild({ where: { userId: req.auth.id, token } }).spread((instance, initialized) => {
     if (!initialized) return res.sendStatus(200);
 

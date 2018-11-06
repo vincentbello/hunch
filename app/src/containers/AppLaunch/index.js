@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Alert, AsyncStorage, View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import { connect } from 'react-redux';
@@ -13,10 +13,6 @@ import { type ReduxState as UserState } from 'reducers/user';
 
 import { refreshAuth, registerDevice } from 'actions/user';
 import NotificationService from 'services/NotificationService';
-
-import Colors from 'theme/colors';
-import { SplashStyles } from 'theme/app';
-import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
   Launch: {
@@ -34,20 +30,22 @@ type ReduxProps = {
   user: UserState,
 };
 
-const mapStateToProps = ({ session, user, ...otherProps }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
-
-const mapDispatchToProps = (dispatch: Action => any) => ({
-  actions: {
-    ...bindActionCreators({ refreshAuth, registerDevice }, dispatch),
-  }
-});
-
-type Props = ReduxProps & {
+type ActionProps = {
   actions: {
     refreshAuth: (refreshToken: string) => void,
     registerDevice: (deviceToken: string) => void,
   },
 };
+
+const mapStateToProps = ({ session, user }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
+
+const mapDispatchToProps = (dispatch: Action => any): ActionProps => ({
+  actions: {
+    ...bindActionCreators({ refreshAuth, registerDevice }, dispatch),
+  }
+});
+
+type Props = ReduxProps & ActionProps;
 
 class AppLaunchContainer extends React.Component<Props> {
   componentDidMount() {
@@ -57,9 +55,10 @@ class AppLaunchContainer extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.user.data === null && this.props.user.data !== null) {
       new NotificationService(({ os, token }): void => this.props.actions.registerDevice(os, token));
-      return Actions.main();
+      Actions.main();
+    } else if (!prevProps.user.hasError && this.props.user.hasError) {
+      Actions.loginModal();
     }
-    if (!prevProps.user.hasError && this.props.user.hasError) Actions.loginModal();
   }
 
   autoLogin = () => {

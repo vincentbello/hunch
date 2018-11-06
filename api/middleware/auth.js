@@ -3,7 +3,7 @@ const env = process.env.NODE_ENV || 'development';
 
 export default function(req, res, next) {
   if (env === 'development') {
-    req.auth = { id: 3 };
+    req.auth = { id: 4 };
     return next();
   }
 

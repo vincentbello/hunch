@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Linking, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,12 +11,9 @@ import { SocialIcon } from 'react-native-elements';
 
 import { authenticate } from 'actions/user';
 
-import { FB_APP_ID } from 'constants/third-party';
-
 import { type Action } from 'types/redux';
 import { type ReduxState as UserState } from 'reducers/user';
 
-import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
@@ -28,25 +25,27 @@ type ReduxProps = {
   user: UserState,
 };
 
+type ActionProps = {
+  actions: {
+    authenticate: (fbToken: string) => void,
+  },
+};
+
 // What data from the store shall we send to the component?
 const mapStateToProps = (state: ReduxStateSlice): ReduxProps => ({
   user: state.user,
 });
 
 // Any actions to map to the component?
-const mapDispatchToProps = (dispatch: Action => any) => ({
+const mapDispatchToProps = (dispatch: Action => any): ActionProps => ({
   actions: {
     ...bindActionCreators({
       authenticate,
     }, dispatch),
-  }
+  },
 });
 
-type Props = ReduxProps & {
-  actions: {
-    authenticate: (fbToken: string) => void,
-  },
-};
+type Props = ReduxProps & ActionProps;
 
 type State = { isAuthenticating: boolean };
 
@@ -63,7 +62,7 @@ class LoginContainer extends React.Component<Props, State> {
 
   loginToFacebook = () => {
     this.setState({ isAuthenticating: true });
-    LoginManager.logInWithReadPermissions(['public_profile', 'email'])
+    LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
       .then((result) => {
         if (result.isCancelled) {
           console.error('Login was cancelled');
@@ -75,6 +74,7 @@ class LoginContainer extends React.Component<Props, State> {
       .then((data) => {
         this.setState({ isAuthenticating: false });
         // Send access token to backend
+        console.log(data);
         this.props.actions.authenticate(data.accessToken);
       });
   };
