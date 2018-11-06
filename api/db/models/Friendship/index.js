@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('APP', 'FB'),
       defaultValue: 'APP',
     },
-  }, {});
+  }, {
+    indexes: [{ unique: true, fields: ['userId', 'friendId'] }],
+  });
   Friendship.associate = function(models) {
     Friendship.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     Friendship.belongsTo(models.User, { foreignKey: 'friendId', as: 'friend' });

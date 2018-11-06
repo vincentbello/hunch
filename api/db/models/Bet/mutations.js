@@ -47,7 +47,6 @@ export default models => ({
       },
     },
     resolve: async function (_, { amount, betteeId, gameId, bettorPickTeamId, type, wager }, context, ...args) {
-      console.log(amount, betteeId, gameId, bettorPickTeamId, type, wager);
       const bet = await models.Bet.create({
         type,
         amount,

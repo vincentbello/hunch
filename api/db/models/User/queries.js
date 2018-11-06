@@ -8,22 +8,12 @@ export default models => ({
     type: new GraphQLList(UserType),
     args: {
       userListType: {
-        description: 'Bet list type',
+        description: 'User list type',
         type: UserListType,
       },
     },
-    resolve: resolver(models.User, {
-      before: (findOptions, args, context) => ({
-        ...findOptions,
-        where: {
-          FRIENDS: {
-            active: true,
-            id: {
-              [Op.ne]: context.userId,
-            },
-          },
-        }[args.userListType] || {},
-      }),
-    }),
+    resolve: async function(root, args, context, info) {
+      return await models.User.getFriends(context.userId);
+    },
   },
 });

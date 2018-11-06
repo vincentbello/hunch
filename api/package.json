@@ -19,6 +19,7 @@
     "graphql-relay": "^0.5.5",
     "graphql-sequelize": "^9.0.4",
     "jsonwebtoken": "^8.3.0",
+    "lodash.difference": "^4.5.0",
     "morgan": "~1.9.0",
     "mysportsfeeds-node": "^2.0.1",
     "mysql2": "^1.6.1",

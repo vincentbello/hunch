@@ -1,4 +1,5 @@
 import Sequelize, { Op } from 'sequelize';
+import difference from 'lodash.difference';
 import models from '../';
 
 export default (sequelize, DataTypes) => {
@@ -43,7 +44,7 @@ export default (sequelize, DataTypes) => {
       },
     });
     const existingFriendIds = existingFriendships.map(({ friendFbId }) => friendFbId);
-    const newFriendFbIds = fbFriendIds.filter(id => !existingFriendIds.includes(id));
+    const newFriendFbIds = difference(fbFriendIds, existingFriendIds);
 
     const newFriendUsers = await models.User.findAll({
       attributes: ['id'],
@@ -56,14 +57,31 @@ export default (sequelize, DataTypes) => {
     });
     const NOW = new Date();
     const newFriendships = newFriendUsers.map(friendUser => ({
-      userId,
-      friendId: friendUser.id,
+      userId: userId > friendUser.id ? friendUser.id : userId,
+      friendId: userId > friendUser.id ? userId : friendUser.id,
       status: 'ACTIVE',
       source: 'FB',
       createdAt: NOW,
       updatedAt: NOW,
     }));
     await models.Friendship.bulkCreate(newFriendships);
-  }
+  };
+
+  User.getFriends = async function(userId) {
+    const friendsQuery = `
+      SELECT B.* FROM (
+        SELECT userId as friendId FROM Friendships WHERE friendId=${userId}
+        UNION
+        SELECT friendId FROM Friendships WHERE userId=${userId}
+      ) A
+      INNER JOIN Users B
+      ON A.friendId = B.id
+      ORDER BY B.firstName ASC
+    `;
+    return await models.sequelize.query(friendsQuery, {
+      model: models.User,
+      type: Sequelize.QueryTypes.SELECT,
+    });
+  };
   return User;
 };
