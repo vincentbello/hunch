@@ -21,9 +21,14 @@ const styles = StyleSheet.create({
     padding: 8,
     color: Colors.white,
   },
-  Pill__icon: {
-    padding: 4,
+  Pill__iconContainer: {
     marginRight: 4,
+  },
+  Pill__iconButton: {
+    padding: 4,
+  },
+  Pill__icon: {
+    marginRight: 0,
   },
 });
 
@@ -42,15 +47,18 @@ const Pill = ({ canRemove, label, onRemove }: Props): React.Node => (
   <View style={styles.Pill}>
     <Text style={styles.Pill__label}>{label}</Text>
     {canRemove && (
-      <Icon.Button
-        style={styles.Pill__icon}
-        backgroundColor="transparent"
-        color={Colors.white}
-        iconStyle={{ marginRight: 0 }}
-        name="x"
-        size={16}
-        onPress={onRemove}
-      />
+      <View style={styles.Pill__iconContainer}>
+        <Icon.Button
+          style={styles.Pill__iconButton}
+          backgroundColor="transparent"
+          color={Colors.white}
+          iconStyle={styles.Pill__icon}
+          name="x"
+          size={16}
+          underlayColor="#ffffff25"
+          onPress={onRemove}
+        />
+      </View>
     )}
   </View>
 );

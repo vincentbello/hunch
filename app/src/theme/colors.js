@@ -26,6 +26,12 @@ const borders = {
   cellBorder: '#EEEEEE',
 };
 
+const iconButton = {
+  iconButton: {
+    underlay: '#CDCDCD',
+  },
+};
+
 const tabbar = {
   tabbar: {
     background: '#FFFFFF',
@@ -50,6 +56,7 @@ const misc = {
 export default {
   ...app,
   ...brand,
+  ...iconButton,
   ...text,
   ...borders,
   ...tabbar,

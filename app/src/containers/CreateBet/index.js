@@ -127,8 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Create__sectionHeaderIcon: {
-    paddingTop: 0,
-    paddingBottom: 0,
+    padding: 4,
   },
   Create__horizontalCellContainer: {
     flexDirection: 'row',
@@ -224,6 +223,7 @@ class CreateBetContainer extends React.Component<Props, State> {
               iconStyle={{ marginRight: 0 }}
               name="x"
               size={18}
+              underlayColor={Colors.iconButton.underlay}
               onPress={(): void => actions.setBettorPickTeam(null)}
             />
           )}
@@ -285,6 +285,7 @@ class CreateBetContainer extends React.Component<Props, State> {
               iconStyle={{ marginRight: 0 }}
               name="x"
               size={18}
+              underlayColor={Colors.iconButton.underlay}
               onPress={(): void => actions.setGame(null)}
             />
           )}
