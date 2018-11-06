@@ -10,6 +10,17 @@ import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
+  IconContainer: {
+    marginLeft: 6,
+    marginRight: 6,
+  },
+  IconButton: {
+    padding: 0,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 2,
+    paddingRight: 2,
+  },
   Badge: {
     position: 'absolute',
     top: 0,
@@ -40,13 +51,15 @@ type Props = {
 };
 
 const NavButton = ({ badgeCount, leftBadge, iconName, targetScene, onClick }: Props): React.Node => (
-  <View>
+  <View style={styles.IconContainer}>
     <Icon.Button
       backgroundColor="transparent"
       color={Colors.brand.primary}
       iconStyle={{ marginRight: 4, marginLeft: 4 }}
+      style={styles.IconButton}
       name={iconName}
       size={24}
+      underlayColor={Colors.background}
       onPress={targetScene ? Actions[targetScene] : onClick}
     />
     {badgeCount > 0 && (
