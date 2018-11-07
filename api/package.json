@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www --exec \"babel-node --inspect\""
   },
   "dependencies": {
+    "apn": "^2.2.0",
     "apollo-server-express": "^2.1.0",
     "axios": "^0.18.0",
     "cookie-parser": "~1.4.3",

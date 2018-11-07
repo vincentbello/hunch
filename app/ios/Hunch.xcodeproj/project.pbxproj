@@ -1358,7 +1358,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vincentbello.Hunch-com.vincentbello.Hunch-com.vincentbello.Hunch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vincentbello.Hunch;
 				PRODUCT_NAME = Hunch;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1383,7 +1383,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vincentbello.Hunch-com.vincentbello.Hunch-com.vincentbello.Hunch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vincentbello.Hunch;
 				PRODUCT_NAME = Hunch;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

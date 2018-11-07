@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import 'dotenv/config';
 import { Op } from 'sequelize';
+import apn from 'apn';
 import debugModule from 'debug';
 import http from 'http';
 import minimist from 'minimist';
 const debug = debugModule('node-api:server');
 
+import apnProvider from '../../services/apnProvider';
 import models from '../../db/models';
 import MySportsFeedsClient from '../../third-party/my-sports-feeds';
 import sleep from '../../utils/sleep';
@@ -60,7 +62,7 @@ async function pollGames() {
 
     try {
       const newData = {
-        ...game,
+        ...game.toJSON(),
         attrs: {
           completed: boxscore.game.playedStatus === 'COMPLETED',
           homeScore: boxscore.scoring.homeScoreTotal,
@@ -91,28 +93,75 @@ async function pollGames() {
 
   const bets = await models.Bet.findAll({
     where: {
+      active: true,
       gameId: {
         [Op.or]: updatedGameIds,
       },
     },
+    include: [
+      { model: models.User, as: 'bettor' },
+      { model: models.User, as: 'bettee' },
+    ],
   });
+
+  console.log(`\n\n\nFound ${bets.length} bets to update.`);
 
   for (let i = 0; i < bets.length; i++) {
     const bet = bets[i];
     const updatedGame = updatedGames[bet.gameId];
-    const winningTeamId = updatedGame.attrs.homeScore > updatedGame.attrs.awayScore ? updatedGame.homeTeamId : updatedGame.awayTeamId;
-    const winnerId = winningTeamId === bet.bettorPickTeamId ? bet.bettorId : bet.betteeId;
-    const loserId = winningTeamId === bet.bettorPickTeamId ? bet.betteeId : bet.bettorId;
+    const didHomeTeamWin = updatedGame.attrs.homeScore > updatedGame.attrs.awayScore;
+    const winningTeamId = didHomeTeamWin ? updatedGame.homeTeam.id : updatedGame.awayTeam.id;
+    const winningTeam = didHomeTeamWin ? updatedGame.homeTeam : updatedGame.awayTeam;
+    const losingTeam = didHomeTeamWin ? updatedGame.awayTeam : updatedGame.homeTeam;
+    const winner = winningTeamId === bet.bettorPickTeamId ? bet.bettor : bet.bettee;
+    const loser = winningTeamId === bet.bettorPickTeamId ? bet.bettee : bet.bettor;
+
     await models.Bet.update({
       active: false,
-      winnerId,
+      winnerId: winner.id,
       resolvedAt: now,
       updatedAt: now,
     }, { where: { id: bet.id } });
-    // TODO: Notify winnerId
-    // TODO: Notify loserId
+    console.log(`\n\nResolved bet ${bet.id}`);
+
+    // Get device tokens
+    const devices = await models.Device.findAll({
+      where: {
+        userId: {
+          [Op.or]: [winner.id, loser.id],
+        },
+        allowedNotifications: true,
+      },
+      include: [{ model: models.User, as: 'user' }],
+    });
+
+    for (let i = 0; i < devices.length; i++) {
+      const device = devices[i];
+      const didWinBet = device.user.id === winner.id;
+      const gameResultText = `The ${winningTeam.lastName} beat the ${losingTeam.lastName}.`;
+      const winnerNotificationHeader = `🎉 You won your bet!`;
+      const loserNotificationHeader = `😤 You lost your bet.`;
+      const winnerNotificationText = `${loser.firstName} owes you $${bet.amount}!`;
+      const loserNotificationText = `You owe ${winner.firstName} $${bet.amount}.`;
+      const notificationHeader = didWinBet ? winnerNotificationHeader : loserNotificationHeader;
+      const notificationBody = `${gameResultText} ${didWinBet ? winnerNotificationText : loserNotificationText}`;
+
+      const notification = new apn.Notification();
+      notification.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 14; // Expires two weeks from now
+      notification.badge = 0;
+      notification.alert = notificationHeader;
+      notification.title = notificationHeader;
+      notification.body = notificationBody;
+      notification.payload = { betId: bet.id };
+      notification.topic = 'com.vincentbello.Hunch';
+      console.log(`\n\nSending notification to ${device.user.fullName}`);
+      const result = await apnProvider.send(notification, device.token);
+      console.log(`\n\nSuccessfully sent notification to ${device.user.fullName}!`);
+    }
+    // TODO: Batch winner and loser tokens
   }
   console.log(`Found ${bets.length} bets.`);
+  process.exit();
 };
 
 pollGames();

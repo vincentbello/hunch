@@ -8,7 +8,7 @@ import sassMiddleware from 'node-sass-middleware';
 import { ApolloServer } from 'apollo-server-express';
 
 import authMiddleware from './middleware/auth';
-import setupPassport from './utils/passport';
+import setupPassport from './services/passport';
 import schema from './schema';
 import UserSerializer from './serialization/User';
 
