@@ -6,7 +6,7 @@
 	<dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		N0pqLYaahHYzA0vhBdoy07oq9DM=
+		1pMh7v0mE2MdRjWECIgN9OV/Q4o=
 		</data>
 		<key>Feather.ttf</key>
 		<data>
@@ -47,7 +47,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		AioLaLdtkEK+PAG0jo2BpwssM30=
+		8plMq/g2PLF6MfZ/vC3mn6jeJM4=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -59,11 +59,11 @@
 		</data>
 		<key>PlugIns/HunchTests.xctest.dSYM/Contents/Resources/DWARF/HunchTests</key>
 		<data>
-		xBEoIlMmWZKIxVGCt7LhkdxZqE0=
+		rrTfhMy6BsaCwcbIl5DVPGBF8L0=
 		</data>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<data>
-		DMIsrmaZiA98BotK8D3CdNeE3oQ=
+		3vbPtnMQpDRqkA/eGgaisj7CsSs=
 		</data>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>
 		<data>
@@ -80,11 +80,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			N0pqLYaahHYzA0vhBdoy07oq9DM=
+			1pMh7v0mE2MdRjWECIgN9OV/Q4o=
 			</data>
 			<key>hash2</key>
 			<data>
-			1/VVM3OqySlvgC9wBLo36AygxV7ORNRJOfmbJXPC0vY=
+			HoitftoksHaQ+kB/CXHvSbFKEagCutT7EGeNPAKGjzk=
 			</data>
 		</dict>
 		<key>Feather.ttf</key>
@@ -192,22 +192,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xBEoIlMmWZKIxVGCt7LhkdxZqE0=
+			rrTfhMy6BsaCwcbIl5DVPGBF8L0=
 			</data>
 			<key>hash2</key>
 			<data>
-			pGdF9EHcQ/bOeHSyz1vqtm+ZFzdE4HZ1zyLVasYGkkc=
+			+xQ+1dOLAFx35Rwp5x/xL3oZBHFmNiVMjDALt+p3f3c=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/HunchTests</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			DMIsrmaZiA98BotK8D3CdNeE3oQ=
+			3vbPtnMQpDRqkA/eGgaisj7CsSs=
 			</data>
 			<key>hash2</key>
 			<data>
-			wZN+Q9w84J8FP9WYwC3VIusxnzItSX5uaq1dDr7cAxo=
+			d8jtPw1NjsKk5rA/Ks5EjkI3HY+/EHuVnrzggEuXcv4=
 			</data>
 		</dict>
 		<key>PlugIns/HunchTests.xctest/Info.plist</key>

@@ -1,18 +1,13 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import ApolloClient from 'apollo-client';
+import { AsyncStorage, View, StyleSheet, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-import { type Action } from 'types/redux';
-import { type ReduxState } from 'types/state';
-import { type ReduxState as SessionState } from 'reducers/session';
-import { type ReduxState as UserState } from 'reducers/user';
-
-import { refreshAuth, registerDevice } from 'actions/user';
 import NotificationService from 'services/NotificationService';
+
+import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
+
+import withApolloClient from 'hocs/withApolloClient';
 
 const styles = StyleSheet.create({
   Launch: {
@@ -25,48 +20,30 @@ const styles = StyleSheet.create({
   },
 });
 
-type ReduxProps = {
-  refreshToken: string | null,
-  user: UserState,
+type Props = {
+  apolloClient: ApolloClient,
 };
 
-type ActionProps = {
-  actions: {
-    refreshAuth: (refreshToken: string) => void,
-    registerDevice: (deviceToken: string) => void,
-  },
-};
-
-const mapStateToProps = ({ session, user }: ReduxState): ReduxProps => ({ refreshToken: session.refreshToken, user });
-
-const mapDispatchToProps = (dispatch: Action => any): ActionProps => ({
-  actions: {
-    ...bindActionCreators({ refreshAuth, registerDevice }, dispatch),
-  }
-});
-
-type Props = ReduxProps & ActionProps;
-
-class AppLaunchContainer extends React.Component<Props> {
+class AppLaunch extends React.Component<Props> {
   componentDidMount() {
-    setTimeout(this.autoLogin);
+    this.autoLogin();
   }
 
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) {
-      new NotificationService(({ os, token }): void => this.props.actions.registerDevice(os, token));
-      Actions.main();
-    } else if (!prevProps.user.hasError && this.props.user.hasError) {
-      Actions.loginModal();
-    }
-  }
-
-  autoLogin = () => {
-    const { actions, refreshToken } = this.props;
+  autoLogin = async (): Promise<void> => {
+    const refreshToken = await AsyncStorage.getItem('refreshToken');
     if (refreshToken === null) {
+      // No record
       Actions.loginModal();
     } else {
-      actions.refreshAuth(refreshToken);
+      const { apolloClient } = this.props;
+      try {
+        const { data: { currentUser } } = await apolloClient.query({ query: GET_CURRENT_USER, variables: { refreshToken } });
+        await AsyncStorage.setItem('refreshToken', currentUser.refreshToken);
+        new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
+        Actions.main();
+      } catch (err) {
+        Actions.loginModal();
+      }
     }
   };
 
@@ -79,4 +56,4 @@ class AppLaunchContainer extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppLaunchContainer);
+export default withApolloClient(AppLaunch);

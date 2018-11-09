@@ -1,6 +1,35 @@
 import { GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 import { Op } from 'sequelize';
 import { resolver } from 'graphql-sequelize';
-import DeviceType from './type';
+import DeviceType, { DeviceOsType } from './type';
 
-export default models => ({});
+export default models => ({
+  registerDevice: {
+    type: GraphQLInt,
+    args: {
+      os: {
+        type: DeviceOsType,
+        description: 'Operating system the device is on',
+      },
+      token: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Device token',
+      },
+    },
+    resolve: async function (_, { os, token }, context) {
+      const [instance, initialized] = await models.Device.findOrBuild({ where: { userId: context.userId, token } });
+      if (!initialized) return null;
+
+      const now = new Date();
+      await instance.update({
+        type: os,
+        token,
+        allowedNotifications: true, // Placeholder
+        userId: context.userId,
+        createdAt: now,
+        updatedAt: now,
+      });
+      return instance.id;
+    },
+  },
+});
