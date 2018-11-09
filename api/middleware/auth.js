@@ -3,6 +3,7 @@ const env = process.env.NODE_ENV || 'development';
 
 export default function(req, res, next) {
   if (env === 'development') {
+    console.log('REQ HEADERS', req.headers);
     req.auth = { id: 4 };
     return next();
   }

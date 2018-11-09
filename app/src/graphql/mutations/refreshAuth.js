@@ -4,8 +4,8 @@ import userFragment from 'graphql/fragments/user';
 export default gql`
   ${userFragment}
 
-  query CurrentUser {
-    currentUser {
+  mutation RefreshAuth($refreshToken: String!) {
+    refreshAuth(refreshToken: $refreshToken) {
       ...userFields
       accessToken
       refreshToken

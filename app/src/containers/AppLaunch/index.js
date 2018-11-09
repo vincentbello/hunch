@@ -6,6 +6,8 @@ import { Actions } from 'react-native-router-flux';
 import NotificationService from 'services/NotificationService';
 
 import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
+import REFRESH_AUTH from 'graphql/mutations/refreshAuth';
+import REGISTER_DEVICE from 'graphql/mutations/registerDevice';
 
 import withApolloClient from 'hocs/withApolloClient';
 
@@ -30,15 +32,19 @@ class AppLaunch extends React.Component<Props> {
   }
 
   autoLogin = async (): Promise<void> => {
+    // TODO: Set timer (maybe in Apollo client?) to refresh auth token
     const refreshToken = await AsyncStorage.getItem('refreshToken');
-    if (refreshToken === null) {
-      // No record
+    if (refreshToken === null) { // No record
       Actions.loginModal();
     } else {
       const { apolloClient } = this.props;
       try {
-        const { data: { currentUser } } = await apolloClient.query({ query: GET_CURRENT_USER, variables: { refreshToken } });
-        await AsyncStorage.setItem('refreshToken', currentUser.refreshToken);
+        const { data: { refreshAuth } } = await apolloClient.mutate({
+          mutation: REFRESH_AUTH,
+          variables: { refreshToken },
+          update: (cache, { data: { refreshAuth: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
+        });
+        await AsyncStorage.multiSet([['accessToken', refreshAuth.accessToken, 'refreshToken', refreshAuth.refreshToken]]);
         new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
         Actions.main();
       } catch (err) {

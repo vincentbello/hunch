@@ -75,6 +75,7 @@ class LoginContainer extends React.Component<Props, State> {
         this.setState({ isAuthenticating: false });
         // Send access token to backend
         console.log(data);
+        // TODO: Mutation to log in, on update writeQuery to CURRENT_USER with result
         this.props.actions.authenticate(data.accessToken);
       });
   };
