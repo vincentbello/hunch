@@ -18,28 +18,21 @@ type State = { isAuthenticating: boolean };
 class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
 
-  loginToFacebook = () => {
+  loginToFacebook = async () => {
     this.setState({ isAuthenticating: true });
-    LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
-      .then((result) => {
-        if (result.isCancelled) {
-          console.error('Login was cancelled');
-          this.setState({ isAuthenticating: false });
-        } else {
-          return AccessToken.getCurrentAccessToken();
-        }
-      }, console.error)
-      .then(({ accessToken }) => {
-        this.setState({ isAuthenticating: false });
-        try {
-          const { data: { login } } = await this.props.login({ variables: { accessToken, type: 'FACEBOOK' } }),
-          await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
-          new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
-          Actions.main();
-        } catch (err) {
-          // Log error
-        }
-      });
+    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
+    if (result.isCancelled) {
+      console.error('Login was cancelled');
+      this.setState({ isAuthenticating: false });
+      return;
+    }
+
+    const { accessToken } = AccessToken.getCurrentAccessToken();
+    const { data: { login } } = await this.props.login({ variables: { accessToken, type: 'FACEBOOK' } }),
+    await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
+    new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
+    this.setState({ isAuthenticating: false });
+    Actions.main();
   };
 
   render(): React.Node {
@@ -50,7 +43,7 @@ class LoginContainer extends React.Component<Props, State> {
           disabled={this.state.isAuthenticating}
           onPress={this.loginToFacebook}
         >
-          {isLoggingIn ? (
+          {this.state.isAuthenticating ? (
             <Text>Logging In...</Text>
            ) : (
             <SocialIcon
