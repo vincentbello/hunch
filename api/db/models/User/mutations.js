@@ -5,12 +5,21 @@ import jwt from 'jsonwebtoken';
 import UserType from './type';
 
 export default models => ({
+  login: {
+    type: UserType,
+    resolve: async function(_root, _args, context) {
+      // console.log('FB ACCESS TOKEN', fbAccessToken);
+      if (!context.user) throw new Error('Something went wrong.');
+      return context.user;
+    },
+  },
+
   refreshAuth: {
     type: UserType,
     args: {
       refreshToken: {
         description: 'The refresh token to refresh authentication',
-        type: GraphQLString,
+        type: GraphQLNonNull(GraphQLString),
       },
     },
     resolve: async function(root, { refreshToken }, context, info) {

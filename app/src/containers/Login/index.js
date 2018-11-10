@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { compose, graphql } from 'react-apollo';
 
-// import graphql, mutations
+import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
+import LOGIN from 'graphql/mutations/login';
+import REGISTER_DEVICE from 'graphql/mutations/registerDevice';
 
 import { Actions } from 'react-native-router-flux';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
@@ -18,7 +21,7 @@ type State = { isAuthenticating: boolean };
 class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
 
-  loginToFacebook = async () => {
+  loginToFacebook = async (): Promise<void> => {
     this.setState({ isAuthenticating: true });
     const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
     if (result.isCancelled) {
@@ -27,8 +30,8 @@ class LoginContainer extends React.Component<Props, State> {
       return;
     }
 
-    const { accessToken } = AccessToken.getCurrentAccessToken();
-    const { data: { login } } = await this.props.login({ variables: { accessToken, type: 'FACEBOOK' } }),
+    const { accessToken } = await AccessToken.getCurrentAccessToken();
+    const { data: { login } } = await this.props.login({ context: { headers: { access_token: btoa(accessToken) } } });
     await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
     new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
     this.setState({ isAuthenticating: false });
@@ -60,13 +63,11 @@ class LoginContainer extends React.Component<Props, State> {
 }
 
 export default compose(
-  graphql({
-    mutation: LOGIN,
+  graphql(LOGIN, {
     name: 'login',
-    update: (cache, { data: { login: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
+    options: {
+      update: (cache, { data: { login: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
+    },
   }),
-  graphql({
-    mutation: REGISTER_DEVICE,
-    name: 'registerDevice',
-  }),
+  graphql(REGISTER_DEVICE, { name: 'registerDevice' }),
 )(LoginContainer);
