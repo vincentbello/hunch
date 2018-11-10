@@ -31,21 +31,12 @@ type ActionProps = {
   },
 };
 
-// What data from the store shall we send to the component?
-const mapStateToProps = (state: ReduxStateSlice): ReduxProps => ({
-  user: state.user,
+// What data from the store shall we send to the comconst mapStateToProps = (state: ReduxStateSlice: ReduxProps => ({
+  usr: state.user,
 });
-
-// Any actions to map to the component?
-const mapDispatchToProps = (dispatch: Action => any): ActionProps => ({
-  actions: {
-    ...bindActionCreators({
-      authenticate,
-    }, dispatch),
-  },
-});
-
-type Props = ReduxProps & ActionProps;
+// Any actions to ma to the component?
+const mapDispatchToProps = (dispatch: Action => any): ActionProp => ({
+  ac Props = ReduxProps & ActionProps;
 
 type State = { isAuthenticating: boolean };
 
@@ -71,10 +62,22 @@ class LoginContainer extends React.Component<Props, State> {
           return AccessToken.getCurrentAccessToken();
         }
       }, console.error)
-      .then((data) => {
+      .then(({ accessToken }) => {
         this.setState({ isAuthenticating: false });
-        // Send access token to backend
-        console.log(data);
+        const { apolloClient } = this.props;
+        try {
+          const { data: { login } } = await apolloClient.mutate({
+            mutation: LOGIN,
+            variables: { accessToken, type: 'FACEBOOK' },
+            update: (cache, { data: { login: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
+          });
+          await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
+          new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
+          Actions.main();
+        } catch (err) {
+          Actions.loginModal();
+        }
+    
         // TODO: Mutation to log in, on update writeQuery to CURRENT_USER with result
         this.props.actions.authenticate(data.accessToken);
       });
