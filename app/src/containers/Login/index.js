@@ -33,12 +33,8 @@ type ActionProps = {
 
 // What data from the store shall we send to the comconst mapStateToProps = (state: ReduxStateSlice: ReduxProps => ({
   usr: state.user,
-});
-// Any actions to ma to the component?
-const mapDispatchToProps = (dispatch: Action => any): ActionProp => ({
-  ac Props = ReduxProps & ActionProps;
-
-type State = { isAuthenticating: boolean };
+   
+// Any actions to type State = { isAuthenticating: boolean };
 
 class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
