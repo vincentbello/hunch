@@ -2,50 +2,21 @@
 import * as React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import graphql, mutations
+
 import { Actions } from 'react-native-router-flux';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 
 import { SocialIcon } from 'react-native-elements';
 
-import { authenticate } from 'actions/user';
-
-import { type Action } from 'types/redux';
-import { type ReduxState as UserState } from 'reducers/user';
-
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
-type ReduxStateSlice = {
-  user: UserState,
-};
-
-type ReduxProps = {
-  user: UserState,
-};
-
-type ActionProps = {
-  actions: {
-    authenticate: (fbToken: string) => void,
-  },
-};
-
-// What data from the store shall we send to the comconst mapStateToProps = (state: ReduxStateSlice: ReduxProps => ({
-  usr: state.user,
-   
-// Any actions to type State = { isAuthenticating: boolean };
+type Props = { apolloClient: ApolloClient };
+type State = { isAuthenticating: boolean };
 
 class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
-
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.user.data === null && this.props.user.data !== null) Actions.bets();
-  }
-
-  get isLoggingIn(): boolean {
-    return this.state.isAuthenticating || this.props.user.isLoading;
-  }
 
   loginToFacebook = () => {
     this.setState({ isAuthenticating: true });
@@ -60,32 +31,23 @@ class LoginContainer extends React.Component<Props, State> {
       }, console.error)
       .then(({ accessToken }) => {
         this.setState({ isAuthenticating: false });
-        const { apolloClient } = this.props;
         try {
-          const { data: { login } } = await apolloClient.mutate({
-            mutation: LOGIN,
-            variables: { accessToken, type: 'FACEBOOK' },
-            update: (cache, { data: { login: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
-          });
+          const { data: { login } } = await this.props.login({ variables: { accessToken, type: 'FACEBOOK' } }),
           await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
-          new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
+          new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
           Actions.main();
         } catch (err) {
-          Actions.loginModal();
+          // Log error
         }
-    
-        // TODO: Mutation to log in, on update writeQuery to CURRENT_USER with result
-        this.props.actions.authenticate(data.accessToken);
       });
   };
 
   render(): React.Node {
-    const { isLoggingIn } = this;
     return (
       <View style={SplashStyles}>
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
-          disabled={isLoggingIn}
+          disabled={this.state.isAuthenticating}
           onPress={this.loginToFacebook}
         >
           {isLoggingIn ? (
@@ -104,4 +66,14 @@ class LoginContainer extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
+export default compose(
+  graphql({
+    mutation: LOGIN,
+    name: 'login',
+    update: (cache, { data: { login: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
+  }),
+  graphql({
+    mutation: REGISTER_DEVICE,
+    name: 'registerDevice',
+  }),
+)(LoginContainer);
