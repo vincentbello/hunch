@@ -10,14 +10,11 @@ import reduxStore from './store';
 
 const RouterWithRedux = connect()(Router);
 
-export default class App extends React.Component<{}> {
-  render(): React.Node {
-    return (
-      <ReduxProvider store={reduxStore}>
-        <ApolloProvider client={apolloClient}>
-          <RouterWithRedux navigator={AppRoutes} />
-        </ApolloProvider>
-      </ReduxProvider>
-    );
-  }
-}
+const App = (): React.Node => (
+  <ReduxProvider store={reduxStore}>
+    <ApolloProvider client={apolloClient}>
+      <RouterWithRedux navigator={AppRoutes} />
+    </ApolloProvider>
+  </ReduxProvider>
+);
+export default App;

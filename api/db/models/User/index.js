@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
     active: DataTypes.BOOLEAN,
     admin: DataTypes.BOOLEAN,
     fbId: DataTypes.STRING,
-    fbAccessToken: DataTypes.STRING(256),
+    fbAccessToken: DataTypes.TEXT,
     imageUrl: DataTypes.STRING,
     gender: DataTypes.STRING,
     lastLoginAt: DataTypes.DATE,

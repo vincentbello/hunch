@@ -30,7 +30,7 @@ type Props = {
 
 function BetList({ betsQuery, betListType, user }: Props) {
   const renderBets = (bets: Array<Bet>): React.Node => {
-    console.log('RENDER BETS');
+    console.log('RENDER BETS', bets);
     if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
     return (
       <FlatList

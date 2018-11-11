@@ -18,7 +18,7 @@ import authRouter from './routes/auth';
 setupPassport();
 
 const app = express();
-const GRAPHQL_PATH = '/graphql';
+const GRAPHQL_PATH = '/api';
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -38,7 +38,7 @@ app.use('/auth', authRouter);
 
 const apolloServer = new ApolloServer({
   schema,
-  context: ({ req, res }) => ({ userId: req.auth.id, user: req.user }),
+  context: ({ req, res }) => ({ userId: req.auth ? req.auth.id : null, user: req.user }),
   // formatError() {}, // TODO: Fill this in
 });
 app.use(GRAPHQL_PATH, authMiddleware);

@@ -44,7 +44,7 @@ class AppLaunch extends React.Component<Props> {
           variables: { refreshToken },
           update: (cache, { data: { refreshAuth: currentUser } }) => cache.writeQuery({ query: GET_CURRENT_USER, data: { currentUser } }),
         });
-        await AsyncStorage.multiSet([['accessToken', refreshAuth.accessToken, 'refreshToken', refreshAuth.refreshToken]]);
+        await AsyncStorage.multiSet([['accessToken', refreshAuth.accessToken], ['refreshToken', refreshAuth.refreshToken]]);
         new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
         Actions.main();
       } catch (err) {

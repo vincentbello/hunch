@@ -4,8 +4,8 @@ import userFragment from 'graphql/fragments/user';
 export default gql`
   ${userFragment}
 
-  mutation Login($fbAccessToken: String!) {
-    login(fbAccessToken: $fbAccessToken) {
+  mutation Login {
+    login {
       ...userFields
       accessToken
       refreshToken

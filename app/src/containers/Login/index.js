@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { AsyncStorage, View, Text, TouchableOpacity } from 'react-native';
 import { compose, graphql } from 'react-apollo';
+import NotificationService from 'services/NotificationService';
 
 import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
 import LOGIN from 'graphql/mutations/login';
@@ -25,14 +26,13 @@ class LoginContainer extends React.Component<Props, State> {
     this.setState({ isAuthenticating: true });
     const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
     if (result.isCancelled) {
-      console.error('Login was cancelled');
       this.setState({ isAuthenticating: false });
       return;
     }
 
     const { accessToken } = await AccessToken.getCurrentAccessToken();
-    const { data: { login } } = await this.props.login({ context: { headers: { access_token: btoa(accessToken) } } });
-    await AsyncStorage.multiSet([['accessToken', login.accessToken, 'refreshToken', login.refreshToken]]);
+    const { data: { login } } = await this.props.login({ context: { headers: { access_token: accessToken } } });
+    await AsyncStorage.multiSet([['accessToken', login.accessToken], ['refreshToken', login.refreshToken]]);
     new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
     this.setState({ isAuthenticating: false });
     Actions.main();

@@ -8,9 +8,18 @@ export default models => ({
   login: {
     type: UserType,
     resolve: async function(_root, _args, context) {
-      // console.log('FB ACCESS TOKEN', fbAccessToken);
       if (!context.user) throw new Error('Something went wrong.');
       return context.user;
+    },
+  },
+
+  logout: {
+    type: UserType,
+    resolve: async function(_root, _args, context) {
+      const user = await models.User.findById(context.userId);
+      user.set('accessToken', '');
+      user.set('refreshToken', '');
+      return await user.save();
     },
   },
 

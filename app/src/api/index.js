@@ -7,22 +7,22 @@ import { type Bet } from 'types/bet';
 import { type User as UserPayload } from 'types/user';
 
 export default class Api {
-  // TODO
+  // DONE
   static authenticateWithFacebook(fbAccessToken: string): Promise<UserPayload> {
     return axios.post(`${API_URL}/auth/facebook`, { access_token: fbAccessToken });
   }
 
-  // TODO
+  // DONE
   static logOut(userId: number): Promise<> {
     return axios.post(`${API_URL}/auth/revoke`, { userId });
   }
 
-  // TODO
+  // DONE
   static refreshAuth(refreshToken: string): Promise<UserPayload> {
     return axios.post(`${API_URL}/auth/refresh`, { refreshToken });
   }
 
-  // TODO
+  // DONE
   static registerDevice(os: Os, token: string): Promise<> {
     return axios.post(`${API_URL}/auth/device`, { os, token });
   }
