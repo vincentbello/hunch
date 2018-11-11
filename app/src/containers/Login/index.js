@@ -16,7 +16,7 @@ import { SocialIcon } from 'react-native-elements';
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
-type Props = { apolloClient: ApolloClient };
+type Props = { login: () => void, registerDevice: () => void };
 type State = { isAuthenticating: boolean };
 
 class LoginContainer extends React.Component<Props, State> {

@@ -1,38 +1,26 @@
 // @flow
 import * as React from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, View, Text } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { StyleSheet, View, Text } from 'react-native';
 import GET_BET from 'graphql/queries/getBet';
-
-import { getBet } from 'selectors/bets';
-import { fetchBet } from 'actions/bets';
 
 import { type Bet } from 'types/bet';
 import { type User } from 'types/user';
-import { type Action, type PromiseState } from 'types/redux';
-import { type ReduxState } from 'types/state';
 import { type ReduxState as UserState } from 'reducers/user';
 
-import { SplashStyles } from 'theme/app';
 import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 import AppSizes from 'theme/sizes';
 
+import withCurrentUser, { type CurrentUserProps } from 'hocs/withCurrentUser';
 import Image from 'components/Image';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import { Query } from 'react-apollo';
-
-type ReduxProps = { user: UserState };
 
 type ExternalProps = {
   betId: number,
 };
 
-const mapStateToProps = ({ user }: ReduxState): ReduxProps => ({ user });
-
-type Props = ExternalProps & ReduxProps;
+type Props = ExternalProps & CurrentUserProps;
 
 const styles = StyleSheet.create({
   Bet: {
@@ -120,4 +108,4 @@ class BetCardContainer extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(BetCardContainer);
+export default withCurrentUser(BetCardContainer);

@@ -1,16 +1,13 @@
 // @flow
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
-import { AsyncStorage, FlatList, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { graphql } from 'react-apollo';
+import { FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import GET_BETS from 'graphql/queries/getBets';
 
 import { type Error } from 'types/apollo';
-import { type Bet } from 'types/bet';
-
-import Colors from 'theme/colors';
-import { SplashStyles } from 'theme/app';
-import Typography from 'theme/typography';
+import { type Bet, type BetListType } from 'types/bet';
+import { type User } from 'types/user';
 
 import BetCell from 'components/BetCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
@@ -28,22 +25,20 @@ type Props = {
   user: User,
 };
 
-function BetList({ betsQuery, betListType, user }: Props) {
+function BetList({ betsQuery: { bets, error, loading, networkStatus, refetch }, betListType, user }: Props): React.Node {
   const renderBets = (bets: Array<Bet>): React.Node => {
-    console.log('RENDER BETS', bets);
     if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
     return (
       <FlatList
         data={bets}
         keyExtractor={(bet: Bet): string => `${bet.id}`}
-        onRefresh={betsQuery.refetch}
-        refreshing={betsQuery.networkStatus === 4}
+        onRefresh={refetch}
+        refreshing={networkStatus === 4}
         renderItem={({ item, index }): React.Node => (
           <BetCell
             bet={item}
             userId={user.id}
             onPress={(): void => Actions.betCard({ betId: item.id })}
-            cancelRequest={(): void => {/** TODO actions.cancelRequest(item.id, index) */}}
           />
         )}
       />
@@ -51,8 +46,8 @@ function BetList({ betsQuery, betListType, user }: Props) {
   };
 
   return (
-    <DerivedStateSplash error={betsQuery.error} loading={betsQuery.loading} withCachedData={Boolean(betsQuery.bets)}>
-      {Boolean(betsQuery.bets) && renderBets(betsQuery.bets)}
+    <DerivedStateSplash error={error} loading={loading} withCachedData={Boolean(bets)}>
+      {Boolean(bets) && renderBets(bets)}
     </DerivedStateSplash>
   );
 }

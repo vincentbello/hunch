@@ -1,6 +1,4 @@
 // @flow
-// import { Actions } from 'react-native-router-flux';
-
 import { type Action } from 'types/redux';
 import { type User } from 'types/user';
 
@@ -14,6 +12,6 @@ export const SET_GAME = 'CREATE_BET/SET_GAME';
 export const clearForm = (): Action => ({ type: CLEAR_FORM });
 export const setBetAmount = (amount: number): Action => ({ type: SET_BET_AMOUNT, payload: { amount } });
 export const setBettee = (bettee: User | null): Action => ({ type: SET_BETTEE, payload: { bettee } });
-export const setBettorPickTeam = (bettorPickTeamId: number | null): Action => ({ type: SET_BETTOR_PICK_TEAM, payload: { bettorPickTeamId } })
+export const setBettorPickTeam = (id: number | null): Action => ({ type: SET_BETTOR_PICK_TEAM, payload: { bettorPickTeamId: id } });
 export const setDateViewIndex = (dateViewIndex: number): Action => ({ type: SET_DATE_VIEW_INDEX, payload: { dateViewIndex } });
 export const setGame = (gameId: number | null): Action => ({ type: SET_GAME, payload: { gameId } });
