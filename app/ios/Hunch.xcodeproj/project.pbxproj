@@ -44,6 +44,7 @@
 		F0DD64E621853D1A0072F301 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0DD64BF21853D1A0072F301 /* Feather.ttf */; };
 		F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0DD64E7218639720072F301 /* FontAwesome.ttf */; };
 		F0DD64F221863A760072F301 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0DD64EF21863A1E0072F301 /* libRCTPushNotification.a */; };
+		F9C4B9232198DEA900E7D3A1 /* VeteranTypewriter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9C4B9222198DEA900E7D3A1 /* VeteranTypewriter.ttf */; };
 		FB2FDF737EAE430DA44E5A7A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918772BC3ED40B5B381003D /* FBSDKLoginKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -380,6 +381,7 @@
 		F0DD64E7218639720072F301 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		F0DD64E921863A1E0072F301 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		F98517E821893D230082AB8C /* Hunch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Hunch.entitlements; path = Hunch/Hunch.entitlements; sourceTree = "<group>"; };
+		F9C4B9222198DEA900E7D3A1 /* VeteranTypewriter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = VeteranTypewriter.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -622,6 +624,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F9C4B8F72198DC5900E7D3A1 /* fonts */,
 				13B07FAE1A68108700A75B9A /* Hunch */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* HunchTests */,
@@ -677,6 +680,14 @@
 				F0DD64F121863A1E0072F301 /* libRCTPushNotification-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F9C4B8F72198DC5900E7D3A1 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F9C4B9222198DEA900E7D3A1 /* VeteranTypewriter.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1163,6 +1174,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				F9C4B9232198DEA900E7D3A1 /* VeteranTypewriter.ttf in Resources */,
 				F0DD64E621853D1A0072F301 /* Feather.ttf in Resources */,
 				F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */,
 			);

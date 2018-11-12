@@ -37,7 +37,8 @@ export default Actions.create(
               <Scene
                 key="bets"
                 {...AppConfig.navbarProps}
-                title="My Bets"
+                title="HunchCard"
+                titleStyle={{ fontFamily: 'VeteranTypewriter', fontSize: 24, transform: [{ scaleY: 0.9 }] }}
                 component={BetsContainer}
                 renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
                 renderRightButton={<InboxButtonContainer />}

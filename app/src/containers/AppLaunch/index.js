@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import ApolloClient from 'apollo-client';
-import { AsyncStorage, View, StyleSheet, Text } from 'react-native';
+import { Animated, AsyncStorage, Easing, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import NotificationService from 'services/NotificationService';
 
@@ -11,22 +11,61 @@ import REGISTER_DEVICE from 'graphql/mutations/registerDevice';
 
 import withApolloClient from 'hocs/withApolloClient';
 
+import AppSizes from 'theme/sizes';
+import Colors from 'theme/colors';
+
 const styles = StyleSheet.create({
   Launch: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  Launch__navbar: {
+    backgroundColor: Colors.white,
+    height: AppSizes.statusBarHeight + AppSizes.navbarHeight + 10,
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
+    flex: 1,
+    alignSelf: 'flex-start',
+  },
+  Launch__container: {
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    position: 'absolute',
+  },
   Launch__text: {
-    fontSize: 36,
+    fontFamily: 'VeteranTypewriter',
+    fontSize: 56,
+    transform: [{ scaleY: 0.9 }],
   },
 });
+
+const ANIMATION_DURATION = 200;
 
 type Props = {
   apolloClient: ApolloClient,
 };
 
-class AppLaunch extends React.Component<Props> {
+type State = {
+  isAnimating: boolean,
+  logoStyle: {
+    fontSize: number,
+    top: number,
+  },
+};
+
+class AppLaunch extends React.Component<Props, State> {
+  state = {
+    isAnimating: false,
+    logoStyle: {
+      fontSize: new Animated.Value(56),
+      top: new Animated.Value((AppSizes.screen.height - 80) / 2),
+    },
+  };
+
   componentDidMount() {
     this.autoLogin();
   }
@@ -46,17 +85,32 @@ class AppLaunch extends React.Component<Props> {
         });
         await AsyncStorage.multiSet([['accessToken', refreshAuth.accessToken], ['refreshToken', refreshAuth.refreshToken]]);
         new NotificationService(({ os, token }): void => apolloClient.mutate({ mutate: REGISTER_DEVICE, variables: { os, token } }));
-        Actions.main();
+        this.startAnimation();
       } catch (err) {
         Actions.loginModal();
       }
     }
   };
 
+  startAnimation = () => {
+    const { fontSize, top } = this.state.logoStyle;
+    this.setState({ isAnimating: true });
+    Animated.parallel([
+      Animated.timing(fontSize, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: 24 }),
+      Animated.timing(top, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: AppSizes.statusBarHeight + 20 }),
+    ]).start(Actions.main);
+  };
+
   render(): React.Node {
+    const { isAnimating, logoStyle } = this.state;
+    const { fontSize, top } = logoStyle;
     return (
       <View style={styles.Launch}>
-        <Text style={styles.Launch__text}>Hunch</Text>
+        {isAnimating && <View style={styles.Launch__navbar} />}
+        <Animated.View style={{ ...styles.Launch__container, top }}>
+          <Animated.Text style={{ ...styles.Launch__text, fontSize }}>HunchCard</Animated.Text>
+        </Animated.View>
+        {/* <TouchableOpacity onPress={this.startAnimation}><Text>ANIMATE</Text></TouchableOpacity> */}
       </View>
     );
   }

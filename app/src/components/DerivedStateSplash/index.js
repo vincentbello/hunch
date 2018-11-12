@@ -4,9 +4,10 @@ import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { type Error } from 'types/apollo';
 
 import Splash from 'components/Splash';
+import Spinner from 'components/Spinner';
 
 import Colors from 'theme/colors';
-import AppSizes from 'theme/sizes';
+import AppSizes from 'theme/sizes'
 
 const styles = StyleSheet.create({
   Splash: {
@@ -29,7 +30,7 @@ const DerivedStateSplash = ({ children, error, loading, withCachedData }: Props)
 
   if (loading) return (
     <View style={styles.Splash}>
-      <ActivityIndicator size="large" color={Colors.brand.primary} />
+      <Spinner size="large" />
     </View>
   );
 

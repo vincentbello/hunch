@@ -18,6 +18,7 @@ import { getBetAmount, getBettee, getBettorPickTeamId, getDateViewIndex, getDate
 import Pill from 'components/Pill';
 import GameCell from 'components/GameCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
+import Splash from 'components/Splash';
 import TabView from 'components/TabView';
 import TeamCell from 'components/TeamCell';
 import UserCell from 'components/UserCell';
@@ -33,8 +34,10 @@ import Typography from 'theme/typography';
 
 const onBetCreate = (cache, { data: { createBetRequest } }) => {
   const pendingBetsQuery = { query: GET_BETS, variables: { betListType: 'PENDING' } };
-  const { bets: pendingBets } = cache.readQuery(pendingBetsQuery);
-  cache.writeQuery({ ...pendingBetsQuery, data: { bets: [...pendingBets, createBetRequest] } });
+  try {
+    const { bets: pendingBets } = cache.readQuery(pendingBetsQuery);
+    cache.writeQuery({ ...pendingBetsQuery, data: { bets: [...pendingBets, createBetRequest] } });
+  } catch (err) {}
 };
 
 type ReduxProps = {
@@ -255,16 +258,20 @@ class CreateBetContainer extends React.Component<Props, State> {
       {({ loading, error, data: { upcomingGames } }): React.Node => (
         <DerivedStateSplash loading={loading} error={error}>
           {upcomingGames && (
-            <FlatList
-              data={upcomingGames}
-              keyExtractor={(game: Game): string => `${game.id}`}
-              renderItem={({ item }): React.Node => (
-                <GameCell
-                  game={item}
-                  onPress={(): void => this.props.actions.setGame(item.id)}
-                />
-              )}
-            />
+            upcomingGames.length === 0 ? (
+              <Splash heading="No more games today." />
+            ) : (
+              <FlatList
+                data={upcomingGames}
+                keyExtractor={(game: Game): string => `${game.id}`}
+                renderItem={({ item }): React.Node => (
+                  <GameCell
+                    game={item}
+                    onPress={(): void => this.props.actions.setGame(item.id)}
+                  />
+                )}
+              />
+            )
           )}
         </DerivedStateSplash>
       )}

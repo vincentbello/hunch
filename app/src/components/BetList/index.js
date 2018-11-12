@@ -27,7 +27,7 @@ type Props = {
 
 function BetList({ betsQuery: { bets, error, loading, networkStatus, refetch }, betListType, user }: Props): React.Node {
   const renderBets = (bets: Array<Bet>): React.Node => {
-    if (bets.length === 0) return <Splash heading={`You have no ${betListType} bets.`} iconName="slash" />;
+    if (bets.length === 0) return <Splash heading={`You have no ${betListType.toLowerCase()} bets.`} iconName="search" />;
     return (
       <FlatList
         data={bets}

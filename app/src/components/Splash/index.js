@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   Splash__heading: {
     ...Typography.h3,
-    fontWeight: 'bold',
+    fontWeight: '500',
     color: Colors.textPrimary,
   },
 });
