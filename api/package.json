@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www --exec \"babel-node --inspect\""
+    "start": "nodemon ./lib/bin/www --exec \"babel-node --inspect\"",
+    "build": "babel lib --copy-files -d dist",
+    "serve": "node dist/bin/www"
   },
   "dependencies": {
     "apn": "^2.2.0",
@@ -28,6 +30,7 @@
     "node-sass-middleware": "0.11.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
+    "pm2": "^3.2.2",
     "qs": "^6.5.2",
     "sequelize": "^4.38.1",
     "sequelize-cli": "^4.1.1"

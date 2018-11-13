@@ -13,7 +13,6 @@ import schema from './schema';
 import UserSerializer from './serialization/User';
 
 import indexRouter from './routes/index';
-import authRouter from './routes/auth';
 
 setupPassport();
 
@@ -34,7 +33,6 @@ app.use(cors({
 }));
 
 app.use('/', indexRouter);
-app.use('/auth', authRouter);
 
 const apolloServer = new ApolloServer({
   schema,

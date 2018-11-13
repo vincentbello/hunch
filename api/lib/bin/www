@@ -3,26 +3,26 @@
 /**
  * Module dependencies.
  */
-
-import app from '../app';
-import debugModule from 'debug';
-import http from 'http';
+require('babel-polyfill');
+const app = require('../app').default;
+const debugModule = require('debug');
+const http = require('http');
 const debug = debugModule('node-api:server');
 
-import models from '../db/models';
+const models = require('../db/models').default;
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 models.sequelize.sync().then(() => {
   /**
