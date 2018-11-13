@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "api",
-      "script": "./bin/www",
+      "script": "./dist/bin/www",
       "merge_logs": true,
       "max_restarts": 20,
       "instances": 4,
