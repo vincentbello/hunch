@@ -3,14 +3,6 @@ module.exports = {
     name: 'Hunch',
     script: './dist/bin/www',
     autorestart: true,
-    watch: false,
-    max_memory_restart: '1G',
-    // env: {
-    //   NODE_ENV: 'development'
-    // },
-    // env_production: {
-    //   NODE_ENV: 'production'
-    // }
   }],
 
   deploy : {
