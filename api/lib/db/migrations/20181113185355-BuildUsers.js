@@ -22,6 +22,14 @@ module.exports = {
     loginCount: Sequelize.INTEGER,
     accessToken: Sequelize.STRING,
     refreshToken: Sequelize.STRING,
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
   }),
 
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Users'),

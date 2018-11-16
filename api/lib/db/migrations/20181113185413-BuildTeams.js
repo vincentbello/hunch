@@ -20,6 +20,14 @@ module.exports = {
     state: Sequelize.STRING,
     xmlStatsId: Sequelize.STRING,
     msfId: Sequelize.INTEGER,
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
   }),
 
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Teams'),

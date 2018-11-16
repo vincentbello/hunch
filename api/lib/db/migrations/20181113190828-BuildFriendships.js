@@ -33,6 +33,14 @@ module.exports = {
         type: Sequelize.ENUM('APP', 'FB'),
         defaultValue: 'APP',
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
     });
     await queryInterface.addIndex('Friendships', {
       fields: ['userId', 'friendId'],
