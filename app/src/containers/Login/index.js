@@ -24,15 +24,15 @@ class LoginContainer extends React.Component<Props, State> {
   state = { isAuthenticating: false };
 
   loginToFacebook = async (): Promise<void> => {
+    await LoginManager.logOut();
     this.setState({ isAuthenticating: true });
-    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
+    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends']);
     if (result.isCancelled) {
       this.setState({ isAuthenticating: false });
       return;
     }
 
     const { accessToken } = await AccessToken.getCurrentAccessToken();
-    console.log('ACCESS TOKEN', accessToken);
     const { data: { login } } = await this.props.login({ context: { headers: { access_token: accessToken } } });
     await AsyncStorage.multiSet([['accessToken', login.accessToken], ['refreshToken', login.refreshToken]]);
     new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
@@ -43,8 +43,6 @@ class LoginContainer extends React.Component<Props, State> {
   render(): React.Node {
     return (
       <View style={SplashStyles}>
-        <Text style={{ fontSize: 8 }}>{API_URL}</Text>
-
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
           disabled={this.state.isAuthenticating}

@@ -31,8 +31,8 @@ export default (sequelize, DataTypes) => {
     const existingFriendships = await models.Friendship.findAll({
       attributes: [[Sequelize.literal(`CASE WHEN user.id=${userId} THEN friend.fbId ELSE user.fbId END`), 'friendFbId']],
       include: [
-        { model: models.User, as: 'user', where: { id: Sequelize.col('friendship.userId') } },
-        { model: models.User, as: 'friend', where: { id: Sequelize.col('friendship.friendId') } },
+        { model: models.User, as: 'user', where: { id: Sequelize.col('Friendship.userId') } },
+        { model: models.User, as: 'friend', where: { id: Sequelize.col('Friendship.friendId') } },
       ],
       raw: true,
       where: {

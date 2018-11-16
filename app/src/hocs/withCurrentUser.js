@@ -12,8 +12,8 @@ export type CurrentUserProps = {
 export default function withApolloClient<P>(Component: React.ComponentType<P>): React.ComponentType<P & CurrentUserProps> {
   return (props: P): React.Node => (
     <Query query={GET_CURRENT_USER}>
-      {({ data: { currentUser } }): React.Node => currentUser && (
-        <Component {...props} currentUser={currentUser} />
+      {({ data }): React.Node => (
+        data && data.currentUser ? <Component {...props} currentUser={data.currentUser} /> : null
       )}
     </Query>
   );

@@ -4,16 +4,9 @@ import passport from 'passport';
 const env = process.env.NODE_ENV || 'development';
 
 export default function(req, res, next) {
-  console.log(req.body.operationName, req.headers.access_token);
   if (req.body.operationName === 'Login' && req.headers.access_token) {
-    console.log('ACCESS TOKEN', req.headers.access_token);
     return passport.authenticate(process.env.FB_TOKEN_KEY, { session: false })(req, res, next);
   }
-
-  // if (env === 'development') {
-  //   req.auth = { id: 4 };
-  //   return next();
-  // }
 
   return req.body.operationName === 'RefreshAuth' ? next() : expressJwt({
     secret: process.env.ACCESS_TOKEN_KEY,
