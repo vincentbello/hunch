@@ -57,12 +57,8 @@ module.exports = {
       },
     },
     winnerId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
     },
     bettorPickTeamId: {
       allowNull: false,

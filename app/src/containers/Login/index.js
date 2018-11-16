@@ -35,7 +35,9 @@ class LoginContainer extends React.Component<Props, State> {
     const { accessToken } = await AccessToken.getCurrentAccessToken();
     const { data: { login } } = await this.props.login({ context: { headers: { access_token: accessToken } } });
     await AsyncStorage.multiSet([['accessToken', login.accessToken], ['refreshToken', login.refreshToken]]);
-    new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
+    new NotificationService(({ os, token }): void => {
+      if (os && token) this.props.registerDevice({ variables: { os, token } });
+    });
     this.setState({ isAuthenticating: false });
     Actions.main();
   };
