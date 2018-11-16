@@ -10,7 +10,7 @@ export default models => ({
     type: UserType,
     resolve: function(_root, _args, context) {
       if (!context.user) throw new AuthenticationError('Unable to log in.');
-      return { data: context.user };
+      return Promise.resolve({ data: context.user });
     },
   },
 
