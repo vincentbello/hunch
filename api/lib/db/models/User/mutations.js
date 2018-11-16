@@ -11,7 +11,7 @@ export default models => ({
     resolve: async function(_root, _args, context) {
       console.log('LOGIN CONTEXT', context);
       if (!context.user) throw new AuthenticationError('Unable to log in.');
-      return context.user;
+      return Promise.resolve(context.user);
     },
   },
 

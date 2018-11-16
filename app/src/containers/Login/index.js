@@ -18,10 +18,23 @@ import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
 
 type Props = { login: () => void, registerDevice: () => void };
-type State = { isAuthenticating: boolean };
+type State = {
+  accessToken: null | string,
+  isAuthenticating: boolean,
+  refreshToken: null | string,
+};
 
 class LoginContainer extends React.Component<Props, State> {
-  state = { isAuthenticating: false };
+  state = {
+    accessToken: null,
+    isAuthenticating: false,
+    refreshToken: null,
+  };
+
+  async componentDidMount(): Promise<void> {
+    const [[_1, accessToken], [_2, refreshToken]] = await AsyncStorage.multiGet(['accessToken', 'refreshToken']);
+    this.setState({ accessToken, refreshToken });
+  }
 
   loginToFacebook = async (): Promise<void> => {
     await LoginManager.logOut();
@@ -42,9 +55,18 @@ class LoginContainer extends React.Component<Props, State> {
     Actions.main();
   };
 
+  renderAdminInfo = (): React.Node => (
+    <React.Fragment>
+      <Text style={{ fontSize: 10 }}>API URL: {API_URL}</Text>
+      <Text style={{ fontSize: 10 }}>Access Token: {this.state.accessToken}</Text>
+      <Text style={{ fontSize: 10 }}>Refresh Token: {this.state.refreshToken}</Text>
+    </React.Fragment>
+  );
+
   render(): React.Node {
     return (
       <View style={SplashStyles}>
+        {this.renderAdminInfo()}
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
           disabled={this.state.isAuthenticating}
