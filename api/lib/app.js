@@ -10,7 +10,7 @@ import { ApolloServer } from 'apollo-server-express';
 import authMiddleware from './middleware/auth';
 import setupPassport from './services/passport';
 import schema from './schema';
-import UserSerializer from './serialization/User';
+import { formatResponse, formatError } from './utils/apollo/formatter';
 
 import indexRouter from './routes/index';
 
@@ -38,7 +38,8 @@ const apolloServer = new ApolloServer({
   schema,
   context: ({ req, res }) => ({ userId: req.auth ? req.auth.id : null, user: req.user }),
   engine: { apiKey: process.env.ENGINE_API_KEY },
-  // formatError() {}, // TODO: Fill this in
+  formatResponse,
+  formatError,
 });
 app.use(GRAPHQL_PATH, authMiddleware);
 apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH });
