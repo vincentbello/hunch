@@ -89,6 +89,8 @@ class AppLaunch extends React.Component<Props, State> {
         });
         this.startAnimation();
       } catch (err) {
+        console.log('Refresh auth error', err);
+        await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
         Actions.loginModal();
       }
     }

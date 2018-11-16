@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import { resolver } from 'graphql-sequelize';
 import jwt from 'jsonwebtoken';
 import UserType from './type';
+import { AuthenticationError } from '../../../utils/apollo/errors';
 
 export default models => ({
   login: {
@@ -33,16 +34,14 @@ export default models => ({
     },
     resolve: async function(root, { refreshToken }, context, info) {
       const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
-      if (!decoded.id) throw new Error('Invalid refresh token.');
+      if (!decoded.id) throw new AuthenticationError('Invalid refresh token.');
 
       const user = await models.User.findById(decoded.id);
-      if (!user || refreshToken !== user.refreshToken) throw new Error('This user does not exist.');
+      if (!user || refreshToken !== user.refreshToken) throw new AuthenticationError('This user does not exist.');
 
       // Refresh access token
       user.set('accessToken', jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }));
-      await user.save();
-
-      return user;
+      return await user.save();
     },
   },
 });
