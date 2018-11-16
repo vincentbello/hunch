@@ -5,9 +5,9 @@ const getLogItems = ({ operationName, variables }) => {
   return [`${operationName}:`, JSON.stringify(variables)];
 };
 
-export function formatResponse(_res, req) {
+export function formatResponse(res, req) {
   console.info(...getLogItems(req));
-  return req;
+  return res;
 }
 
 export function formatError(err) {
