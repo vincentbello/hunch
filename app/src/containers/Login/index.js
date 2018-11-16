@@ -3,6 +3,7 @@ import * as React from 'react';
 import { AsyncStorage, View, Text, TouchableOpacity } from 'react-native';
 import { compose, graphql } from 'react-apollo';
 import NotificationService from 'services/NotificationService';
+import { API_URL } from 'react-native-dotenv';
 
 import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
 import LOGIN from 'graphql/mutations/login';
@@ -41,6 +42,7 @@ class LoginContainer extends React.Component<Props, State> {
   render(): React.Node {
     return (
       <View style={SplashStyles}>
+        <Text style={{ fontSize: 8 }}>{API_URL}</Text>
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
           disabled={this.state.isAuthenticating}
