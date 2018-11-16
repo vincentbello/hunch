@@ -28,6 +28,8 @@ export default (sequelize, DataTypes) => {
   User.associate = function() {};
 
   User.populateFbFriendships = async function(userId, fbFriendIds) {
+    if (fbFriendIds.length === 0) return;
+
     const existingFriendships = await models.Friendship.findAll({
       attributes: [[Sequelize.literal(`CASE WHEN user.id=${userId} THEN friend.fbId ELSE user.fbId END`), 'friendFbId']],
       include: [

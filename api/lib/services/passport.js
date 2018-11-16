@@ -11,7 +11,6 @@ export default () => {
     clientSecret: process.env.FB_CLIENT_SECRET,
     profileFields: ['id', 'displayName', 'name', 'emails', 'friends'],
   }, (fbAccessToken, refreshToken, profile, done) => {
-    console.log(fbAccessToken, refreshToken, JSON.stringify(profile));
     models.User.findOrBuild({ where: { fbId: profile.id } }).spread((instance, initialized) => {
       const { id, gender, emails, photos, name: { familyName: lastName, givenName: firstName }, friends, _json } = profile;
       const newProfile = {
