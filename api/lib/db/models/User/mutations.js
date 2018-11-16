@@ -8,9 +8,9 @@ import { AuthenticationError } from '../../../utils/apollo/errors';
 export default models => ({
   login: {
     type: UserType,
-    resolve: async function(_root, _args, context) {
+    resolve: function(_root, _args, context) {
       if (!context.user) throw new AuthenticationError('Unable to log in.');
-      return await resolver(models.User)(_root, { id: context.user.id }, context);
+      return context.user;
     },
   },
 
