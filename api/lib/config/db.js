@@ -11,11 +11,10 @@ module.exports = {
     storage: ':memory:'
   },
   production: {
-    username: 'foo', // process.env.DB_USERNAME,
-    password: 'bar', // process.env.DB_PASSWORD,
-    database: 'baz', // process.env.DB_NAME,
-    host: 'quux', // process.env.DB_HOSTNAME,
-    dialect: 'mysql',
-    use_env_variable: 'DATABASE_URL'
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOSTNAME,
+    dialect: 'mysql'
   }
 };
