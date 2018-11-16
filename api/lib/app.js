@@ -37,6 +37,7 @@ app.use('/', indexRouter);
 const apolloServer = new ApolloServer({
   schema,
   context: ({ req, res }) => ({ userId: req.auth ? req.auth.id : null, user: req.user }),
+  engine: { apiKey: process.env.ENGINE_API_KEY },
   // formatError() {}, // TODO: Fill this in
 });
 app.use(GRAPHQL_PATH, authMiddleware);
