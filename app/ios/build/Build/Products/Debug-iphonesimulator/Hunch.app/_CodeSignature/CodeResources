@@ -6,7 +6,7 @@
 	<dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		1pMh7v0mE2MdRjWECIgN9OV/Q4o=
+		Yz9DF6VH6TtvT0dTJwRKh60NnGM=
 		</data>
 		<key>Feather.ttf</key>
 		<data>
@@ -47,7 +47,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		8plMq/g2PLF6MfZ/vC3mn6jeJM4=
+		WMSnpx9+vWdEIfBo3JPVmO5vcr8=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -73,6 +73,10 @@
 		<data>
 		ToQV5C9015Ds3X4qpog/Nxr0EFA=
 		</data>
+		<key>VeteranTypewriter.ttf</key>
+		<data>
+		caRFffAXOQYI6T+CHuOsVH9s2aA=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -80,11 +84,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1pMh7v0mE2MdRjWECIgN9OV/Q4o=
+			Yz9DF6VH6TtvT0dTJwRKh60NnGM=
 			</data>
 			<key>hash2</key>
 			<data>
-			HoitftoksHaQ+kB/CXHvSbFKEagCutT7EGeNPAKGjzk=
+			m4SVHXA6lDoU3kgjXyN4grFFjfeH54z2i6e2fDwaf0U=
 			</data>
 		</dict>
 		<key>Feather.ttf</key>
@@ -230,6 +234,17 @@
 			<key>hash2</key>
 			<data>
 			/qyvg4fqLd6rGCYqORvf38tBxX+TcmJxIsWSivzymmI=
+			</data>
+		</dict>
+		<key>VeteranTypewriter.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			caRFffAXOQYI6T+CHuOsVH9s2aA=
+			</data>
+			<key>hash2</key>
+			<data>
+			eR9HY+Too3BkbqnxJLL0wj2OmMzd89lOu/SCicapq2M=
 			</data>
 		</dict>
 	</dict>

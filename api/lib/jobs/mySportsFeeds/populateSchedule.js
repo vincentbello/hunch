@@ -35,7 +35,8 @@ async function populateSchedules() {
   }));
 
   const createdGames = await models.Game.bulkCreate(gameRows);
-  console.log(`\n\n\nSuccessfully created ${gameRows.length} total games.`)
+  console.log(`\n\n\nSuccessfully created ${gameRows.length} total games.`);
+  process.exit();
 }
 
 populateSchedules();
