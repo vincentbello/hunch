@@ -32,6 +32,7 @@ class LoginContainer extends React.Component<Props, State> {
     }
 
     const { accessToken } = await AccessToken.getCurrentAccessToken();
+    console.log('ACCESS TOKEN', accessToken);
     const { data: { login } } = await this.props.login({ context: { headers: { access_token: accessToken } } });
     await AsyncStorage.multiSet([['accessToken', login.accessToken], ['refreshToken', login.refreshToken]]);
     new NotificationService(({ os, token }): void => this.props.registerDevice({ variables: { os, token } }));
@@ -43,6 +44,7 @@ class LoginContainer extends React.Component<Props, State> {
     return (
       <View style={SplashStyles}>
         <Text style={{ fontSize: 8 }}>{API_URL}</Text>
+
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
           disabled={this.state.isAuthenticating}
