@@ -9,7 +9,8 @@ export default models => ({
   login: {
     type: UserType,
     resolve: async function(_root, _args, context) {
-      if (!context.user) throw new Error('Something went wrong.');
+      console.log('LOGIN CONTEXT', context);
+      if (!context.user) throw new AuthenticationError('Unable to log in.');
       return context.user;
     },
   },
