@@ -110,9 +110,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   Create__headerMetaText: {
-    color: Colors.primary.green,
+    color: Colors.textPrimary,
     fontSize: 20,
     fontWeight: '900',
+  },
+  Create__headerMetaText_superscript: {
+    color: Colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginRight: 2,
   },
   Create__sectionHeader: {
     flexDirection: 'row',
@@ -259,7 +265,7 @@ class CreateBetContainer extends React.Component<Props, State> {
         <DerivedStateSplash loading={loading} error={error}>
           {upcomingGames && (
             upcomingGames.length === 0 ? (
-              <Splash heading="No more games today." />
+              <Splash heading="No more games today." iconName="slash" grow />
             ) : (
               <FlatList
                 data={upcomingGames}
@@ -360,7 +366,7 @@ class CreateBetContainer extends React.Component<Props, State> {
               />
             </View>
             <View style={styles.Create__headerMeta}>
-              <Text style={styles.Create__headerMetaText}>$</Text>
+              <Text style={[styles.Create__headerMetaText, styles.Create__headerMetaText_superscript]}>$</Text>
               <TextInput
                 style={styles.Create__headerMetaText}
                 autoFocus

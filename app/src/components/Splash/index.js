@@ -11,6 +11,11 @@ import { SplashStyles, SplashStylesWithNav } from 'theme/app';
 import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
+  Splash__grow: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   Splash__icon: {
     marginBottom: 16,
   },
@@ -23,17 +28,18 @@ const styles = StyleSheet.create({
 
 type Props = {
   fullScreen: boolean,
+  grow: boolean,
   heading: string,
   iconName: string,
 };
 
-const Splash = ({ fullScreen, heading, iconName }: Props): React.Node => (
-  <View style={fullScreen ? SplashStyles : SplashStylesWithNav}>
+const Splash = ({ fullScreen, grow, heading, iconName }: Props): React.Node => (
+  <View style={[grow && styles.Splash__grow, !grow && (fullScreen ? SplashStyles : SplashStylesWithNav)]}>
     <Icon style={styles.Splash__icon} name={iconName} size={48} color={Colors.textPrimary} />
     <Text style={styles.Splash__heading}>{heading}</Text>
   </View>
 );
 
-Splash.defaultProps = { fullScreen: false };
+Splash.defaultProps = { grow: false, fullScreen: false };
 Splash.displayName = 'Splash';
 export default Splash;

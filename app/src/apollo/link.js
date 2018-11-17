@@ -8,6 +8,7 @@ const httpLink = new HttpLink({ uri: `${API_URL}/api` });
 const authLink = setContext(async (_, context) => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (accessToken === null) return context;
+
   return {
     ...context,
     headers: {

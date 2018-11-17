@@ -3,14 +3,13 @@ import * as React from 'react';
 import { AsyncStorage, View, Text, TouchableOpacity } from 'react-native';
 import { compose, graphql } from 'react-apollo';
 import NotificationService from 'services/NotificationService';
+import { Actions } from 'react-native-router-flux';
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import { API_URL } from 'react-native-dotenv';
 
 import GET_CURRENT_USER from 'graphql/queries/getCurrentUser';
 import LOGIN from 'graphql/mutations/login';
 import REGISTER_DEVICE from 'graphql/mutations/registerDevice';
-
-import { Actions } from 'react-native-router-flux';
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
 
 import { SocialIcon } from 'react-native-elements';
 

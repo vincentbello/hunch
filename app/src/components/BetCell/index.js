@@ -65,12 +65,28 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   Bet__label: {
-    color: Colors.primary.green,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  Bet__labelText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.textPrimary,
+  },
+  Bet__labelText_green: {
     fontSize: 20,
     fontWeight: '900',
+    color: Colors.primary.green,
   },
-  Bet__label_red: {
+  Bet__labelText_red: {
+    fontSize: 20,
+    fontWeight: '900',
     color: Colors.primary.red,
+  },
+  Bet__labelSuperscript: {
+    fontSize: 14,
+    marginLeft: 5,
+    marginRight: 1,
   },
   Bet__headerText: {
     flex: 1,
@@ -166,14 +182,6 @@ class BetCell extends React.PureComponent<Props> {
     return userId === bet.bettor.id || userId === bet.bettee.id;
   }
 
-  get betOutcome(): string {
-    const { bet, userId } = this.props;
-    const amount = `$${bet.amount}`;
-
-    if (bet.winnerId === null) return amount;
-    return `${bet.winnerId === userId ? 'Won' : 'Lost'} ${amount}`;
-  }
-
   get primaryAction(): () => void {
     return this.isBettor ? this.remind : this.respond(true);
   }
@@ -185,6 +193,19 @@ class BetCell extends React.PureComponent<Props> {
   cancel = (): void => this.props.cancel({ variables: { id: this.props.bet.id } });
   remind = (): void => this.props.remind({ variables: { id: this.props.bet.id } });
   respond = (accepted: boolean): (() => void) => (): void => this.props.respond({ variables: { id: this.props.bet.id, accepted } });
+
+  renderBetAmount = (): React.Node => {
+    const { bet, userId } = this.props;
+    const isComplete = bet.winnerId !== null;
+    const labelTextStyle = [styles.Bet__labelText, isComplete && styles[`Bet__labelText_${bet.winnerId === userId ? 'green' : 'red'}`]];
+    return (
+      <React.Fragment>
+        {bet.winnerId !== null && <Text style={styles.Bet__labelText}>{bet.winnerId === userId ? 'Won' : 'Lost'}</Text>}
+        <Text style={styles.Bet__labelSuperscript}>$</Text>
+        <Text style={labelTextStyle}>{bet.amount}</Text>
+      </React.Fragment>
+    );
+  };
 
   render(): React.Node {
     const { displayedImageUrl, isBettor, isInvolved } = this;
@@ -201,9 +222,7 @@ class BetCell extends React.PureComponent<Props> {
                   <Text> bet </Text>
                   {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.Bet__link}>{bet.bettee.fullName}</Text>}
                 </Text>
-                <Text style={[styles.Bet__label, bet.winnerId !== null && bet.winnerId !== userId && styles.Bet__label_red]}>
-                  {this.betOutcome}
-                </Text>
+                <View style={styles.Bet__label}>{this.renderBetAmount()}</View>
               </View>
               <Text style={styles.Bet__body}>“{bet.wager}”</Text>
               <Text style={styles.Bet__meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>
