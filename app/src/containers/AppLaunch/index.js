@@ -85,7 +85,7 @@ class AppLaunch extends React.Component<Props, State> {
         });
         await AsyncStorage.multiSet([['accessToken', refreshAuth.accessToken], ['refreshToken', refreshAuth.refreshToken]]);
         new NotificationService(({ os, token }): void => {
-          if (os && token) apolloClient.mutate({ mutation: REGISTER_DEVICE, variables: { os, token } });
+          if (os && token) apolloClient.mutate({ mutation: REGISTER_DEVICE, variables: { os: os.toUpperCase(), token } });
         });
         this.startAnimation();
       } catch (err) {

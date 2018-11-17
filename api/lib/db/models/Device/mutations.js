@@ -24,7 +24,7 @@ export default models => ({
 
       const now = new Date();
       await instance.update({
-        type: os.toUpperCase(),
+        type: os,
         token,
         allowedNotifications: true, // Placeholder
         userId: context.userId,
