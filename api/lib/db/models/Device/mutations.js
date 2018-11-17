@@ -17,12 +17,14 @@ export default models => ({
       },
     },
     resolve: async function (_, { os, token }, context) {
+      console.log('RESOLVING...');
       const [instance, initialized] = await models.Device.findOrBuild({ where: { userId: context.userId, token } });
+      console.log('INITIALIZED...');
       if (!initialized) return null;
 
       const now = new Date();
       await instance.update({
-        type: os,
+        type: os.toUpperCase(),
         token,
         allowedNotifications: true, // Placeholder
         userId: context.userId,
