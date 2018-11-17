@@ -7,7 +7,8 @@
     "build": "babel lib --copy-files -d dist",
     "serve": "node dist/bin/www",
     "deploy": "pm2 deploy ecosystem.config.js production",
-    "restart": "pm2 startOrRestart ecosystem.config.js"
+    "restart": "pm2 startOrRestart ecosystem.config.js",
+    "poll-games": "babel-node lib/jobs/mySportsFeeds/pollGames.js --league NBA"
   },
   "dependencies": {
     "apn": "^2.2.0",
