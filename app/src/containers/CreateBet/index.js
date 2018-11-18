@@ -15,7 +15,7 @@ import GET_UPCOMING_GAMES from 'graphql/queries/getUpcomingGames';
 import { DATE_VIEW_TYPES } from 'constants/view-types';
 import { clearForm, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame } from 'actions/createBet';
 import { getBetAmount, getBettee, getBettorPickTeamId, getDateViewIndex, getDateViewType, getGameId } from 'selectors/createBet';
-import Pill from 'components/Pill';
+import AmountInput from 'components/AmountInput';
 import GameCell from 'components/GameCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import Splash from 'components/Splash';
@@ -79,6 +79,7 @@ type Props = ReduxProps & {
 
 type State = {
   betteeInputText: string,
+  isAmountInputFocused: boolean,
 };
 
 const styles = StyleSheet.create({
@@ -88,37 +89,28 @@ const styles = StyleSheet.create({
   Create__container: {
     flex: 1,
   },
+  Create__container_focus: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 200,
+  },
   Create__header: {
-    height: 48,
+    height: 50,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: Colors.border,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    paddingRight: 8,
   },
   Create__headerInput: {
     fontSize: 16,
+    padding: 8,
   },
   Create__headerMain: {
     flex: 1,
     flexDirection: 'row',
-  },
-  Create__headerMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  Create__headerMetaText: {
-    color: Colors.textPrimary,
-    fontSize: 20,
-    fontWeight: '900',
-  },
-  Create__headerMetaText_superscript: {
-    color: Colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-    marginRight: 2,
   },
   Create__sectionHeader: {
     flexDirection: 'row',
@@ -167,10 +159,17 @@ const styles = StyleSheet.create({
   },
 });
 
+const initialState = {
+  betteeInputText: '',
+  isAmountInputFocused: false,
+};
+
 class CreateBetContainer extends React.Component<Props, State> {
-  state = {
-    betteeInputText: '',
-  };
+  state = initialState;
+
+  get amountInputValue(): string {
+    return `${this.props.betAmount === 0 ? '' : this.props.betAmount}`;
+  }
 
   get betVariables(): {} {
     const { betAmount, bettee, bettorPickTeamId, gameId } = this.props;
@@ -207,16 +206,32 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   onBetteeInputChange = (betteeInputText: string): void => this.setState({ betteeInputText });
 
-  removeBettee = (): void => this.props.actions.setBettee(null);
+  removeBettee = (): void => {
+    this.setState({ ...initialState });
+    this.props.actions.setBettee(null);
+  }
 
   selectBettee = (user: User) => {
-    this.setState({ betteeInputText: '' });
     this.props.actions.setBettee(user);
+    this.setState({ betteeInputText: '', isAmountInputFocused: true });
   };
 
   selectBettorPickTeam = (teamId: number) => {
     this.props.actions.setBettorPickTeam(this.props.bettorPickTeamId === null || this.props.bettorPickTeamId !== teamId ? teamId : null);
   };
+
+  renderRemoveButton = (onPress: () => void): React.Node => (
+    <Icon.Button
+      style={styles.Create__sectionHeaderIcon}
+      backgroundColor="transparent"
+      color={Colors.brand.primary}
+      iconStyle={{ marginRight: 0 }}
+      name="x"
+      size={18}
+      underlayColor={Colors.iconButton.underlay}
+      onPress={onPress}
+    />
+  );
 
   renderPickSelection = (game: Game): React.Node => {
     const { actions, bettorPickTeamId } = this.props;
@@ -224,18 +239,7 @@ class CreateBetContainer extends React.Component<Props, State> {
       <React.Fragment>
         <View style={styles.Create__sectionHeader}>
           <Text style={styles.Create__sectionHeaderText}>My Pick</Text>
-          {bettorPickTeamId && (
-            <Icon.Button
-              style={styles.Create__sectionHeaderIcon}
-              backgroundColor="transparent"
-              color={Colors.brand.primary}
-              iconStyle={{ marginRight: 0 }}
-              name="x"
-              size={18}
-              underlayColor={Colors.iconButton.underlay}
-              onPress={(): void => actions.setBettorPickTeam(null)}
-            />
-          )}
+          {bettorPickTeamId && this.renderRemoveButton((): void => actions.setBettorPickTeam(null))}
         </View>
         <View style={styles.Create__horizontalCellContainer}>
           <View style={styles.Create__horizontalCell}>
@@ -290,18 +294,7 @@ class CreateBetContainer extends React.Component<Props, State> {
       <React.Fragment>
         <View style={styles.Create__sectionHeader}>
           <Text style={styles.Create__sectionHeaderText}>{gameId === null ? 'Select a Game' : 'Selected Game'}</Text>
-          {gameId !== null && (
-            <Icon.Button
-              style={styles.Create__sectionHeaderIcon}
-              backgroundColor="transparent"
-              color={Colors.brand.primary}
-              iconStyle={{ marginRight: 0 }}
-              name="x"
-              size={18}
-              underlayColor={Colors.iconButton.underlay}
-              onPress={(): void => actions.setGame(null)}
-            />
-          )}
+          {gameId !== null && this.renderRemoveButton((): void => actions.setGame(null))}
         </View>
         {gameId === null ? (
           <TabView
@@ -340,6 +333,7 @@ class CreateBetContainer extends React.Component<Props, State> {
               keyExtractor={(user: User): string => `${user.id}`}
               renderItem={({ item }): React.Node => (
                 <UserCell
+                  inList
                   user={item}
                   onPress={(): void => this.selectBettee(item)}
                 />
@@ -352,42 +346,47 @@ class CreateBetContainer extends React.Component<Props, State> {
   );
 
   render(): React.Node {
-    const { isFormCompleted } = this;
-    const { betAmount, bettee } = this.props;
+    const { amountInputValue, isFormCompleted } = this;
+    const { bettee } = this.props;
+    const { betteeInputText, isAmountInputFocused } = this.state;
     return (
       <View style={styles.Create}>
         {bettee ? (
           <View style={styles.Create__header}>
             <View style={styles.Create__headerMain}>
-              <Pill
-                canRemove
-                label={bettee.fullName}
-                onRemove={this.removeBettee}
-              />
+              <View style={styles.Create__headerMain}>
+                <View style={{ flex: 1 }}>
+                  <UserCell user={bettee} renderMeta = {(): React.Node => this.renderRemoveButton(this.removeBettee)} />
+                </View>
+              </View>
             </View>
-            <View style={styles.Create__headerMeta}>
-              <Text style={[styles.Create__headerMetaText, styles.Create__headerMetaText_superscript]}>$</Text>
-              <TextInput
-                style={styles.Create__headerMetaText}
-                autoFocus
-                keyboardType="number-pad"
-                placeholder="0"
-                value={`${betAmount === 0 ? '' : betAmount}`}
-                onChangeText={this.onAmountInputChange}
+            {!isAmountInputFocused && (
+              <AmountInput
+                value={amountInputValue}
+                toggleFocus={(): void => this.setState({ isAmountInputFocused: true })}
               />
-            </View>
+            )}
           </View>
         ) : (
           <TextInput
             style={[styles.Create__header, styles.Create__headerInput]}
             autoFocus
             placeholder="Name"
-            value={this.state.betteeInputText}
+            value={betteeInputText}
             onChangeText={this.onBetteeInputChange}
           />
         )}
-        <View style={styles.Create__container}>
-          {bettee ? this.renderGameSelection() : this.renderUsers()}
+        <View style={[styles.Create__container, isAmountInputFocused && styles.Create__container_focus]}>
+          {bettee && isAmountInputFocused ? (
+            <AmountInput
+              isFocused
+              value={amountInputValue}
+              onChange={this.onAmountInputChange}
+              toggleFocus={(): void => this.setState({ isAmountInputFocused: !isAmountInputFocused })}
+            />
+          ) : (
+            bettee ? this.renderGameSelection() : this.renderUsers()
+          )}
         </View>
         <Mutation mutation={CREATE_BET_REQUEST} update={onBetCreate} onCompleted={this.onBetCreated}>
           {(createBetRequest, { loading }): React.Node => (

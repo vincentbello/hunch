@@ -114,7 +114,6 @@ class AppLaunch extends React.Component<Props, State> {
         <Animated.View style={{ ...styles.Launch__container, top }}>
           <Animated.Text style={{ ...styles.Launch__text, fontSize }}>HunchCard</Animated.Text>
         </Animated.View>
-        {/* <TouchableOpacity onPress={this.startAnimation}><Text>ANIMATE</Text></TouchableOpacity> */}
       </View>
     );
   }
