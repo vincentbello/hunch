@@ -8,6 +8,7 @@ export const SET_BETTEE = 'CREATE_BET/SET_BETTEE';
 export const SET_BETTOR_PICK_TEAM = 'CREATE_BET/SET_BETTOR_PICK_TEAM';
 export const SET_DATE_VIEW_INDEX = 'CREATE_BET/SET_DATE_VIEW_INDEX';
 export const SET_GAME = 'CREATE_BET/SET_GAME';
+export const SET_WAGER = 'CREATE_BET/SET_WAGER';
 
 export const clearForm = (): Action => ({ type: CLEAR_FORM });
 export const setBetAmount = (amount: number): Action => ({ type: SET_BET_AMOUNT, payload: { amount } });
@@ -15,3 +16,4 @@ export const setBettee = (bettee: User | null): Action => ({ type: SET_BETTEE, p
 export const setBettorPickTeam = (id: number | null): Action => ({ type: SET_BETTOR_PICK_TEAM, payload: { bettorPickTeamId: id } });
 export const setDateViewIndex = (dateViewIndex: number): Action => ({ type: SET_DATE_VIEW_INDEX, payload: { dateViewIndex } });
 export const setGame = (gameId: number | null): Action => ({ type: SET_GAME, payload: { gameId } });
+export const setBetWager = (wager: string): Action => ({ type: SET_WAGER, payload: { wager } });

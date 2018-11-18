@@ -45,6 +45,7 @@
         "allowRequiredDefaults": true
       }
     ],
+    "react/destructuring-assignment": [2, "never"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "flowtype/boolean-style": [
       2,

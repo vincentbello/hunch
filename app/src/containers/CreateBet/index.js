@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
-import { FlatList, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, Keyboard, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions } from 'react-native-router-flux';
-import { Mutation, Query } from 'react-apollo';
+import { compose, graphql, Mutation, Query } from 'react-apollo';
+import memoize from 'fast-memoize';
 import Icon from 'react-native-vector-icons/Feather';
 import CREATE_BET_REQUEST from 'graphql/mutations/createBetRequest';
 import GET_BETS from 'graphql/queries/getBets';
@@ -13,8 +14,8 @@ import GET_USERS from 'graphql/queries/getUsers';
 import GET_UPCOMING_GAMES from 'graphql/queries/getUpcomingGames';
 
 import { DATE_VIEW_TYPES } from 'constants/view-types';
-import { clearForm, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame } from 'actions/createBet';
-import { getBetAmount, getBettee, getBettorPickTeamId, getDateViewIndex, getDateViewType, getGameId } from 'selectors/createBet';
+import { clearForm, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame, setBetWager } from 'actions/createBet';
+import { getBetAmount, getBettee, getBettorPickTeamId, getDateViewIndex, getDateViewType, getGameId, getBetWager } from 'selectors/createBet';
 import AmountInput from 'components/AmountInput';
 import GameCell from 'components/GameCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
@@ -47,6 +48,7 @@ type ReduxProps = {
   dateViewIndex: number,
   dateViewType: string,
   gameId: number | null,
+  wager: string,
 };
 
 // What data from the store shall we send to the component?
@@ -57,12 +59,13 @@ const mapStateToProps = (state: ReduxState): ReduxProps => ({
   dateViewIndex: getDateViewIndex(state),
   dateViewType: getDateViewType(state),
   gameId: getGameId(state),
+  wager: getBetWager(state),
 });
 
 // Any actions to map to the component?
 const mapDispatchToProps = (dispatch: Action => any) => ({
   actions: {
-    ...bindActionCreators({ clearForm, setBetAmount, setBettee, setBettorPickTeam, setDateViewIndex, setGame }, dispatch),
+    ...bindActionCreators({ clearForm, setBetAmount, setBettee, setBetWager, setBettorPickTeam, setDateViewIndex, setGame }, dispatch),
   }
 });
 
@@ -72,6 +75,7 @@ type Props = ReduxProps & {
     setBetAmount: (amount: number) => void,
     setBettee: (bettee: User | null) => void,
     setBettorPickTeam: (bettorPickTeamId: number | null) => void,
+    setBetWager: (wager: string) => void,
     setDateViewIndex: (dateViewIndex: number) => void,
     setGame: (gameId: number | null) => void,
   },
@@ -79,7 +83,9 @@ type Props = ReduxProps & {
 
 type State = {
   betteeInputText: string,
+  keyboardOffset: number,
   isAmountInputFocused: boolean,
+  isWagerInputFocused: boolean,
 };
 
 const styles = StyleSheet.create({
@@ -157,22 +163,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 12,
   },
+  Create__footer: {
+    marginBottom: 4,
+  },
+  Create__footerInput: {
+    flex: 1,
+    marginLeft: 8,
+    fontSize: 16,
+  },
 });
 
 const initialState = {
   betteeInputText: '',
+  keyboardOffset: 0,
   isAmountInputFocused: false,
+  isWagerInputFocused: false,
 };
 
 class CreateBetContainer extends React.Component<Props, State> {
-  state = initialState;
+  constructor(props) {
+    super(props);
+    this.getFilteredFriends = memoize(this.getFilteredFriends);
+    this.state = initialState;
+  }
+
+  componentDidMount() {
+    Keyboard.addListener('keyboardDidShow', this.onKeyboardShown);
+  }
 
   get amountInputValue(): string {
     return `${this.props.betAmount === 0 ? '' : this.props.betAmount}`;
   }
 
   get betVariables(): {} {
-    const { betAmount, bettee, bettorPickTeamId, gameId } = this.props;
+    const { betAmount, bettee, bettorPickTeamId, gameId, wager } = this.props;
     if (!this.isFormCompleted) return { variables: {} };
     return {
       variables: {
@@ -181,7 +205,7 @@ class CreateBetContainer extends React.Component<Props, State> {
         gameId,
         bettorPickTeamId,
         type: 'MONEY_LINE', // Placeholder
-        wager: 'Here is a fun bet!',
+        wager,
       },
     };
   }
@@ -195,6 +219,16 @@ class CreateBetContainer extends React.Component<Props, State> {
     );
   }
 
+  getFilteredFriends = (str: string): Array<User> => {
+    const { users } = this.props.friends;
+    if (str.length === 0) return users;
+
+    const filterStr = str.trim().toLowerCase();
+    return users.filter((user: User): boolean => (
+      user.firstName.toLowerCase().startsWith(filterStr) || user.lastName.toLowerCase().startsWith(filterStr)
+    ));
+  };
+
   onAmountInputChange = (amountInputText: string) => {
     this.props.actions.setBetAmount(parseInt(amountInputText, 10) || 0);
   };
@@ -205,6 +239,12 @@ class CreateBetContainer extends React.Component<Props, State> {
   };
 
   onBetteeInputChange = (betteeInputText: string): void => this.setState({ betteeInputText });
+
+  onKeyboardShown = (evt): void => {
+    if (this.state.isWagerInputFocused) {
+      this.setState({ keyboardOffset: evt.endCoordinates.height - Sizes.homeIndicatorHeight });
+    }
+  };
 
   removeBettee = (): void => {
     this.setState({ ...initialState });
@@ -269,7 +309,7 @@ class CreateBetContainer extends React.Component<Props, State> {
         <DerivedStateSplash loading={loading} error={error}>
           {upcomingGames && (
             upcomingGames.length === 0 ? (
-              <Splash heading="No more games today." iconName="slash" grow />
+              <Splash heading={this.props.dateViewIndex === 0 ? 'No more games today.' : 'No games.'} iconName="slash" grow />
             ) : (
               <FlatList
                 data={upcomingGames}
@@ -324,25 +364,47 @@ class CreateBetContainer extends React.Component<Props, State> {
   };
 
   renderUsers = (): React.Node => (
-    <Query query={GET_USERS} variables={{ userListType: 'FRIENDS' }}>
-      {({ loading, error, data: { users } }): React.Node => (
-        <DerivedStateSplash loading={loading} error={error}>
-          {users && (
-            <FlatList
-              data={users}
-              keyExtractor={(user: User): string => `${user.id}`}
-              renderItem={({ item }): React.Node => (
-                <UserCell
-                  inList
-                  user={item}
-                  onPress={(): void => this.selectBettee(item)}
-                />
-              )}
+    <DerivedStateSplash loading={this.props.friends.loading} error={this.props.friends.error}>
+      {this.props.friends.users && (
+        <FlatList
+          data={this.getFilteredFriends(this.state.betteeInputText)}
+          keyExtractor={(user: User): string => `${user.id}`}
+          renderItem={({ item }): React.Node => (
+            <UserCell
+              inList
+              user={item}
+              onPress={(): void => this.selectBettee(item)}
             />
           )}
-        </DerivedStateSplash>
+        />
       )}
-    </Query>
+    </DerivedStateSplash>
+  );
+
+  renderWagerInput = (): React.Node => (
+    <View style={[styles.Create__header, styles.Create__headerInput, styles.Create__footer]}>
+      <Icon name="edit-3" size={18} color={Colors.textSecondary} />
+      <TextInput
+        style={styles.Create__footerInput}
+        placeholder="Talk some trash..."
+        onChangeText={this.props.actions.setBetWager}
+        onBlur={(): void => this.setState({ keyboardOffset: 0, isWagerInputFocused: false })}
+        onFocus={(): void => this.setState({ isWagerInputFocused: true })}
+        value={this.props.wager}
+      />
+      {this.state.isWagerInputFocused && (
+        <Icon.Button
+          style={styles.Create__sectionHeaderIcon}
+          backgroundColor="transparent"
+          color={Colors.brand.primary}
+          iconStyle={{ marginRight: 0 }}
+          name="chevrons-down"
+          size={18}
+          underlayColor={Colors.iconButton.underlay}
+          onPress={Keyboard.dismiss}
+        />
+      )}
+    </View>
   );
 
   render(): React.Node {
@@ -388,21 +450,27 @@ class CreateBetContainer extends React.Component<Props, State> {
             bettee ? this.renderGameSelection() : this.renderUsers()
           )}
         </View>
-        <Mutation mutation={CREATE_BET_REQUEST} update={onBetCreate} onCompleted={this.onBetCreated}>
-          {(createBetRequest, { loading }): React.Node => (
-            <TouchableOpacity disabled={loading || !isFormCompleted} onPress={(): void => createBetRequest(this.betVariables)}>
-              <View style={[styles.Create__button, (loading || !isFormCompleted) && styles.Create__button_disabled]}>
-                <Icon name="send" size={24} color={Colors.white} />
-                <Text style={styles.Create__buttonText}>
-                  {loading ? 'Sending...' : `Send${bettee ? ` ${bettee.firstName} a` : ''} Bet Request`}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        </Mutation>
+        <View style={{ top: -this.state.keyboardOffset, zIndex: 1, backgroundColor: Colors.background }}>
+          {bettee && !isAmountInputFocused && this.renderWagerInput()}
+          <Mutation mutation={CREATE_BET_REQUEST} update={onBetCreate} onCompleted={this.onBetCreated}>
+            {(createBetRequest, { loading }): React.Node => (
+              <TouchableOpacity disabled={loading || !isFormCompleted} onPress={(): void => createBetRequest(this.betVariables)}>
+                <View style={[styles.Create__button, (loading || !isFormCompleted) && styles.Create__button_disabled]}>
+                  <Icon name="send" size={24} color={Colors.white} />
+                  <Text style={styles.Create__buttonText}>
+                    {loading ? 'Sending...' : `Send${bettee ? ` ${bettee.firstName} a` : ''} Bet Request`}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          </Mutation>
+        </View>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBetContainer);
+export default compose(
+  graphql(GET_USERS, { name: 'friends', options: { variables: { userListType: 'FRIENDS' } } }),
+  connect(mapStateToProps, mapDispatchToProps),
+)(CreateBetContainer);

@@ -1,5 +1,5 @@
 // @flow
-import { CLEAR_FORM, SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_DATE_VIEW_INDEX, SET_GAME } from 'actions/createBet';
+import { CLEAR_FORM, SET_BET_AMOUNT, SET_BETTEE, SET_BETTOR_PICK_TEAM, SET_DATE_VIEW_INDEX, SET_GAME, SET_WAGER } from 'actions/createBet';
 
 import { type User } from 'types/user';
 import { type Action } from 'types/redux';
@@ -10,6 +10,7 @@ export type ReduxState = {
   bettee: User | null,
   gameId: number | null,
   dateViewIndex: number,
+  wager: string,
 };
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   bettee: null,
   gameId: null,
   dateViewIndex: 0,
+  wager: '',
 };
 
 export default function createBetReducer(state: ReduxState = initialState, action: Action): ReduxState {
@@ -39,6 +41,9 @@ export default function createBetReducer(state: ReduxState = initialState, actio
 
     case SET_GAME:
       return { ...state, gameId: action.payload.gameId, bettorPickTeamId: initialState.bettorPickTeamId };
+
+    case SET_WAGER:
+      return { ...state, wager: action.payload.wager };
 
     default:
       return state;

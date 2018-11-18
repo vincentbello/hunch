@@ -15,3 +15,5 @@ export const getDateViewIndex = (state: ReduxState): number => state.views.creat
 export const getDateViewType = createSelector(getDateViewIndex, (index: number): string => DATE_VIEW_TYPES[index].key);
 
 export const getGameId = (state: ReduxState): number | null => state.views.createBet.gameId;
+
+export const getBetWager = (state: ReduxState): string => state.views.createBet.wager;
