@@ -17,20 +17,29 @@ const styles = StyleSheet.create({
   Team: {
     backgroundColor: 'white',
     borderRadius: 2,
-    padding: 8,
+    padding: 4,
     alignItems: 'center',
     overflow: 'hidden',
   },
   Team_muted: {
     opacity: 0.25,
   },
-  Team__image: {
-    height: 64,
-    width: 64,
-  },
   Team__label: {
+    marginTop: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  Team__labelHeading: {
     ...Typography.h4,
+    lineHeight: 16,
     fontWeight: 'bold',
+  },
+  Team__labelSubhead: {
+    ...Typography.h5,
+    lineHeight: 12,
+    fontSize: 12,
+    marginBottom: 2,
+    fontWeight: '500',
   },
   Team__selection: {
     position: 'absolute',
@@ -50,30 +59,31 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  away: boolean,
   muted: boolean,
   selected: boolean,
   team: Team,
-  onPress: () => void,
 };
 
-const TeamCell = ({ muted, selected, team, onPress }: Props): React.Node => (
-  <TouchableOpacity onPress={onPress}>
-    <View style={[styles.Team, muted && styles.Team_muted]}>
-      <Image size="large" url={team.imageUrl} />
-      <Text style={styles.Team__label}>{team.lastName}</Text>
-      {selected && (
-        <View style={styles.Team__selection}>
-          <Icon style={styles.Team__selectionIcon} name="check" size={24} color={Colors.white} />
-        </View>
-      )}
+const TeamCell = ({ away, muted, selected, team }: Props): React.Node => (
+  <View style={[styles.Team, muted && styles.Team_muted]}>
+    <Image url={team.imageUrl} />
+    <View style={styles.Team__label}>
+      <Text style={styles.Team__labelSubhead}>{team.firstName}</Text>
+      <Text style={styles.Team__labelHeading}>{team.lastName}</Text>
     </View>
-  </TouchableOpacity>
+    {selected && (
+      <View style={styles.Team__selection}>
+        <Icon style={styles.Team__selectionIcon} name="check" size={24} color={Colors.white} />
+      </View>
+    )}
+  </View>
 );
 
 TeamCell.defaultProps = {
+  away: false,
   muted: false,
   selected: false,
-  onPress() {},
 };
 TeamCell.displayName = 'TeamCell';
 

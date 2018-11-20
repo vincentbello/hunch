@@ -62,3 +62,6 @@ typings/
 
 # Distribution files
 dist/
+
+# MySportsFeeds cache
+results/

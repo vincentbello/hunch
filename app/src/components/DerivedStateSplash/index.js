@@ -6,15 +6,16 @@ import { type Error } from 'types/apollo';
 import Splash from 'components/Splash';
 import Spinner from 'components/Spinner';
 
-import Colors from 'theme/colors';
 import AppSizes from 'theme/sizes'
 
 const styles = StyleSheet.create({
   Splash: {
-    flex: 1,
     width: AppSizes.screen.width,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  Splash_full: {
+    flex: 1,
   },
 });
 
@@ -22,15 +23,23 @@ type Props = {
   children: React.Node,
   error?: Error,
   loading: boolean,
+  size: 'small' | 'medium' | 'large',
   withCachedData: boolean,
 };
 
-const DerivedStateSplash = ({ children, error, loading, withCachedData }: Props): React.Node => {
+const defaultProps = {
+  loading: false,
+  error: undefined,
+  size: 'large',
+  withCachedData: false,
+};
+
+const DerivedStateSplash = ({ children, error, loading, size, withCachedData }: Props): React.Node => {
   if (withCachedData) return children;
 
   if (loading) return (
-    <View style={styles.Splash}>
-      <Spinner size="large" />
+    <View style={[styles.Splash, size === 'large' && styles.Splash_full]}>
+      <Spinner size={size} />
     </View>
   );
 
@@ -39,10 +48,6 @@ const DerivedStateSplash = ({ children, error, loading, withCachedData }: Props)
   ) : children;
 };
 
-DerivedStateSplash.defaultProps = {
-  loading: false,
-  error: undefined,
-  withCachedData: false,
-};
+DerivedStateSplash.defaultProps = defaultProps;
 DerivedStateSplash.displayName = 'DerivedStateSplash';
 export default DerivedStateSplash;

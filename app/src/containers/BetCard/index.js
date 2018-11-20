@@ -1,35 +1,55 @@
 // @flow
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { compose, graphql, Query } from 'react-apollo';
 import GET_BET from 'graphql/queries/getBet';
+import GET_GAME from 'graphql/queries/getGame';
 
+import { type Error } from 'types/apollo';
 import { type Bet } from 'types/bet';
+import { type Game } from 'types/game';
 import { type User } from 'types/user';
-import { type ReduxState as UserState } from 'reducers/user';
 
 import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 import AppSizes from 'theme/sizes';
 
 import withCurrentUser, { type CurrentUserProps } from 'hocs/withCurrentUser';
+import GameCard from 'components/GameCard';
 import Image from 'components/Image';
 import DerivedStateSplash from 'components/DerivedStateSplash';
-import { Query } from 'react-apollo';
 
 type ExternalProps = {
   betId: number,
+  betQuery: {
+    loading: boolean,
+    error: Error,
+    bet: Bet,
+  },
 };
 
 type Props = ExternalProps & CurrentUserProps;
 
 const styles = StyleSheet.create({
   Bet: {
+    marginTop: 8,
+  },
+  Bet__section: {
     backgroundColor: Colors.white,
     borderRadius: 2,
-    margin: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    marginBottom: 8,
     padding: 8,
   },
-  Bet__header: {
+  Bet__sectionHeader: {
+    ...Typography.h4,
+    fontWeight: '900',
+    marginLeft: 8,
+    marginRight: 8,
+    marginBottom: 2,
+  },
+  Bet__section_row: {
     flexDirection: 'row',
   },
   Bet__user: {
@@ -71,12 +91,22 @@ class BetCardContainer extends React.Component<Props> {
 
   renderBet = (bet: Bet): React.Node => (
     <View style={styles.Bet}>
-      <View style={styles.Bet__header}>
+      <View style={[styles.Bet__section, styles.Bet__section_row]}>
         {this.renderUser(bet.bettor, true)}
         <View style={styles.Bet__main}>
           <Text>{bet.wager}</Text>
         </View>
         {this.renderUser(bet.bettee)}
+      </View>
+      <Text style={styles.Bet__sectionHeader}>Game</Text>
+      <View style={styles.Bet__section}>
+        <Query query={GET_GAME} variables={{ id: bet.game.id }}>
+          {({ loading, error, data: { game } }): React.Node => (
+            <DerivedStateSplash error={error} loading={loading}>
+              {game && <GameCard game={game} />}
+            </DerivedStateSplash>
+          )}
+        </Query>
       </View>
     </View>
   );
@@ -95,17 +125,16 @@ class BetCardContainer extends React.Component<Props> {
   );
 
   render(): React.Node {
-    const { betId } = this.props;
+    const { loading, error, bet } = this.props.betQuery;
     return (
-      <Query query={GET_BET} variables={{ betId }}>
-        {({ loading, error, data }): React.Node => (
-          <DerivedStateSplash error={error} loading={loading}>
-            {data && data.bet && this.renderBet(data.bet)}
-          </DerivedStateSplash>
-        )}
-      </Query>
+      <DerivedStateSplash error={error} loading={loading}>
+        {bet && this.renderBet(bet)}
+      </DerivedStateSplash>
     );
   }
 }
 
-export default withCurrentUser(BetCardContainer);
+export default compose(
+  graphql(GET_BET, { name: 'betQuery', options: ({ betId }) => ({ variables: { betId } }) }),
+  withCurrentUser,
+)(BetCardContainer);

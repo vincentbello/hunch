@@ -283,20 +283,22 @@ class CreateBetContainer extends React.Component<Props, State> {
         </View>
         <View style={styles.Create__horizontalCellContainer}>
           <View style={styles.Create__horizontalCell}>
-            <TeamCell
-              team={game.awayTeam}
-              muted={bettorPickTeamId !== null && game.awayTeam.id !== bettorPickTeamId}
-              selected={bettorPickTeamId !== null && game.awayTeam.id === bettorPickTeamId}
-              onPress={(): void => this.selectBettorPickTeam(game.awayTeam.id)}
-            />
+            <TouchableOpacity onPress={(): void => this.selectBettorPickTeam(game.awayTeam.id)}>
+              <TeamCell
+                team={game.awayTeam}
+                muted={bettorPickTeamId !== null && game.awayTeam.id !== bettorPickTeamId}
+                selected={bettorPickTeamId !== null && game.awayTeam.id === bettorPickTeamId}
+              />
+            </TouchableOpacity>
           </View>
           <View style={[styles.Create__horizontalCell, styles.Create__horizontalCell_last]}>
-            <TeamCell
-              team={game.homeTeam}
-              muted={bettorPickTeamId !== null && game.homeTeam.id !== bettorPickTeamId}
-              selected={bettorPickTeamId !== null && game.homeTeam.id === bettorPickTeamId}
-              onPress={(): void => this.selectBettorPickTeam(game.homeTeam.id)}
-            />
+            <TouchableOpacity onPress={(): void => this.selectBettorPickTeam(game.homeTeam.id)}>
+              <TeamCell
+                team={game.homeTeam}
+                muted={bettorPickTeamId !== null && game.homeTeam.id !== bettorPickTeamId}
+                selected={bettorPickTeamId !== null && game.homeTeam.id === bettorPickTeamId}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </React.Fragment>

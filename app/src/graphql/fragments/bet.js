@@ -18,7 +18,6 @@ export default gql`
     lastRemindedAt
     game {
       id
-      league
     }
     bettor {
       ...userFields
