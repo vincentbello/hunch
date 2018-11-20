@@ -1,5 +1,6 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+import models from '../';
+
+export default (sequelize, DataTypes) => {
   const Bet = sequelize.define('Bet', {
     type: {
       allowNull: false,
@@ -43,11 +44,36 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
   }, {});
-  Bet.associate = function(models) {
-    Bet.belongsTo(models.Game, { foreignKey: 'gameId', as: 'game' });
-    Bet.belongsTo(models.Team, { foreignKey: 'bettorPickTeamId', as: 'bettorPickTeam' });
-    Bet.belongsTo(models.User, { foreignKey: 'bettorId', as: 'bettor' });
-    Bet.belongsTo(models.User, { foreignKey: 'betteeId', as: 'bettee' });
+  Bet.associate = function(m) {
+    Bet.belongsTo(m.Game, { foreignKey: 'gameId', as: 'game' });
+    Bet.belongsTo(m.Team, { foreignKey: 'bettorPickTeamId', as: 'bettorPickTeam' });
+    Bet.belongsTo(m.User, { foreignKey: 'bettorId', as: 'bettor' });
+    Bet.belongsTo(m.User, { foreignKey: 'betteeId', as: 'bettee' });
   };
+
+  Bet.prototype.sendRequestNotifications = async function() {
+    const bettor = await models.User.findById(this.bettorId);
+    const betteeDevices = await models.Device.findAll({ where: { userId: this.betteeId, allowedNotifications: true } });
+    for (const device of betteeDevices) {
+      const notification = new Notification({
+        body: `${bettor.fullName} has sent you a bet request.`,
+        payload: { betId: this.id },
+      });
+      await notification.send(device.token);
+    }
+  };
+
+  Bet.prototype.sendResponseNotifications = async function() {
+    const bettee = await models.User.findById(this.betteeId);
+    const devices = await models.Device.findAll({ where: { userId: this.bettorId } });
+    for (const device of devices) {
+      const notification = new Notification({
+        body: `${this.accepted ? 'It\'s on! ' : ''}${bettee.fullName} ${this.accepted ? 'accepted' : 'rejected'} your bet request.`,
+        payload: this.accepted ? { betId: this.id } : null,
+      });
+      await notification.send(device.token);
+    }
+  };
+
   return Bet;
 };

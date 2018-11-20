@@ -47,7 +47,7 @@ export default models => ({
       },
     },
     resolve: async function (_, { amount, betteeId, gameId, bettorPickTeamId, type, wager }, context, ...args) {
-      const bet = await models.Bet.create({
+      const newBet = await models.Bet.create({
         type,
         amount,
         wager,
@@ -57,17 +57,15 @@ export default models => ({
         bettorId: context.userId,
         betteeId: betteeId,
         bettorPickTeamId,
+      }, {
+        include: [
+          { model: models.Game, as: 'game' },
+          { model: models.User, as: 'bettor' },
+          { model: models.User, as: 'bettee' },
+        ],
       });
-      return await resolver(models.Bet, {
-        before: (findOptions, args, context) => ({
-          ...findOptions,
-          include: [
-            { model: models.Game, as: 'game' },
-            { model: models.User, as: 'bettor' },
-            { model: models.User, as: 'bettee' },
-          ],
-        }),
-      })(_, { id: bet.id }, context, ...args);
+      newBet.sendRequestNotifications();
+      return newBet;
     },
   },
 
@@ -99,9 +97,10 @@ export default models => ({
       },
     },
     resolve: async function(root, { id, accepted }, ...args) {
-      // TODO: Send notifications
-      await models.Bet.update({ accepted, active: accepted, responded: true }, { where: { id } });
-      return await resolver(models.Bet)(root, { id, accepted }, ...args);
+      const bet = await models.Bet.findById(id);
+      await bet.update({ accepted, active: accepted, responded: true });
+      bet.sendResponseNotifications();
+      return bet;
     },
   },
 });

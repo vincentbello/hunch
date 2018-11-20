@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import 'dotenv/config';
 import { Op } from 'sequelize';
-import apn from 'apn';
 import debugModule from 'debug';
 import http from 'http';
 import minimist from 'minimist';
@@ -10,6 +9,7 @@ const debug = debugModule('node-api:server');
 import apnProvider from '../../services/apnProvider';
 import models from '../../db/models';
 import MySportsFeedsClient from '../../third-party/my-sports-feeds';
+import Notification from '../../services/Notification';
 import sleep from '../../utils/sleep';
 
 const argv = minimist(process.argv.slice(2));
@@ -142,20 +142,18 @@ async function pollGames() {
       const winnerNotificationHeader = `🎉 You won your bet!`;
       const loserNotificationHeader = `😤 You lost your bet.`;
       const winnerNotificationText = `${loser.firstName} owes you $${bet.amount}!`;
-      const loserNotificationText = `You owe ${winner.firstName} $${bet.amount}.`;
+      const loserNotificationText = `Pay up! You owe ${winner.firstName} $${bet.amount}.`;
       const notificationHeader = didWinBet ? winnerNotificationHeader : loserNotificationHeader;
       const notificationBody = `${gameResultText} ${didWinBet ? winnerNotificationText : loserNotificationText}`;
 
-      const notification = new apn.Notification();
-      notification.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 14; // Expires two weeks from now
-      notification.badge = 0;
-      notification.alert = notificationHeader;
-      notification.title = notificationHeader;
-      notification.body = notificationBody;
-      notification.payload = { betId: bet.id };
-      notification.topic = 'com.vincentbello.Hunch';
+      const notification = new Notification({
+        alert: notificationHeader,
+        title: notificationHeader,
+        body: notificationBody,
+        payload: { betId: bet.id },
+      });
       console.log(`\n\nSending notification to ${device.user.fullName}`);
-      const result = await apnProvider.send(notification, device.token);
+      const result = await notification.send(device.token);
       console.log(`\n\nSuccessfully sent notification to ${device.user.fullName}!`);
     }
     // TODO: Batch winner and loser tokens
