@@ -6,6 +6,7 @@ export default gql`
 
   fragment gameFields on Game {
     id
+    league
     seasonType
     homeScore
     awayScore

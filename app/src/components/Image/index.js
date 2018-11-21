@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  light: boolean,
   rounded: boolean,
   size: 'xsmall' | 'small' | 'medium' | 'large',
   url: string | null,
@@ -38,13 +39,14 @@ const SIZES = {
 };
 
 const defaultProps = {
+  light: false,
   rounded: false,
   size: 'medium',
 };
 
-const CustomImage = ({ rounded, size, url }: Props): React.Node => {
+const CustomImage = ({ light, rounded, size, url }: Props): React.Node => {
   const dimension = SIZES[size];
-  const style = [styles.Image, rounded && styles.Image_bordered, {
+  const style = [styles.Image, (rounded && !light) && styles.Image_bordered, {
     height: dimension,
     width: dimension,
     borderRadius: rounded ? dimension / 2 : 0,

@@ -15,8 +15,9 @@ import Typography from 'theme/typography';
 import AppSizes from 'theme/sizes';
 
 import withCurrentUser, { type CurrentUserProps } from 'hocs/withCurrentUser';
-import GameCard from 'components/GameCard';
+import GameCell from 'components/GameCell';
 import Image from 'components/Image';
+import ImageSplash from 'components/ImageSplash';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 
 type ExternalProps = {
@@ -33,6 +34,11 @@ type Props = ExternalProps & CurrentUserProps;
 const styles = StyleSheet.create({
   Bet: {
     marginTop: 8,
+  },
+  Bet__game: {
+    marginLeft: 8,
+    marginRight: 8,
+    marginBottom: 8,
   },
   Bet__section: {
     backgroundColor: Colors.white,
@@ -91,22 +97,23 @@ class BetCardContainer extends React.Component<Props> {
 
   renderBet = (bet: Bet): React.Node => (
     <View style={styles.Bet}>
+      <ImageSplash dimmed source={require('../../../assets/nba-splash.png')}>
+        <View style={styles.Bet__game}>
+          <Query query={GET_GAME} variables={{ id: bet.game.id }}>
+            {({ loading, error, data: { game } }): React.Node => (
+              <DerivedStateSplash error={error} loading={loading}>
+                {game && <GameCell game={game} light size="large" />}
+              </DerivedStateSplash>
+            )}
+          </Query>
+        </View>
+      </ImageSplash>
       <View style={[styles.Bet__section, styles.Bet__section_row]}>
         {this.renderUser(bet.bettor, true)}
         <View style={styles.Bet__main}>
           <Text>{bet.wager}</Text>
         </View>
         {this.renderUser(bet.bettee)}
-      </View>
-      <Text style={styles.Bet__sectionHeader}>Game</Text>
-      <View style={styles.Bet__section}>
-        <Query query={GET_GAME} variables={{ id: bet.game.id }}>
-          {({ loading, error, data: { game } }): React.Node => (
-            <DerivedStateSplash error={error} loading={loading}>
-              {game && <GameCard game={game} />}
-            </DerivedStateSplash>
-          )}
-        </Query>
       </View>
     </View>
   );

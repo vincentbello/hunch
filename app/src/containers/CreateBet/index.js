@@ -317,10 +317,9 @@ class CreateBetContainer extends React.Component<Props, State> {
                 data={upcomingGames}
                 keyExtractor={(game: Game): string => `${game.id}`}
                 renderItem={({ item }): React.Node => (
-                  <GameCell
-                    game={item}
-                    onPress={(): void => this.props.actions.setGame(item.id)}
-                  />
+                  <TouchableOpacity onPress={(): void => this.props.actions.setGame(item.id)}>
+                    <GameCell game={item} withContainer />
+                  </TouchableOpacity>
                 )}
               />
             )
@@ -354,7 +353,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             {({ data: { game } }): React.Node => (
               game ? (
                 <React.Fragment>
-                  <GameCell game={game} />
+                  <GameCell game={game} withContainer />
                   {this.renderPickSelection(game)}
                 </React.Fragment>
               ) : null
