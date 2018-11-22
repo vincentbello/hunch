@@ -34,6 +34,7 @@ import Sizes from 'theme/sizes';
 import Typography from 'theme/typography';
 
 const onBetCreate = (cache, { data: { createBetRequest } }) => {
+  console.log(createBetRequest);
   const pendingBetsQuery = { query: GET_BETS, variables: { betListType: 'PENDING' } };
   try {
     const { bets: pendingBets } = cache.readQuery(pendingBetsQuery);

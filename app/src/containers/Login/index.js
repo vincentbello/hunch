@@ -50,7 +50,6 @@ class LoginContainer extends React.Component<Props, State> {
     new NotificationService(({ os, token }): void => {
       if (os && token) this.props.registerDevice({ variables: { os: os.toUpperCase(), token } });
     });
-    this.setState({ isAuthenticating: false });
     Actions.main();
   };
 

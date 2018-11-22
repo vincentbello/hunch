@@ -7,6 +7,7 @@ export type Game = {
   season: number,
   seasonType: string,
   completed: boolean,
+  inProgress: boolean,
   homeScore: number | null,
   awayScore: number | null,
   week: number,

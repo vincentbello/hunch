@@ -53,7 +53,6 @@ export default Actions.create(
 
               <Scene
                 key="betCard"
-                // TODO: Color back button white
                 navTransparent
                 {...AppConfig.navbarProps}
                 title="Bet"

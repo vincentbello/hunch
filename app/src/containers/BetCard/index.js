@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, View, Text } from 'react-native';
 import { compose, graphql, Query } from 'react-apollo';
 import GET_BET from 'graphql/queries/getBet';
 import GET_GAME from 'graphql/queries/getGame';
+import GET_USER_STATS from 'graphql/queries/getUserStats';
 
 import { type Error } from 'types/apollo';
 import { type Bet } from 'types/bet';
@@ -15,10 +16,12 @@ import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 import AppSizes from 'theme/sizes';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import withCurrentUser, { type CurrentUserProps } from 'hocs/withCurrentUser';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import GameCell from 'components/GameCell';
-import Image from 'components/Image';
+import Image, { SIZES } from 'components/Image';
 import ImageSplash from 'components/ImageSplash';
 import FeedMessage from 'components/FeedMessage';
 
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     top: -2,
   },
   amountText: {
-    fontWeight: 'bold',
+    fontWeight: '900',
     fontSize: 32,
   },
   user: {
@@ -107,14 +110,27 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: -4,
   },
+  userLabelContainer: {
+    flexDirection: 'row',
+    marginTop: 8,
+    marginBottom: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userIcon: {
+    marginRight: 6,
+  },
   userLabel: {
     fontWeight: '800',
     fontSize: 15,
-    marginTop: 8,
-    marginBottom: 4,
-    textAlign: 'center',
+  },
+  userLabel_muted: {
+    opacity: 0.75,
   },
   userMeta: {
+    flexDirection: 'row',
+  },
+  userMetaText: {
     color: Colors.textSecondary,
     fontSize: 12,
   },
@@ -153,9 +169,9 @@ class BetCardContainer extends React.Component<Props> {
           </ImageSplash>
           <View style={styles.content}>
             <View style={[styles.section, styles.section_row]}>
-              {this.renderUser(bet.bettor, bet.bettorPickTeamId, game, true)}
+              {this.renderUser(bet.bettor, bet, game, true)}
               {this.renderAmount(bet.amount)}
-              {this.renderUser(bet.bettee, bet.bettorPickTeamId, game)}
+              {this.renderUser(bet.bettee, bet, game)}
             </View>
             {bet.wager && (
               <View style={styles.section}>
@@ -176,18 +192,21 @@ class BetCardContainer extends React.Component<Props> {
     </View>
   );
 
-  renderUser = (user: User, bettorPickTeamId: number, game: ?Game, isBettor: boolean = false): React.Node => {
+  renderUser = (user: User, bet: Bet, game: ?Game, isBettor: boolean = false): React.Node => {
     let pickedTeam = null;
     if (game) {
-      pickedTeam = (game.homeTeam.id === bettorPickTeamId && isBettor) || (game.homeTeam.id !== bettorPickTeamId && !isBettor) ? game.homeTeam : game.awayTeam;
+      pickedTeam = (game.homeTeam.id === bet.bettorPickTeamId && isBettor) || (game.homeTeam.id !== bet.bettorPickTeamId && !isBettor) ? game.homeTeam : game.awayTeam;
     }
+    const didWin = bet.winnerId === user.id;
+    const didLose = bet.winnerId !== null && bet.winnerId !== user.id;
 
     return (
       <View style={[styles.user, isBettor && styles.user_left]}>
-        <Image rounded padded size="large" url={user.imageUrl} />
+        <Image muted={didLose} rounded padded size="large" url={user.imageUrl} />
         {pickedTeam !== null && (
           <View style={[styles.userTeam, isBettor && styles.userTeam_left]}>
             <Image
+              muted={didLose}
               rounded
               padded
               size="xsmall"
@@ -197,11 +216,20 @@ class BetCardContainer extends React.Component<Props> {
           </View>
         )}
         {pickedTeam && <Text style={styles.userSubhead}>Picked the {pickedTeam.lastName}</Text>}
-        <Text style={styles.userLabel}>{user.fullName}</Text>
-        <Text style={styles.userMeta}>
-          {`Record: ${isBettor ? '7-4' : '3-9'}`}
-          {/* TODO: Aggregations */}
-        </Text>
+        <View style={styles.userLabelContainer}>
+          {didWin && <Icon style={styles.userIcon} name="star" size={20} color={Colors.gold} />}
+          <Text style={[styles.userLabel, didLose && styles.userLabel_muted]}>{user.fullName}</Text>
+        </View>
+        <View style={styles.userMeta}>
+          <Text style={styles.userMetaText}>Record: </Text>
+          <Query query={GET_USER_STATS} variables={{ userId: user.id }}>
+            {({ data: { userStats } }): React.Node => (userStats ? (
+              <Text style={styles.userMetaText}>
+                {`${userStats.betsWon}-${userStats.betsPlayed - userStats.betsWon}`}
+              </Text>
+            ) : null)}
+          </Query>
+        </View>
         {isBettor && (
           <View style={styles.userBadge}>
             <Text style={styles.userBadgeText}>CHALLENGER</Text>

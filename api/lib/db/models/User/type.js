@@ -1,6 +1,19 @@
-import { GraphQLEnumType, GraphQLObjectType } from 'graphql';
+import { GraphQLEnumType, GraphQLInt, GraphQLObjectType } from 'graphql';
 import { attributeFields } from 'graphql-sequelize';
 import models from '../';
+
+export const UserStatsType = new GraphQLObjectType({
+  name: 'UserStatsType',
+  description: 'Statistics around a user\'s performance',
+  fields: {
+    betsWon: {
+      type: GraphQLInt,
+    },
+    betsPlayed: {
+      type: GraphQLInt,
+    },
+  },
+});
 
 export const UserListType = new GraphQLEnumType({
   name: 'UserListType',

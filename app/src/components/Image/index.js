@@ -27,21 +27,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.background,
   },
-  Image__emptyIcon: {
-
+  Image_muted: {
+    opacity: 0.75,
   },
 });
 
 type Props = {
   bordered: boolean,
   light: boolean,
+  muted: boolean,
   rounded: boolean,
   padded: boolean,
   size: 'xsmall' | 'small' | 'medium' | 'large',
   url: string | null,
 };
 
-const SIZES = {
+export const SIZES = {
   xsmall: 32,
   small: 36,
   medium: 50,
@@ -51,22 +52,23 @@ const SIZES = {
 const defaultProps = {
   bordered: false,
   light: false,
+  muted: false,
   padded: false,
   rounded: false,
   size: 'medium',
 };
 
-const CustomImage = ({ bordered, light, padded, rounded, size, url }: Props): React.Node => {
+const CustomImage = ({ bordered, light, muted, padded, rounded, size, url }: Props): React.Node => {
   const dimension = SIZES[size];
   const borderRadius = rounded ? dimension / 2 : 0;
-  const style = [styles.Image, bordered && styles.Image_bordered, {
+  const style = [styles.Image, muted && styles.Image_muted, bordered && styles.Image_bordered, {
     height: dimension,
     width: dimension,
     borderRadius,
   }];
   const image = url === null ? (
     <View style={[...style, styles.Image_empty]}>
-      <Icon name="user" size={dimension * 2 / 3} color={Colors.textSecondary} style={styles.Image__emptyIcon} />
+      <Icon name="user" size={dimension * 2 / 3} color={Colors.textSecondary} />
     </View>
   ) : (
     <Image style={style} source={{ uri: url }} />

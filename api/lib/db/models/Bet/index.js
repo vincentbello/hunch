@@ -51,12 +51,12 @@ export default (sequelize, DataTypes) => {
     Bet.belongsTo(m.User, { foreignKey: 'betteeId', as: 'bettee' });
   };
 
-  Bet.prototype.sendRequestNotifications = async function() {
+  Bet.prototype.sendRequestNotifications = async function(remind = false) {
     const bettor = await models.User.findById(this.bettorId);
     const betteeDevices = await models.Device.findAll({ where: { userId: this.betteeId, allowedNotifications: true } });
     for (const device of betteeDevices) {
       const notification = new Notification({
-        body: `${bettor.fullName} has sent you a bet request.`,
+        body: `${remind ? 'Don\'t forget! ' : ''}${bettor.fullName} has sent you a bet request.`,
         payload: { betId: this.id },
       });
       await notification.send(device.token);

@@ -53,7 +53,7 @@ type Props = {
 };
 
 const FeedMessage = ({ byMe, message }: Props): React.Node => {
-  const image = <Image bordered rounded size="xsmall" url={message.author.url} />;
+  const image = <Image bordered rounded size="xsmall" url={message.author.imageUrl} />;
 
   return (
     <View style={[s.message, byMe && s.message_byMe]}>

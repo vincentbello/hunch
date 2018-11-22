@@ -50,6 +50,7 @@ const misc = {
     purple: '#D28BDE',
     gray: '#AAAAAA',
   },
+  gold: '#FFD700',
   white: '#FFFFFF',
   transparent: 'transparent',
 };

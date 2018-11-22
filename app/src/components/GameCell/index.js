@@ -35,9 +35,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 7,
-  },
-  content_large: {
-    flex: 1,
+    marginRight: 4,
   },
   row: {
     flexDirection: 'row',
@@ -68,14 +66,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   rowMeta: {
+    fontSize: 14,
     fontWeight: '800',
-    ...Typography.base,
+  },
+  rowMeta_large: {
+    fontSize: 20,
+    fontWeight: '900',
   },
   rowMeta_offset: {
     marginRight: 11,
   },
+  rowMeta_largeOffset: {
+    marginRight: 17,
+  },
   rowIcon: {
-    position: 'relative',
     right: -5,
   },
   meta: {
@@ -151,24 +155,41 @@ const TeamRow = ({ didLose, didWin, large, light, score, team }: TeamRowProps): 
           {team.lastName}
         </Text>
       </View>
-      {score !== null && <Text style={[styles.rowMeta, light && styles.lightText, didLose && styles.rowMeta_offset]}>{score}</Text>}
-      {didWin && <Icon style={styles.rowIcon} name="chevron-left" size={12} />}
+      {score !== null && (
+        <Text
+          style={[
+            styles.rowMeta,
+            light && styles.lightText,
+            large && styles.rowMeta_large,
+            didLose && styles.rowMeta_offset,
+            large && didLose && styles.rowMeta_largeOffset,
+          ]}
+        >
+          {score}
+        </Text>
+      )}
+      {didWin && (
+        <Icon color={light ? Colors.white : Colors.textPrimary} style={styles.rowIcon} name="chevron-left" size={large ? 18 : 12} />
+      )}
     </View>
   );
 };
 
-const GameStatus = (props: { game: Game, stacked: boolean, light: boolean }): React.Node => (
-  <React.Fragment>
-    <Text style={[styles.metaText, props.light && styles.metaText_light, props.game.completed && styles.metaText_emphasized]}>
-      {props.game.completed ? 'Final' : format(props.game.startDate, props.stacked ? 'MMM D, YYYY' : 'M/D, h:mm A')}
-    </Text>
-    {props.stacked && (
-      <Text style={[styles.metaText, styles.metaText_stacked, props.light && styles.metaText_light]}>
-        {format(props.game.startDate, props.game.completed ? 'MMM D, YYYY' : 'h:mm A')}
+const GameStatus = (props: { game: Game, stacked: boolean, light: boolean }): React.Node => {
+  const hasStarted = props.game.completed || props.game.inProgress;
+  return (
+    <React.Fragment>
+      <Text style={[styles.metaText, props.light && styles.metaText_light, hasStarted && styles.metaText_emphasized]}>
+        {hasStarted ? (props.game.completed ? 'Final' : 'In Progress') : format(props.game.startDate, props.stacked ? 'MMM D, YYYY' : 'M/D, h:mm A')}
       </Text>
-    )}
-  </React.Fragment>
-);
+      {props.stacked && (
+        <Text style={[styles.metaText, styles.metaText_stacked, props.light && styles.metaText_light]}>
+          {format(props.game.startDate, hasStarted ? 'MMM D, YYYY' : 'h:mm A')}
+        </Text>
+      )}
+    </React.Fragment>
+  );
+};
 
 const GameCell = ({ game, large, light, muted, withContainer }: Props): React.Node => (
   <View>

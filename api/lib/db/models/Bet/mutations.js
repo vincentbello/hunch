@@ -1,7 +1,9 @@
 import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
+import { isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import { resolver } from 'graphql-sequelize';
 import BetType, { BetListType } from './type';
+import { ForbiddenError } from '../../../utils/apollo/errors';
 
 export default models => ({
   cancelBetRequest: {
@@ -78,9 +80,10 @@ export default models => ({
       },
     },
     resolve: async function(root, { id }, ...args) {
-      // TODO: Send Reminder
+      const bet = await models.Bet.findById(id);
       await models.Bet.update({ lastRemindedAt: new Date() }, { where: { id } });
-      return await resolver(models.Bet)(root, { id }, ...args);
+      bet.sendRequestNotifications(true);
+      return bet;
     },
   },
 
@@ -97,7 +100,9 @@ export default models => ({
       },
     },
     resolve: async function(root, { id, accepted }, ...args) {
-      const bet = await models.Bet.findById(id);
+      const bet = await models.Bet.findById(id, { include: [{ model: models.Game, as: 'game' }] });
+      if (isBefore(bet.game.startDate, new Date())) throw new ForbiddenError('This bet\'s game has already started.');
+
       await bet.update({ accepted, active: accepted, responded: true });
       bet.sendResponseNotifications();
       return bet;
