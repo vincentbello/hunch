@@ -1,5 +1,6 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+import { isBefore } from 'date-fns';
+
+export default (sequelize, DataTypes) => {
   const Game = sequelize.define('Game', {
     league: DataTypes.ENUM('NBA'),
     season: DataTypes.INTEGER,
@@ -18,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     awayTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+    },
+    inProgress: {
+      type: DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['completed', 'startDate']),
+      get() {
+        return !this.getDataValue('completed') && isBefore(this.getDataValue('startDate'), new Date());
+      }
     },
   }, {});
   Game.associate = function(models) {

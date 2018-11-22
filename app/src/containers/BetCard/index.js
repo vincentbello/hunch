@@ -102,7 +102,7 @@ class BetCardContainer extends React.Component<Props> {
           <Query query={GET_GAME} variables={{ id: bet.game.id }}>
             {({ loading, error, data: { game } }): React.Node => (
               <DerivedStateSplash error={error} loading={loading}>
-                {game && <GameCell game={game} light size="large" />}
+                {game && <GameCell game={game} large light />}
               </DerivedStateSplash>
             )}
           </Query>

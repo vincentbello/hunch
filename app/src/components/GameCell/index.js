@@ -33,77 +33,90 @@ const styles = StyleSheet.create({
   Game_muted: {
     opacity: 0.25,
   },
-  Game__content: {
+  content: {
     flex: 7,
   },
-  Game__row: {
+  content_large: {
+    flex: 1,
+  },
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
     margin: 0,
   },
-  Game__row_muted: {
-    opacity: 0.5,
+  row_muted: {
+    opacity: 0.65,
   },
-  Game__rowStack: {
+  rowStack: {
     marginLeft: 8,
     justifyContent: 'center',
   },
-  Game__rowSubhead: {
+  rowSubhead: {
     marginBottom: 2,
+    fontSize: 13,
   },
-  Game__rowLabel: {
+  rowLabel: {
     flex: 1,
     fontWeight: 'bold',
     ...Typography.base,
   },
-  Game__rowLabel_large: {
+  rowLabel_large: {
     flex: 0,
     fontSize: 18,
   },
-  Game__rowMeta: {
+  rowMeta: {
     fontWeight: '800',
     ...Typography.base,
   },
-  Game__rowMeta_offset: {
+  rowMeta_offset: {
     marginRight: 11,
   },
-  Game__rowIcon: {
+  rowIcon: {
     position: 'relative',
     right: -5,
   },
-  Game__meta: {
+  meta: {
     flex: 3,
   },
-  Game__metaContainer: {
+  metaContainer: {
     flex: 1,
     marginTop: 8,
     marginBottom: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  Game__metaContainer_bordered: {
+  metaContainer_bordered: {
     borderLeftWidth: 1,
     borderColor: Colors.cellBorder,
   },
-  Game__metaText: {
+  metaText: {
     fontSize: 12,
     color: Colors.textSecondary,
   },
-  Game__metaText_emphasized: {
+  metaText_emphasized: {
     fontWeight: 'bold',
+    fontSize: 14,
   },
-  Game__lightText: {
+  metaText_light: {
+    color: Colors.textTertiary,
+  },
+  metaText_stacked: {
+    marginTop: 4,
+  },
+  lightText: {
     color: Colors.white,
   },
-  Game__metaRow: {
-    fontSize: 12,
-    color: '#DDDDDD',
+  metaRow: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: Colors.textTertiary,
     marginBottom: 4,
   },
 });
 
 type Props = {
   game: Game,
+  large: boolean,
   light: boolean,
   muted: boolean,
   withContainer: boolean,
@@ -112,63 +125,76 @@ type Props = {
 type TeamRowProps = {
   didLose: boolean,
   didWin: boolean,
+  large: boolean,
   light: boolean,
   score: number | null,
-  size: 'medium' | 'large',
   team: Team,
 };
 
 const defaultProps = {
+  large: false,
   light: false,
   muted: false,
-  size: 'medium',
 };
 
-const TeamRow = ({ didLose, didWin, light, score, size, team }: TeamRowProps): React.Node => {
+const TeamRow = ({ didLose, didWin, large, light, score, team }: TeamRowProps): React.Node => {
   return (
-    <View style={[styles.Game__row, didLose && styles.Game__row_muted]}>
-      {team.imageUrl !== null && <Image rounded light={light} size={size === 'large' ? 'medium' : 'xsmall'} url={team.imageUrl} />}
-      <View style={styles.Game__rowStack}>
-        {size === 'large' && <Text style={[styles.Game__rowSubhead, light && styles.Game__lightText]}>{team.firstName}</Text>}
-        <Text style={[styles.Game__rowLabel, light && styles.Game__lightText, size !== defaultProps.size && styles[`Game__rowLabel_${size}`]]}>{team.lastName}</Text>
+    <View style={[styles.row, didLose && styles.row_muted]}>
+      {team.imageUrl !== null && <Image rounded light={light} size={large ? 'medium' : 'xsmall'} url={team.imageUrl} />}
+      <View style={styles.rowStack}>
+        {large && <Text style={[styles.rowSubhead, light && styles.lightText]}>{team.firstName}</Text>}
+        <Text style={[styles.rowLabel, light && styles.lightText, large && styles.rowLabel_large]}>
+          {team.lastName}
+        </Text>
       </View>
-      {score !== null && <Text style={[styles.Game__rowMeta, didLose && styles.Game__rowMeta_offset]}>{score}</Text>}
-      {didWin && <Icon style={styles.Game__rowIcon} name="chevron-left" size={12} />}
+      {score !== null && <Text style={[styles.rowMeta, didLose && styles.rowMeta_offset]}>{score}</Text>}
+      {didWin && <Icon style={styles.rowIcon} name="chevron-left" size={12} />}
     </View>
   );
-}
+};
 
-const GameCell = ({ game, light, muted, size, withContainer }: Props): React.Node => (
+const GameStatus = (props: { game: Game, stacked: boolean, light: boolean }): React.Node => (
+  <React.Fragment>
+    <Text style={[styles.metaText, props.light && styles.metaText_light, props.game.completed && styles.metaText_emphasized]}>
+      {props.game.completed ? 'Final' : format(props.game.startDate, props.stacked ? 'MMM D, YYYY' : 'M/D, h:mm A')}
+    </Text>
+    {props.stacked && (
+      <Text style={[styles.metaText, styles.metaText_stacked, props.light && styles.metaText_light]}>
+        {format(props.game.startDate, props.game.completed ? 'MMM D, YYYY' : 'h:mm A')}
+      </Text>
+    )}
+  </React.Fragment>
+);
+
+const GameCell = ({ game, large, light, muted, withContainer }: Props): React.Node => (
   <View>
-    {size === 'large' && <Text style={styles.Game__metaRow}>{game.league}</Text>}
+    {large && <Text style={styles.metaRow}>{game.league}</Text>}
     <View style={[styles.Game, withContainer && styles.Game_contained, muted && styles.Game_muted]}>
-      <View style={styles.Game__content}>
+      <View style={[large && styles.content]}>
         <TeamRow
           didLose={game.completed && game.awayScore < game.homeScore}
           didWin={game.completed && game.awayScore > game.homeScore}
+          large={large}
           light={light}
           score={game.awayScore}
-          size={size}
           team={game.awayTeam}
         />
         <TeamRow
           didLose={game.completed && game.homeScore < game.awayScore}
           didWin={game.completed && game.homeScore > game.awayScore}
+          large={large}
           light={light}
           score={game.homeScore}
-          size={size}
           team={game.homeTeam}
         />
       </View>
-      <View style={styles.Game__meta}>
-        <View style={[styles.Game__metaContainer, size !== 'large' && styles.Game__metaContainer_bordered]}>
-          <Text style={[styles.Game__metaText, game.completed && styles.Game__metaText_emphasized]}>
-            {game.completed ? 'Final' : format(game.startDate, 'M/D, h:mm A')}
-          </Text>
+      <View style={!large && styles.meta}>
+        <View style={[styles.metaContainer, !large && styles.metaContainer_bordered]}>
+          <GameStatus game={game} light={light} stacked={large} />
         </View>
       </View>
     </View>
-    {size === 'large' && <Text style={styles.Game__metaRow}>{`${game.homeTeam.site} · ${game.homeTeam.city}, ${game.homeTeam.state}`}</Text>}
+    {large && <Text style={styles.metaRow}>{`${game.homeTeam.site} · ${game.homeTeam.city}, ${game.homeTeam.state}`}</Text>}
   </View>
 );
 

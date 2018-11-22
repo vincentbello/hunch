@@ -8,6 +8,8 @@ export default gql`
     id
     league
     seasonType
+    completed
+    inProgress
     homeScore
     awayScore
     startDate
