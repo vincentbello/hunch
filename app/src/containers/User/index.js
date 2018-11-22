@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 const UserContainer = ({ currentUser }: CurrentUserProps): React.Node => (
   <View style={styles.User}>
     <View style={styles.User__header}>
-      <Image rounded size="large" url={currentUser.imageUrl} />
+      <Image bordered rounded size="large" url={currentUser.imageUrl} />
       <View style={styles.User__headerContent}>
         <Text style={styles.User__headerTitle}>{currentUser.fullName}</Text>
       </View>

@@ -9,6 +9,7 @@ export default gql`
     type
     amount
     wager
+    bettorPickTeamId
     responded
     accepted
     active

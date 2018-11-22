@@ -214,7 +214,7 @@ class BetCell extends React.PureComponent<Props> {
       <TouchableOpacity disabled={disabled} onPress={onPress}>
         <View style={styles.Bet}>
           <View style={styles.Bet__container}>
-            <Image rounded url={displayedImageUrl} />
+            <Image bordered rounded url={displayedImageUrl} />
             <View style={styles.Bet__content}>
               <View style={styles.Bet__header}>
                 <Text style={styles.Bet__headerText}>

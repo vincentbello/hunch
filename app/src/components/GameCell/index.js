@@ -44,10 +44,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 0,
   },
+  row_large: {
+    marginBottom: 4,
+  },
   row_muted: {
     opacity: 0.65,
   },
   rowStack: {
+    flex: 1,
     marginLeft: 8,
     justifyContent: 'center',
   },
@@ -56,7 +60,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   rowLabel: {
-    flex: 1,
     fontWeight: 'bold',
     ...Typography.base,
   },
@@ -110,6 +113,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     color: Colors.textTertiary,
+    marginTop: 4,
     marginBottom: 4,
   },
 });
@@ -139,15 +143,15 @@ const defaultProps = {
 
 const TeamRow = ({ didLose, didWin, large, light, score, team }: TeamRowProps): React.Node => {
   return (
-    <View style={[styles.row, didLose && styles.row_muted]}>
-      {team.imageUrl !== null && <Image rounded light={light} size={large ? 'medium' : 'xsmall'} url={team.imageUrl} />}
+    <View style={[styles.row, large && styles.row_large, didLose && styles.row_muted]}>
+      <Image rounded light={light} size={large ? 'medium' : 'xsmall'} url={team.imageUrl} />
       <View style={styles.rowStack}>
         {large && <Text style={[styles.rowSubhead, light && styles.lightText]}>{team.firstName}</Text>}
         <Text style={[styles.rowLabel, light && styles.lightText, large && styles.rowLabel_large]}>
           {team.lastName}
         </Text>
       </View>
-      {score !== null && <Text style={[styles.rowMeta, didLose && styles.rowMeta_offset]}>{score}</Text>}
+      {score !== null && <Text style={[styles.rowMeta, light && styles.lightText, didLose && styles.rowMeta_offset]}>{score}</Text>}
       {didWin && <Icon style={styles.rowIcon} name="chevron-left" size={12} />}
     </View>
   );
@@ -170,7 +174,7 @@ const GameCell = ({ game, large, light, muted, withContainer }: Props): React.No
   <View>
     {large && <Text style={styles.metaRow}>{game.league}</Text>}
     <View style={[styles.Game, withContainer && styles.Game_contained, muted && styles.Game_muted]}>
-      <View style={[large && styles.content]}>
+      <View style={styles.content}>
         <TeamRow
           didLose={game.completed && game.awayScore < game.homeScore}
           didWin={game.completed && game.awayScore > game.homeScore}
@@ -188,7 +192,7 @@ const GameCell = ({ game, large, light, muted, withContainer }: Props): React.No
           team={game.homeTeam}
         />
       </View>
-      <View style={!large && styles.meta}>
+      <View style={[!large && styles.meta]}>
         <View style={[styles.metaContainer, !large && styles.metaContainer_bordered]}>
           <GameStatus game={game} light={light} stacked={large} />
         </View>

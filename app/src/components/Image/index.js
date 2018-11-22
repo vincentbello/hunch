@@ -10,6 +10,14 @@ import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
   Image: {},
+  wrapper: {
+    borderWidth: 1,
+    padding: 3,
+    borderColor: Colors.primary.gray,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   Image_bordered: {
     borderWidth: 1,
     borderColor: Colors.primary.gray,
@@ -25,8 +33,10 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  bordered: boolean,
   light: boolean,
   rounded: boolean,
+  padded: boolean,
   size: 'xsmall' | 'small' | 'medium' | 'large',
   url: string | null,
 };
@@ -39,25 +49,33 @@ const SIZES = {
 };
 
 const defaultProps = {
+  bordered: false,
   light: false,
+  padded: false,
   rounded: false,
   size: 'medium',
 };
 
-const CustomImage = ({ light, rounded, size, url }: Props): React.Node => {
+const CustomImage = ({ bordered, light, padded, rounded, size, url }: Props): React.Node => {
   const dimension = SIZES[size];
-  const style = [styles.Image, (rounded && !light) && styles.Image_bordered, {
+  const borderRadius = rounded ? dimension / 2 : 0;
+  const style = [styles.Image, bordered && styles.Image_bordered, {
     height: dimension,
     width: dimension,
-    borderRadius: rounded ? dimension / 2 : 0,
+    borderRadius,
   }];
-  if (url !== null) return <Image style={style} source={{ uri: url }} />;
-
-  return (
+  const image = url === null ? (
     <View style={[...style, styles.Image_empty]}>
       <Icon name="user" size={dimension * 2 / 3} color={Colors.textSecondary} style={styles.Image__emptyIcon} />
     </View>
+  ) : (
+    <Image style={style} source={{ uri: url }} />
   );
+  return padded ? (
+    <View style={[styles.wrapper, rounded && { borderRadius: borderRadius + 3 }]}>
+      {image}
+    </View>
+   ) : image;
 };
 CustomImage.defaultProps = defaultProps;
 CustomImage.displayName = 'Image';

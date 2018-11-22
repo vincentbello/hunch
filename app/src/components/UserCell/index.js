@@ -45,7 +45,7 @@ const UserCell = ({ inList, user, onPress, renderMeta }: Props): React.Node => {
   const s = [styles.User, inList && styles.User_inList];
   const contents = (
     <React.Fragment>
-      <Image rounded size="small" url={user.imageUrl} />
+      <Image bordered rounded size="small" url={user.imageUrl} />
       <View style={styles.User__content}>
         <Text>{user.fullName}</Text>
       </View>
