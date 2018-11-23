@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FlatList, StyleSheet, View, Text } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { compose, graphql, Query } from 'react-apollo';
 import GET_BET from 'graphql/queries/getBet';
@@ -26,6 +26,7 @@ import GameCell from 'components/GameCell';
 import Image from 'components/Image';
 import ImageSplash from 'components/ImageSplash';
 import FeedMessage from 'components/FeedMessage';
+import PaymentActions from 'components/PaymentActions';
 
 type ExternalProps = {
   betId: number,
@@ -159,20 +160,18 @@ const styles = StyleSheet.create({
   splashSubhead: {
     fontSize: 16,
   },
+  splashSubhead_padded: {
+    marginBottom: 8,
+  },
 });
 
 class BetCardContainer extends React.Component<Props> {
   static displayName = 'BetCardContainer';
 
-  getResolutionMessage = (bet: Bet): string => {
-    const other = bet.bettor.id === this.props.currentUser.id ? bet.bettee : bet.bettor;
-    return bet.winnerId === this.props.currentUser.id ? `${other.firstName} owes you $${bet.amount}.` : `You owe ${other.firstName} $${bet.amount}.`;
-  }
-
   renderBet = (bet: Bet): React.Node => (
     <Query query={GET_GAME} variables={{ id: bet.game.id }}>
       {({ loading, error, data: { game } }): React.Node => (
-        <View style={styles.Bet}>
+        <ScrollView bounces={false} style={styles.Bet}>
           <ImageSplash dimmed height={280} source={require('../../../assets/nba-splash.png')}>
             <DerivedStateSplash error={error} loading={loading}>
               {game && (
@@ -196,7 +195,7 @@ class BetCardContainer extends React.Component<Props> {
               </View>
             )}
           </View>
-        </View>
+        </ScrollView>
       )}
     </Query>
   );
@@ -207,6 +206,7 @@ class BetCardContainer extends React.Component<Props> {
     const isBettor = bet.bettor.id === this.props.currentUser.id;
     const other = isBettor ? bet.bettee : bet.bettor;
     const didWin = bet.winnerId === this.props.currentUser.id;
+    const didLose = bet.winnerId !== null && bet.winnerId !== this.props.currentUser.id;
     return (
       <View style={[styles.section, styles.section_centered]}>
         <Text style={styles.splashText}>
@@ -216,9 +216,12 @@ class BetCardContainer extends React.Component<Props> {
           }
         </Text>
         {bet.responded ? (
-          <Text style={styles.splashSubhead}>
-            {didWin ? `${other.firstName} owes you $${bet.amount}.` : `You owe ${other.firstName} $${bet.amount}.`}
-          </Text>
+          <React.Fragment>
+            <Text style={[styles.splashSubhead, didLose && styles.splashSubhead_padded]}>
+              {didWin ? `${other.firstName} owes you $${bet.amount}.` : `You owe ${other.firstName} $${bet.amount}.`}
+            </Text>
+            {didLose && <PaymentActions user={other} />}
+          </React.Fragment>
         ) : (
           <BetActions bet={bet} isBettor={isBettor} onCancel={Actions.pop} />
         )}

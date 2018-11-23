@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import GET_BETS from 'graphql/queries/getBets';
 
@@ -9,6 +9,9 @@ import { type Error } from 'types/apollo';
 import { type Bet, type BetListType } from 'types/bet';
 import { type User } from 'types/user';
 
+import Colors from 'theme/colors';
+
+import Icon from 'react-native-vector-icons/Feather';
 import BetCell from 'components/BetCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import Splash from 'components/Splash';
@@ -25,9 +28,40 @@ type Props = {
   user: User,
 };
 
+const styles = StyleSheet.create({
+  subheadIcon: {
+    marginRight: 6,
+  },
+  subheadText: {
+    fontWeight: '600',
+    color: Colors.brand.primary,
+    fontSize: 18,
+  },
+});
+
 function BetList({ betsQuery: { bets, error, loading, networkStatus, refetch }, betListType, user }: Props): React.Node {
   const renderBets = (bets: Array<Bet>): React.Node => {
-    if (bets.length === 0) return <Splash heading={`You have no ${betListType.toLowerCase()} bets.`} iconName="search" />;
+    if (bets.length === 0) {
+      return (
+        <Splash
+          heading={`You have no ${betListType.toLowerCase()} bets.`}
+          iconName="search"
+          renderSubhead={betListType === 'ACTIVE' ? (): React.Node => (
+            <Icon.Button
+              backgroundColor={Colors.transparent}
+              color={Colors.brand.primary}
+              iconStyle={styles.subheadIcon}
+              name="plus"
+              underlayColor={Colors.background}
+              onPress={Actions.createBetModal}
+            >
+              <Text style={styles.subheadText}>Create One</Text>
+            </Icon.Button>
+          ) : null}
+        />
+      );
+    }
+
     return (
       <FlatList
         data={bets}

@@ -41,6 +41,15 @@ const tabbar = {
   },
 };
 
+const thirdParty = {
+  thirdParty: {
+    cashApp: '#28C101',
+    facebook: '#3B5998',
+    iMessage: '#007AFF',
+    venmo: '#3D95CE',
+  },
+};
+
 const misc = {
   primary: {
     orange: '#FFA352',
@@ -62,5 +71,6 @@ export default {
   ...text,
   ...borders,
   ...tabbar,
+  ...thirdParty,
   ...misc,
 };

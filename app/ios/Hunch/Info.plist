@@ -61,6 +61,7 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>MaterialCommunityIcons.ttf</string>
 		<string>FontAwesome.ttf</string>
 		<string>Feather.ttf</string>
 		<string>VeteranTypewriter.ttf</string>

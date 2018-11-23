@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     paddingRight: 0,
   },
   tab_scrollable: {
-    width: 72,
+    width: 64,
   },
 });
 

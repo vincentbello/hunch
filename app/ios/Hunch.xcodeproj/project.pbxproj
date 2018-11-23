@@ -45,6 +45,7 @@
 		F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0DD64E7218639720072F301 /* FontAwesome.ttf */; };
 		F0DD64F221863A760072F301 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0DD64EF21863A1E0072F301 /* libRCTPushNotification.a */; };
 		F9C4B9232198DEA900E7D3A1 /* VeteranTypewriter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9C4B9222198DEA900E7D3A1 /* VeteranTypewriter.ttf */; };
+		F9C4B98921A8A2AF00E7D3A1 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9C4B98821A8A2AD00E7D3A1 /* MaterialCommunityIcons.ttf */; };
 		FB2FDF737EAE430DA44E5A7A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D918772BC3ED40B5B381003D /* FBSDKLoginKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -382,6 +383,7 @@
 		F0DD64E921863A1E0072F301 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		F98517E821893D230082AB8C /* Hunch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Hunch.entitlements; path = Hunch/Hunch.entitlements; sourceTree = "<group>"; };
 		F9C4B9222198DEA900E7D3A1 /* VeteranTypewriter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = VeteranTypewriter.ttf; sourceTree = "<group>"; };
+		F9C4B98821A8A2AD00E7D3A1 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -529,6 +531,7 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				F0DD64E7218639720072F301 /* FontAwesome.ttf */,
 				F0DD64BF21853D1A0072F301 /* Feather.ttf */,
+				F9C4B98821A8A2AD00E7D3A1 /* MaterialCommunityIcons.ttf */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -1179,6 +1182,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				F9C4B9232198DEA900E7D3A1 /* VeteranTypewriter.ttf in Resources */,
 				F0DD64E621853D1A0072F301 /* Feather.ttf in Resources */,
+				F9C4B98921A8A2AF00E7D3A1 /* MaterialCommunityIcons.ttf in Resources */,
 				F0DD64E8218639720072F301 /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

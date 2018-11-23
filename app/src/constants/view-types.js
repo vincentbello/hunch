@@ -11,6 +11,6 @@ export const DATE_VIEW_TYPES = [...Array(7)].map((_, index) => {
   const date = addDays(now, index);
   return {
     key: format(date, 'MMDDYYYY'),
-    title: index === 0 ? 'Today' : format(date, 'MMM D'),
+    title: index === 0 ? 'Today' : format(date, 'ddd    MMM D'),
   };
 });

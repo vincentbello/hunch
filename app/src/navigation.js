@@ -55,7 +55,6 @@ export default Actions.create(
                 key="betCard"
                 navTransparent
                 {...AppConfig.navbarProps}
-                title="Bet"
                 component={BetCardContainer}
               />
             </Scene>
