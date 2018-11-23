@@ -59,15 +59,16 @@ export default models => ({
         bettorId: context.userId,
         betteeId: betteeId,
         bettorPickTeamId,
-      }, {
+      });
+      const bet = await models.Bet.findById(newBet.id, {
         include: [
           { model: models.Game, as: 'game' },
           { model: models.User, as: 'bettor' },
           { model: models.User, as: 'bettee' },
         ],
       });
-      newBet.sendRequestNotifications();
-      return newBet;
+      bet.sendRequestNotifications();
+      return bet;
     },
   },
 

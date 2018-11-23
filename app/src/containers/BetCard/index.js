@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FlatList, StyleSheet, View, Text } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { compose, graphql, Query } from 'react-apollo';
 import GET_BET from 'graphql/queries/getBet';
 import GET_GAME from 'graphql/queries/getGame';
@@ -20,8 +21,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import withCurrentUser, { type CurrentUserProps } from 'hocs/withCurrentUser';
 import DerivedStateSplash from 'components/DerivedStateSplash';
+import BetActions from 'components/BetActions';
 import GameCell from 'components/GameCell';
-import Image, { SIZES } from 'components/Image';
+import Image from 'components/Image';
 import ImageSplash from 'components/ImageSplash';
 import FeedMessage from 'components/FeedMessage';
 
@@ -62,6 +64,9 @@ const styles = StyleSheet.create({
     ...Typography.h4,
     fontWeight: '900',
     marginBottom: 2,
+  },
+  section_centered: {
+    alignItems: 'center',
   },
   section_row: {
     flexDirection: 'row',
@@ -146,13 +151,23 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.brand.primary,
   },
-  feed: {
-    // marginTop:
+  splashText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  splashSubhead: {
+    fontSize: 16,
   },
 });
 
 class BetCardContainer extends React.Component<Props> {
   static displayName = 'BetCardContainer';
+
+  getResolutionMessage = (bet: Bet): string => {
+    const other = bet.bettor.id === this.props.currentUser.id ? bet.bettee : bet.bettor;
+    return bet.winnerId === this.props.currentUser.id ? `${other.firstName} owes you $${bet.amount}.` : `You owe ${other.firstName} $${bet.amount}.`;
+  }
 
   renderBet = (bet: Bet): React.Node => (
     <Query query={GET_GAME} variables={{ id: bet.game.id }}>
@@ -173,7 +188,8 @@ class BetCardContainer extends React.Component<Props> {
               {this.renderAmount(bet.amount)}
               {this.renderUser(bet.bettee, bet, game)}
             </View>
-            {bet.wager && (
+            {this.renderActions(bet)}
+            {Boolean(bet.wager) && (
               <View style={styles.section}>
                 <Text style={styles.sectionHeader}>Trash Talk</Text>
                 {this.renderMessages([{ id: 1, author: bet.bettor, content: bet.wager }], bet.bettor.id)}
@@ -184,6 +200,31 @@ class BetCardContainer extends React.Component<Props> {
       )}
     </Query>
   );
+
+  renderActions = (bet: Bet): React.Node => {
+    if (![bet.bettor.id, bet.bettee.id].includes(this.props.currentUser.id)) return null;
+
+    const isBettor = bet.bettor.id === this.props.currentUser.id;
+    const other = isBettor ? bet.bettee : bet.bettor;
+    const didWin = bet.winnerId === this.props.currentUser.id;
+    return (
+      <View style={[styles.section, styles.section_centered]}>
+        <Text style={styles.splashText}>
+          {bet.responded ?
+            (didWin ? '🎉 You won!' : '😤 You lost...') :
+            (isBettor ? `You challenged ${other.firstName}.` : `${other.firstName} challenged you.`)
+          }
+        </Text>
+        {bet.responded ? (
+          <Text style={styles.splashSubhead}>
+            {didWin ? `${other.firstName} owes you $${bet.amount}.` : `You owe ${other.firstName} $${bet.amount}.`}
+          </Text>
+        ) : (
+          <BetActions bet={bet} isBettor={isBettor} onCancel={Actions.pop} />
+        )}
+      </View>
+    );
+  };
 
   renderAmount = (amount: number): React.Node => (
     <View style={styles.amount}>
@@ -199,13 +240,15 @@ class BetCardContainer extends React.Component<Props> {
     }
     const didWin = bet.winnerId === user.id;
     const didLose = bet.winnerId !== null && bet.winnerId !== user.id;
+    const inactive = !isBettor && !bet.responded;
 
     return (
       <View style={[styles.user, isBettor && styles.user_left]}>
-        <Image muted={didLose} rounded padded size="large" url={user.imageUrl} />
+        <Image dotted={inactive} muted={didLose} rounded padded size="large" url={user.imageUrl} />
         {pickedTeam !== null && (
           <View style={[styles.userTeam, isBettor && styles.userTeam_left]}>
             <Image
+              dotted={inactive}
               muted={didLose}
               rounded
               padded
@@ -215,7 +258,9 @@ class BetCardContainer extends React.Component<Props> {
             {/* TODO: XOR */}
           </View>
         )}
-        {pickedTeam && <Text style={styles.userSubhead}>Picked the {pickedTeam.lastName}</Text>}
+        {pickedTeam && (
+          <Text style={styles.userSubhead}>{inactive ? 'Pending response' : `Picked the ${pickedTeam.lastName}`}</Text>
+        )}
         <View style={styles.userLabelContainer}>
           {didWin && <Icon style={styles.userIcon} name="star" size={20} color={Colors.gold} />}
           <Text style={[styles.userLabel, didLose && styles.userLabel_muted]}>{user.fullName}</Text>
@@ -240,25 +285,23 @@ class BetCardContainer extends React.Component<Props> {
   };
 
   renderMessages = (messages: Array<Message>): React.Node => (
-    <View style={styles.feed}>
-      <FlatList
-        data={messages}
-        keyExtractor={(message: Message): string => `${message.id}`}
-        renderItem={({ item, index }): React.Node => (
-          <FeedMessage
-            message={item}
-            byMe={item.author.id === this.props.currentUser.id}
-          />
-        )}
-      />
-    </View>
+    <FlatList
+      data={messages}
+      keyExtractor={(message: Message): string => `${message.id}`}
+      renderItem={({ item, index }): React.Node => (
+        <FeedMessage
+          message={item}
+          byMe={item.author.id === this.props.currentUser.id}
+        />
+      )}
+    />
   );
 
   render(): React.Node {
     const { loading, error, bet } = this.props.betQuery;
     return (
       <DerivedStateSplash error={error} loading={loading}>
-        {bet && this.renderBet(bet)}
+        {Boolean(bet) && this.renderBet(bet)}
       </DerivedStateSplash>
     );
   }

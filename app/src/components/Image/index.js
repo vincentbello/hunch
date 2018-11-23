@@ -18,9 +18,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  wrapper_dotted: {
+    borderStyle: 'dashed',
+  },
   Image_bordered: {
     borderWidth: 1,
     borderColor: Colors.primary.gray,
+  },
+  Image_dotted: {
+    borderStyle: 'dashed',
   },
   Image_empty: {
     alignItems: 'center',
@@ -34,6 +40,7 @@ const styles = StyleSheet.create({
 
 type Props = {
   bordered: boolean,
+  dotted: boolean,
   light: boolean,
   muted: boolean,
   rounded: boolean,
@@ -42,7 +49,7 @@ type Props = {
   url: string | null,
 };
 
-export const SIZES = {
+const SIZES = {
   xsmall: 32,
   small: 36,
   medium: 50,
@@ -58,7 +65,7 @@ const defaultProps = {
   size: 'medium',
 };
 
-const CustomImage = ({ bordered, light, muted, padded, rounded, size, url }: Props): React.Node => {
+const CustomImage = ({ bordered, dotted, light, muted, padded, rounded, size, url }: Props): React.Node => {
   const dimension = SIZES[size];
   const borderRadius = rounded ? dimension / 2 : 0;
   const style = [styles.Image, muted && styles.Image_muted, bordered && styles.Image_bordered, {
@@ -74,7 +81,7 @@ const CustomImage = ({ bordered, light, muted, padded, rounded, size, url }: Pro
     <Image style={style} source={{ uri: url }} />
   );
   return padded ? (
-    <View style={[styles.wrapper, rounded && { borderRadius: borderRadius + 3 }]}>
+    <View style={[styles.wrapper, dotted && styles.wrapper_dotted, rounded && { borderRadius: borderRadius + 3 }]}>
       {image}
     </View>
    ) : image;
