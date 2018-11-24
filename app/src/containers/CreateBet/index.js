@@ -425,6 +425,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             </View>
             {!isAmountInputFocused && (
               <AmountInput
+                bettee={bettee}
                 value={amountInputValue}
                 toggleFocus={(): void => this.setState({ isAmountInputFocused: true })}
               />
@@ -442,6 +443,7 @@ class CreateBetContainer extends React.Component<Props, State> {
         <View style={[styles.Create__container, isAmountInputFocused && styles.Create__container_focus]}>
           {bettee && isAmountInputFocused ? (
             <AmountInput
+              bettee={bettee}
               isFocused
               value={amountInputValue}
               onChange={this.onAmountInputChange}

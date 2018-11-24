@@ -4,6 +4,8 @@ import { Animated, Button, Easing, Text, TextInput, TouchableOpacity, View, Styl
 
 import Icon from 'react-native-vector-icons/Feather';
 
+import { type User } from 'types/user';
+
 import Colors from 'theme/colors';
 import { SplashStyles } from 'theme/app';
 import Typography from 'theme/typography';
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  bettee: null | User,
   isFocused: boolean,
   value: string,
   onChange: (value: string) => void,
@@ -106,7 +109,7 @@ class AmountInput extends React.Component<Props, State> {
   };
 
   render(): React.Node {
-    const { isFocused, value, toggleFocus } = this.props;
+    const { bettee, isFocused, value, toggleFocus } = this.props;
     return (
       <View style={{ alignItems: 'center' }}>
         {isFocused ? (
@@ -118,7 +121,9 @@ class AmountInput extends React.Component<Props, State> {
         )}
         {isFocused && (
           <React.Fragment>
-            <Text style={styles.Input__label}>How much do you want to bet Fooington?</Text>
+            <Text style={styles.Input__label}>
+              {`How much do you want to bet${bettee === null ? '' : ` ${bettee.firstName}`}?`}
+            </Text>
             <Button
               disabled={value.length === 0}
               title="Next"
