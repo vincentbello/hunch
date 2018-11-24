@@ -6,7 +6,6 @@ import http from 'http';
 import minimist from 'minimist';
 const debug = debugModule('node-api:server');
 
-import apnProvider from '../../services/apnProvider';
 import models from '../../db/models';
 import MySportsFeedsClient from '../../third-party/my-sports-feeds';
 import Notification from '../../services/Notification';

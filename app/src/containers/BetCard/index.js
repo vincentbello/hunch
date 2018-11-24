@@ -201,7 +201,7 @@ class BetCardContainer extends React.Component<Props> {
   );
 
   renderActions = (bet: Bet): React.Node => {
-    if (![bet.bettor.id, bet.bettee.id].includes(this.props.currentUser.id)) return null;
+    if (bet.active || ![bet.bettor.id, bet.bettee.id].includes(this.props.currentUser.id)) return null;
 
     const isBettor = bet.bettor.id === this.props.currentUser.id;
     const other = isBettor ? bet.bettee : bet.bettor;
@@ -210,7 +210,7 @@ class BetCardContainer extends React.Component<Props> {
     return (
       <View style={[styles.section, styles.section_centered]}>
         <Text style={styles.splashText}>
-          {bet.responded ?
+          {bet.winnerId !== null ?
             (didWin ? '🎉 You won!' : '😤 You lost...') :
             (isBettor ? `You challenged ${other.firstName}.` : `${other.firstName} challenged you.`)
           }

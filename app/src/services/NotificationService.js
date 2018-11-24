@@ -1,17 +1,17 @@
-// @flow
 import PushNotification from 'react-native-push-notification';
+import { Actions } from 'react-native-router-flux';
 
 export default class NotificationService {
-  constructor(onRegister: (token: string) => void) {
+  constructor(onRegister) {
     this.configure(onRegister);
   }
 
-  configure(onRegister: (token: string) => void) {
+  configure(onRegister) {
     PushNotification.configure({
       onRegister,
 
       // (required) Called when a remote or local notification is opened or received
-      onNotification: console.log,
+      onNotification: this.onNotification,
 
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
@@ -32,4 +32,10 @@ export default class NotificationService {
       requestPermissions: true,
     });
   }
+
+  onNotification = (notification) => {
+    if (notification.data.betId) {
+      Actions.betCard({ betId: notification.data.betId });
+    }
+  };
 }

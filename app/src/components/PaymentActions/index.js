@@ -27,7 +27,7 @@ const PAYMENT_OPTIONS: Array<PaymentOption> = [
     iconSize: 22,
     iconType: 'material',
     name: 'Messenger',
-    urls: (user: User): Array<string> => [`fb-messenger://user-thread/${user.fbId}`, `https://www.messenger.com/t/${user.fbId}`],
+    urls: (user: User): Array<string> => [/**`fb-messenger://user-thread/${user.fbId}`, */`https://www.messenger.com/t/${user.fbId}`], // TODO: Figure out FB username
   },
   {
     color: Colors.thirdParty.cashApp,

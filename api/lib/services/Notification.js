@@ -1,4 +1,5 @@
 import apn from 'apn';
+import apnProvider from './apnProvider';
 
 const defaultOptions = {
   expiry: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 14, // Expires two weeks from now
@@ -25,6 +26,6 @@ export default class Notification {
   }
 
   async send(deviceToken) {
-    return await this.notification.send(deviceToken);
+    return await apnProvider.send(this.notification, deviceToken);
   }
 }
