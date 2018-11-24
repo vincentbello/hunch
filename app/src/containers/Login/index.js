@@ -64,7 +64,6 @@ class LoginContainer extends React.Component<Props, State> {
   render(): React.Node {
     return (
       <View style={SplashStyles}>
-        {this.renderAdminInfo()}
         <Text style={{ ...Typography.h1, marginBottom: 16 }}>Welcome to Hunch!</Text>
         <TouchableOpacity
           disabled={this.state.isAuthenticating}
