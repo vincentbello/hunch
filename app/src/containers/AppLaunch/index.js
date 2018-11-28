@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import ApolloClient from 'apollo-client';
-import { Animated, AsyncStorage, Easing, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Animated, AsyncStorage, Easing, Image, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import NotificationService from 'services/NotificationService';
 
@@ -12,58 +12,38 @@ import REGISTER_DEVICE from 'graphql/mutations/registerDevice';
 import withApolloClient from 'hocs/withApolloClient';
 
 import AppSizes from 'theme/sizes';
-import Colors from 'theme/colors';
+
+const AnimatedImage = Animated.createAnimatedComponent(Image);
+const ANIMATION_DURATION = 200;
+const IMG_DIMENSION = AppSizes.screen.widthHalf;
+const NAV_IMG_DIMENSION = 48;
 
 const styles = StyleSheet.create({
-  Launch: {
+  container: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  Launch__navbar: {
-    backgroundColor: Colors.white,
-    height: AppSizes.statusBarHeight + AppSizes.navbarHeight + 10,
-    borderBottomWidth: 1,
-    borderColor: Colors.border,
-    flex: 1,
-    alignSelf: 'flex-start',
-  },
-  Launch__container: {
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    position: 'absolute',
-  },
-  Launch__text: {
-    fontFamily: 'VeteranTypewriter',
-    fontSize: 56,
-    transform: [{ scaleY: 0.9 }],
+  image: {
+    width: IMG_DIMENSION,
+    height: IMG_DIMENSION,
   },
 });
-
-const ANIMATION_DURATION = 200;
 
 type Props = {
   apolloClient: ApolloClient,
 };
 
 type State = {
-  isAnimating: boolean,
-  logoStyle: {
-    fontSize: number,
-    top: number,
-  },
+  bottomTop: Animated.Value,
+  dimensionRatio: Animated.Value,
+  topTop: Animated.Value,
 };
 
 class AppLaunch extends React.Component<Props, State> {
   state = {
-    isAnimating: false,
-    logoStyle: {
-      fontSize: new Animated.Value(56),
-      top: new Animated.Value((AppSizes.screen.height - 80) / 2),
-    },
+    bottomTop: new Animated.Value((AppSizes.screen.height - 2.15 * IMG_DIMENSION) / 2),
+    dimensionRatio: new Animated.Value(1),
+    topTop: new Animated.Value((AppSizes.screen.height - IMG_DIMENSION) / 2),
   };
 
   componentDidMount() {
@@ -97,23 +77,37 @@ class AppLaunch extends React.Component<Props, State> {
   };
 
   startAnimation = () => {
-    const { fontSize, top } = this.state.logoStyle;
-    this.setState({ isAnimating: true });
+    const { bottomTop, dimensionRatio, topTop } = this.state;
     Animated.parallel([
-      Animated.timing(fontSize, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: 24 }),
-      Animated.timing(top, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: AppSizes.statusBarHeight + 20 }),
+      Animated.timing(bottomTop, {
+        duration: ANIMATION_DURATION,
+        toValue: AppSizes.screen.height,
+      }),
+      Animated.timing(dimensionRatio, {
+        duration: ANIMATION_DURATION,
+        toValue: 0,
+      }),
+      Animated.timing(topTop, {
+        duration: ANIMATION_DURATION,
+        toValue: AppSizes.statusBarHeight + AppSizes.topOffset + 22,
+      }),
     ]).start(Actions.main);
   };
 
   render(): React.Node {
-    const { isAnimating, logoStyle } = this.state;
-    const { fontSize, top } = logoStyle;
+    const { bottomTop, dimensionRatio, topTop } = this.state;
+    const height = dimensionRatio.interpolate({ inputRange: [0, 1], outputRange: [NAV_IMG_DIMENSION / 2, IMG_DIMENSION / 2] });
+    const width = dimensionRatio.interpolate({ inputRange: [0, 1], outputRange: [NAV_IMG_DIMENSION, IMG_DIMENSION] });
     return (
-      <View style={styles.Launch}>
-        {isAnimating && <View style={styles.Launch__navbar} />}
-        <Animated.View style={{ ...styles.Launch__container, top }}>
-          <Animated.Text style={{ ...styles.Launch__text, fontSize }}>HunchCard</Animated.Text>
-        </Animated.View>
+      <View style={styles.container}>
+        <AnimatedImage
+          style={{ height, width, top: topTop }}
+          source={require('../../../assets/brand/logo-top.png')}
+        />
+        <AnimatedImage
+          style={[styles.image, { top: bottomTop }]}
+          source={require('../../../assets/brand/logo-bottom.png')}
+        />
       </View>
     );
   }

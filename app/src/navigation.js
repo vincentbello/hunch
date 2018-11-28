@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { Actions, ActionConst, Scene, Stack, Lightbox, Modal, Tabs } from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/Feather';
 
 import AppConfig from 'constants/navigation';
 
@@ -16,6 +15,7 @@ import LogoutButtonContainer from 'containers/LogoutButton';
 import UserContainer from 'containers/User';
 import NavButton from 'components/NavButton';
 import TabbarIcon from 'components/TabbarIcon';
+import TitleLogo from 'components/TitleLogo';
 
 import Colors from 'theme/colors';
 
@@ -37,8 +37,7 @@ export default Actions.create(
               <Scene
                 key="bets"
                 {...AppConfig.navbarProps}
-                title="HunchCard"
-                titleStyle={{ fontFamily: 'VeteranTypewriter', fontSize: 24, transform: [{ scaleY: 0.9 }] }}
+                renderTitle={<TitleLogo />}
                 component={BetsContainer}
                 renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
                 renderRightButton={<InboxButtonContainer />}
@@ -49,6 +48,7 @@ export default Actions.create(
                 {...AppConfig.navbarProps}
                 title="My Bet Requests"
                 component={BetRequestsContainer}
+                renderBackButton={(): React.Node => <NavButton iconName="arrow-left" onClick={Actions.pop} />}
               />
 
               <Scene
@@ -56,6 +56,7 @@ export default Actions.create(
                 navTransparent
                 {...AppConfig.navbarProps}
                 component={BetCardContainer}
+                renderBackButton={(): React.Node => <NavButton color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
               />
             </Scene>
             <Scene key="userTab" icon={props => <TabbarIcon focused={props.focused} name="user" />} tabBarLabel="Me">

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Animated, Button, Easing, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Animated, Button, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -73,8 +73,8 @@ class AmountInput extends React.Component<Props, State> {
   animate = (big: boolean) => {
     const { fontSize, superScriptFontSize } = this.state;
     Animated.parallel([
-      Animated.timing(fontSize, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: big ? 56 : 20 }),
-      Animated.timing(superScriptFontSize, { duration: ANIMATION_DURATION, easing: Easing.inOut(Easing.ease), toValue: big ? 24 : 14 }),
+      Animated.timing(fontSize, { duration: ANIMATION_DURATION, toValue: big ? 56 : 20 }),
+      Animated.timing(superScriptFontSize, { duration: ANIMATION_DURATION, toValue: big ? 24 : 14 }),
     ]).start();
   };
 

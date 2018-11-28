@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Animated, AsyncStorage, Easing, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { distanceInWordsToNow } from 'date-fns';
+import { Animated, Easing, StyleSheet } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 
