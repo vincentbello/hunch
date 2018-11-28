@@ -82,7 +82,8 @@ export default models => ({
     },
     resolve: async function(root, { id }, ...args) {
       const bet = await models.Bet.findById(id);
-      await models.Bet.update({ lastRemindedAt: new Date() }, { where: { id } });
+      bet.lastRemindedAt = new Date();
+      await bet.save();
       bet.sendRequestNotifications(true);
       return bet;
     },
@@ -104,7 +105,8 @@ export default models => ({
       const bet = await models.Bet.findById(id, { include: [{ model: models.Game, as: 'game' }] });
       if (isBefore(bet.game.startDate, new Date())) throw new ForbiddenError('This bet\'s game has already started.');
 
-      await bet.update({ accepted, active: accepted, responded: true });
+      bet.update({ accepted, active: accepted, responded: true });
+      await bet.save();
       bet.sendResponseNotifications();
       return bet;
     },

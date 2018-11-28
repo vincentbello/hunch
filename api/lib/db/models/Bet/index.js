@@ -1,4 +1,5 @@
 import models from '../';
+import Notification from '../../../services/Notification';
 
 export default (sequelize, DataTypes) => {
   const Bet = sequelize.define('Bet', {
