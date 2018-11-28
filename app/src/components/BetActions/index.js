@@ -9,7 +9,7 @@ import CANCEL_BET_REQUEST from 'graphql/mutations/cancelBetRequest';
 import REMIND_BET_REQUEST from 'graphql/mutations/remindBetRequest';
 import RESPOND_TO_BET from 'graphql/mutations/respondToBet';
 
-import chain from 'utils/functions';
+import { chain, noop } from 'utils/functions';
 
 import Colors from 'theme/colors';
 
@@ -130,7 +130,7 @@ class BetActions extends React.PureComponent<Props> {
 }
 
 export default compose(
-  graphql(CANCEL_BET_REQUEST, { name: 'cancel', options: props => ({ update: chain(onBetCancel, props.onCancel) }) }),
+  graphql(CANCEL_BET_REQUEST, { name: 'cancel', options: props => ({ update: chain(onBetCancel, props.onCancel || noop) }) }),
   graphql(REMIND_BET_REQUEST, { name: 'remind' }),
   graphql(RESPOND_TO_BET, { name: 'respond', options: { update: onBetRespond } }),
 )(BetActions);
