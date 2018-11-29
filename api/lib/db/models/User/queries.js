@@ -25,25 +25,6 @@ export default models => ({
         type: new GraphQLNonNull(GraphQLInt),
       },
     },
-    resolve: async function(root, args, context, info) {
-      const [betsWon, betsPlayed] = await Promise.all([
-        models.Bet.count({
-          where: {
-            winnerId: args.userId,
-          },
-        }),
-        models.Bet.count({
-          where: {
-            accepted: true,
-            active: false,
-            [Op.or]: {
-              bettorId: args.userId,
-              betteeId: args.userId,
-            },
-          },
-        }),
-      ]);
-      return { betsWon, betsPlayed };
-    },
+    resolve: (_, { userId }) => ({ userId }),
   },
 });

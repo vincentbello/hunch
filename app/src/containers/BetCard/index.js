@@ -273,7 +273,7 @@ class BetCardContainer extends React.Component<Props> {
           <Query query={GET_USER_STATS} variables={{ userId: user.id }}>
             {({ data: { userStats } }): React.Node => (userStats ? (
               <Text style={styles.userMetaText}>
-                {`${userStats.betsWon}-${userStats.betsPlayed - userStats.betsWon}`}
+                {`${userStats.won}-${userStats.played - userStats.won}`}
               </Text>
             ) : null)}
           </Query>

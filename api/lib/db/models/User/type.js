@@ -1,16 +1,48 @@
 import { GraphQLEnumType, GraphQLInt, GraphQLObjectType } from 'graphql';
 import { attributeFields } from 'graphql-sequelize';
+import { Op } from 'sequelize';
 import models from '../';
 
 export const UserStatsType = new GraphQLObjectType({
-  name: 'UserStatsType',
+  name: 'UserStats',
   description: 'Statistics around a user\'s performance',
   fields: {
-    betsWon: {
+    won: {
       type: GraphQLInt,
+      description: 'Number of bets won',
+      async resolve({ userId }) {
+        return await models.Bet.count({ where: { winnerId: userId } });
+      },
     },
-    betsPlayed: {
+    played: {
       type: GraphQLInt,
+      description: 'Number of bets played',
+      async resolve({ userId }) {
+        return await models.Bet.count({
+          where: {
+            accepted: true,
+            active: false,
+            [Op.or]: {
+              bettorId: userId,
+              betteeId: userId,
+            },
+          },
+        });
+      },
+    },
+    amountWon: {
+      type: GraphQLInt,
+      description: 'Total amount won on bets',
+      resolve({ userId }) {
+        return 153;
+      },
+    },
+    amountLost: {
+      type: GraphQLInt,
+      description: 'Total amount lost on bets',
+      resolve({ userId }) {
+        return 701;
+      },
     },
   },
 });
@@ -26,5 +58,12 @@ export const UserListType = new GraphQLEnumType({
 export default new GraphQLObjectType({
   name: 'User',
   description: 'A Hunch user',
-  fields: attributeFields(models.User),
+  fields: {
+    ...attributeFields(models.User),
+    stats: {
+      type: UserStatsType,
+      description: 'Stats for this user',
+      resolve: () => ({}),
+    },
+  },
 });

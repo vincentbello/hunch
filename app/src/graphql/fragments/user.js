@@ -9,5 +9,7 @@ export default gql`
     imageUrl
     gender
     fbId
+    lastLoginAt
+    createdAt
   }
 `;

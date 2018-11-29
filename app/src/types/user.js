@@ -6,6 +6,8 @@ export type User = {
   fullName: string,
   imageUrl: null | string,
   fbId: string,
+  lastLoginAt: string,
+  createdAt: string,
 };
 
 export type UserGroupType = 'friends';
