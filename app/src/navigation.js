@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { View } from 'react-native';
 import { Actions, ActionConst, Scene, Stack, Lightbox, Modal, Tabs } from 'react-native-router-flux';
 
 import AppConfig from 'constants/navigation';
@@ -18,6 +19,7 @@ import TabbarIcon from 'components/TabbarIcon';
 import TitleLogo from 'components/TitleLogo';
 
 import Colors from 'theme/colors';
+import AppSizes from 'theme/sizes';
 
 /* Routes ==================================================================== */
 export default Actions.create(
@@ -53,8 +55,9 @@ export default Actions.create(
 
               <Scene
                 key="betCard"
-                navTransparent
                 {...AppConfig.navbarProps}
+                navTransparent
+                // navBar={() => <View style={{ backgroundColor: Colors.transparent, height: AppSizes.navbarHeight + AppSizes.topOffset + AppSizes.statusBarHeight, width: AppSizes.screen.width, borderColor: 'red', borderWidth: 1 }} />}
                 component={BetCardContainer}
                 renderBackButton={(): React.Node => <NavButton color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
               />

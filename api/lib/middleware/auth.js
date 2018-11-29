@@ -8,11 +8,6 @@ export default function(req, res, next) {
     return passport.authenticate(process.env.FB_TOKEN_KEY, { session: false })(req, res, next);
   }
 
-  if (env === 'development') {
-    req.auth = { userId: 2 };
-    return next();
-  }
-
   return req.body.operationName === 'RefreshAuth' ? next() : expressJwt({
     secret: process.env.ACCESS_TOKEN_KEY,
     requestProperty: 'auth',

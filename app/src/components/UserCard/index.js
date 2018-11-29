@@ -165,6 +165,7 @@ const UserCard = ({ user }: Props): React.Node => (
                   </View>
                   <View style={styles.statCard}>
                     <View style={styles.statContent}>
+                      <Text style={styles.statSuperscript}>$</Text>
                       <Text
                         style={[
                           styles.stat,
@@ -172,7 +173,9 @@ const UserCard = ({ user }: Props): React.Node => (
                           userStats.amountWon < userStats.amountLost && styles.stat_error,
                         ]}
                       >
-                        {`${userStats.amountWon > userStats.amountLost ? '+' : '-'}${Math.abs(userStats.amountWon - userStats.amountLost)}`}
+                        {userStats.amountWon === userStats.amountLost ? '0' : (
+                          `${userStats.amountWon > userStats.amountLost ? '+' : '-'}${Math.abs(userStats.amountWon - userStats.amountLost)}`
+                        )}
                       </Text>
                     </View>
                     <Text style={styles.statLabel}>Net</Text>

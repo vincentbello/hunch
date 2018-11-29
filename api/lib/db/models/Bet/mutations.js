@@ -105,7 +105,10 @@ export default models => ({
       const bet = await models.Bet.findById(id, { include: [{ model: models.Game, as: 'game' }] });
       if (isBefore(bet.game.startDate, new Date())) throw new ForbiddenError('This bet\'s game has already started.');
 
-      await bet.update({ accepted, active: accepted, responded: true });
+      bet.accepted = accepted;
+      bet.active = accepted;
+      bet.responded = true;
+      await bet.save();
       bet.sendResponseNotifications();
       return bet;
     },

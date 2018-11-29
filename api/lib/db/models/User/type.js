@@ -33,15 +33,27 @@ export const UserStatsType = new GraphQLObjectType({
     amountWon: {
       type: GraphQLInt,
       description: 'Total amount won on bets',
-      resolve({ userId }) {
-        return 153;
+      async resolve({ userId }) {
+        return await models.Bet.sum('amount', { where: { winnerId: userId } }) || 0;
       },
     },
     amountLost: {
       type: GraphQLInt,
       description: 'Total amount lost on bets',
-      resolve({ userId }) {
-        return 701;
+      async resolve({ userId }) {
+        return await models.Bet.sum('amount', {
+          where: {
+            accepted: true,
+            active: false,
+            [Op.or]: {
+              bettorId: userId,
+              betteeId: userId,
+            },
+            winnerId: {
+              [Op.ne]: userId,
+            },
+          },
+        }) || 0;
       },
     },
   },
