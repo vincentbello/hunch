@@ -31,8 +31,10 @@ const FriendsContainer = ({ friendsQuery: { loading, error, networkStatus, refet
         refreshing={networkStatus === 4}
         renderItem={({ item }): React.Node => (
           <UserCell
+            full
             inList
             user={item}
+            withDisclosureIndicator
             onPress={(): void => Actions.userCard({ userId: item.id })}
           />
         )}

@@ -28,34 +28,41 @@ const styles = StyleSheet.create({
     borderColor: Colors.cellBorder,
   },
   User__content: {
-    // flex: 1,
     marginLeft: 8,
     marginRight: 8,
+  },
+  User__content_full: {
+    flex: 1,
   },
 });
 
 type Props = {
+  full: boolean,
   inList: boolean,
   user: User,
+  withDisclosureIndicator: boolean,
   onPress: null | (() => void),
   renderMeta: () => React.Node,
 };
 
-const UserCell = ({ inList, user, onPress, renderMeta }: Props): React.Node => {
+const UserCell = ({ full, inList, user, withDisclosureIndicator, onPress, renderMeta }: Props): React.Node => {
   const s = [styles.User, inList && styles.User_inList];
   const contents = (
     <React.Fragment>
       <Image bordered rounded size="small" url={user.imageUrl} />
-      <View style={styles.User__content}>
+      <View style={[styles.User__content, styles.User__content_full]}>
         <Text>{user.fullName}</Text>
       </View>
       {renderMeta()}
+      {withDisclosureIndicator && <Icon name="chevron-right" color={Colors.textSecondary} size={16} />}
     </React.Fragment>
   );
   return onPress === null ? <View style={s}>{contents}</View> : <TouchableOpacity style={s} onPress={onPress}>{contents}</TouchableOpacity>;
 };
 
 UserCell.defaultProps = {
+  full: false,
+  withDisclosureIndicator: false,
   onPress: null,
   renderMeta: (): React.Node => null,
 };
