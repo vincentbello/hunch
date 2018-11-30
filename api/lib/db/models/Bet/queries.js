@@ -36,7 +36,7 @@ export default models => ({
       before: (findOptions, args, context) => ({
         ...findOptions,
         include: [
-          { model: models.Game, as: 'game', where: args.betListType === 'REQUESTED' ? { startDate: { [Op.gt]: new Date() } } : {} },
+          { model: models.Game, as: 'game', where: ['REQUESTED', 'PENDING'].includes(args.betListType) ? { startDate: { [Op.gt]: new Date() } } : {} },
           { model: models.User, as: 'bettor' },
           { model: models.User, as: 'bettee' },
         ],

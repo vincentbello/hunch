@@ -7,10 +7,10 @@ export const BET_VIEW_TYPES = [
 ];
 
 const now = new Date();
-export const DATE_VIEW_TYPES = [...Array(7)].map((_, index) => {
+export const DATE_VIEW_TYPES = [...Array(10)].map((_, index) => {
   const date = addDays(now, index);
   return {
     key: format(date, 'MMDDYYYY'),
-    title: index === 0 ? 'Today' : format(date, 'ddd    MMM D'),
+    title: index === 0 ? 'Today' : format(date, 'ddd       MMM D'),
   };
 });

@@ -17,6 +17,17 @@ export default models => ({
     },
   },
 
+  user: {
+    type: UserType,
+    args: {
+      id: {
+        description: 'ID of user',
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: resolver(models.User),
+  },
+
   userStats: {
     type: UserStatsType,
     args: {

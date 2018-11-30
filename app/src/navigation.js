@@ -10,10 +10,12 @@ import BetCardContainer from 'containers/BetCard';
 import BetRequestsContainer from 'containers/BetRequests';
 import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
+import FriendsContainer from 'containers/Friends';
 import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
 import LogoutButtonContainer from 'containers/LogoutButton';
 import UserContainer from 'containers/User';
+import UserCardContainer from 'containers/UserCard';
 import NavButton from 'components/NavButton';
 import TabbarIcon from 'components/TabbarIcon';
 import TitleLogo from 'components/TitleLogo';
@@ -57,9 +59,15 @@ export default Actions.create(
                 key="betCard"
                 {...AppConfig.navbarProps}
                 navTransparent
-                // navBar={() => <View style={{ backgroundColor: Colors.transparent, height: AppSizes.navbarHeight + AppSizes.topOffset + AppSizes.statusBarHeight, width: AppSizes.screen.width, borderColor: 'red', borderWidth: 1 }} />}
                 component={BetCardContainer}
                 renderBackButton={(): React.Node => <NavButton color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
+              />
+            </Scene>
+            <Scene key="friendsTab" icon={props => <TabbarIcon focused={props.focused} name="users" />} tabBarLabel="Friends">
+              <Scene
+                key="friends"
+                title="My Friends"
+                component={FriendsContainer}
               />
             </Scene>
             <Scene key="userTab" icon={props => <TabbarIcon focused={props.focused} name="user" />} tabBarLabel="Me">
@@ -71,6 +79,14 @@ export default Actions.create(
               />
             </Scene>
           </Tabs>
+          <Scene
+            clone
+            key="userCard"
+            {...AppConfig.navbarProps}
+            title="User"
+            component={UserCardContainer}
+            renderBackButton={(): React.Node => <NavButton iconName="arrow-left" onClick={Actions.pop} />}
+          />
         </Scene>
       </Stack>
     </Lightbox>

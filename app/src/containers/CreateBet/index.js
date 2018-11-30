@@ -234,8 +234,8 @@ class CreateBetContainer extends React.Component<Props, State> {
   };
 
   onBetCreated = () => {
-    this.props.actions.clearForm();
     Actions.pop();
+    setTimeout(this.props.actions.clearForm, 150);
   };
 
   onBetteeInputChange = (betteeInputText: string): void => this.setState({ betteeInputText });
@@ -456,12 +456,12 @@ class CreateBetContainer extends React.Component<Props, State> {
         <View style={{ top: -this.state.keyboardOffset, zIndex: 1, backgroundColor: Colors.background }}>
           {bettee && !isAmountInputFocused && this.renderWagerInput()}
           <Mutation mutation={CREATE_BET_REQUEST} update={onBetCreate} onCompleted={this.onBetCreated}>
-            {(createBetRequest, { loading }): React.Node => (
-              <TouchableOpacity disabled={loading || !isFormCompleted} onPress={(): void => createBetRequest(this.betVariables)}>
-                <View style={[styles.Create__button, (loading || !isFormCompleted) && styles.Create__button_disabled]}>
+            {(createBetRequest, { called, loading }): React.Node => (
+              <TouchableOpacity disabled={called || !isFormCompleted} onPress={(): void => createBetRequest(this.betVariables)}>
+                <View style={[styles.Create__button, (called || !isFormCompleted) && styles.Create__button_disabled]}>
                   <Icon name="send" size={24} color={Colors.white} />
                   <Text style={styles.Create__buttonText}>
-                    {loading ? 'Sending...' : `Send${bettee ? ` ${bettee.firstName} a` : ''} Bet Request`}
+                    {called ? `${loading ? 'Sending...' : 'Sent!'}` : `Send${bettee ? ` ${bettee.firstName} a` : ''} Bet Request`}
                   </Text>
                 </View>
               </TouchableOpacity>

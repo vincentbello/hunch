@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react';
-import { FlatList, ScrollView, StyleSheet, View, Text } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { compose, graphql, Query } from 'react-apollo';
 import GET_BET from 'graphql/queries/getBet';
 import GET_GAME from 'graphql/queries/getGame';
 import GET_USER_STATS from 'graphql/queries/getUserStats';
+import { noop } from 'utils/functions';
 
 import { type Error } from 'types/apollo';
 import { type Bet } from 'types/bet';
@@ -244,9 +245,14 @@ class BetCardContainer extends React.Component<Props> {
     const didWin = bet.winnerId === user.id;
     const didLose = bet.winnerId !== null && bet.winnerId !== user.id;
     const inactive = !isBettor && !bet.responded;
+    const isCurrentUser = user.id === this.props.currentUser.id;
 
     return (
-      <View style={[styles.user, isBettor && styles.user_left]}>
+      <TouchableOpacity
+        activeOpacity={isCurrentUser ? 1 : 0.9}
+        style={[styles.user, isBettor && styles.user_left]}
+        onPress={isCurrentUser ? noop : (): void => Actions.userCard({ userId: user.id })}
+      >
         <Image dotted={inactive} muted={didLose} rounded padded size="large" url={user.imageUrl} />
         {pickedTeam !== null && (
           <View style={[styles.userTeam, isBettor && styles.userTeam_left]}>
@@ -283,7 +289,7 @@ class BetCardContainer extends React.Component<Props> {
             <Text style={styles.userBadgeText}>CHALLENGER</Text>
           </View>
         )}
-      </View>
+      </TouchableOpacity>
     );
   };
 
