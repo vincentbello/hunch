@@ -1,10 +1,12 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  query UserStats($userId: Int!) {
+  query FullUserStats($userId: Int!) {
     userStats(userId: $userId) {
       won
       played
+      amountWon
+      amountLost
     }
   }
 `;

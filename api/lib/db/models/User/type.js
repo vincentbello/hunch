@@ -77,5 +77,17 @@ export default new GraphQLObjectType({
       description: 'Stats for this user',
       resolve: () => ({}),
     },
+    friendCount: {
+      type: GraphQLInt,
+      description: 'Number of friends for this user',
+      resolve: async parentValue => await models.Friendship.count({
+        where: {
+          [Op.or]: [
+            { userId: parentValue.id },
+            { friendId: parentValue.id },
+          ],
+        },
+      }),
+    },
   },
 });

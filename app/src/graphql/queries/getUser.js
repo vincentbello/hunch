@@ -7,6 +7,7 @@ export default gql`
   query User($id: Int!) {
     user(id: $id) {
       ...userFields
+      friendCount
     }
   }
 `;

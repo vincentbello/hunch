@@ -1,5 +1,6 @@
-import { GraphQLEnumType, GraphQLObjectType } from 'graphql';
+import { GraphQLEnumType, GraphQLInt, GraphQLObjectType } from 'graphql';
 import { attributeFields } from 'graphql-sequelize';
+import { Op } from 'sequelize';
 import UserType from '../User/type';
 import models from '../';
 

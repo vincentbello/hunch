@@ -1,28 +1,19 @@
 // @flow
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import { distanceInWordsToNow, format } from 'date-fns';
 
+import Button from 'react-native-button';
+import Icon from 'react-native-vector-icons/Feather';
+
 import { type User } from 'types/user';
-import DerivedStateSplash from 'components/DerivedStateSplash';
+import FriendshipButton from 'components/FriendshipButton';
 import Image from 'components/Image';
+import UserStats from 'components/UserStats';
 
 import Colors from 'theme/colors';
 import { BoxStyles } from 'theme/app';
 import Typography from 'theme/typography';
-
-const GET_STATS = gql`
-  query FullUserStats($userId: Int!) {
-    userStats(userId: $userId) {
-      won
-      played
-      amountWon
-      amountLost
-    }
-  }
-`;
 
 const styles = StyleSheet.create({
   user: {
@@ -35,6 +26,11 @@ const styles = StyleSheet.create({
   },
   section_row: {
     flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  section_clear: {
+    marginTop: 4,
+    marginBottom: 12,
   },
   sectionHeader: {
     ...Typography.h4,
@@ -55,49 +51,32 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginBottom: 2,
   },
-  statRow: {
-    flexDirection: 'row',
-    marginTop: 16,
+  button: {
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginLeft: 12,
+    backgroundColor: Colors.white,
+    borderColor: Colors.brand.primary,
+    borderWidth: 1,
+    borderRadius: 3,
   },
-  statRow_first: {
-    marginTop: 0,
+  buttonIcon: {
+    marginRight: 8,
   },
-  statCard: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statContent: {
-    padding: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statSuperscript: {
-    fontSize: 14,
-    top: -4,
-    marginRight: 4,
-  },
-  stat: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: Colors.textPrimary,
-  },
-  stat_success: {
-    color: Colors.primary.green,
-  },
-  stat_error: {
-    color: Colors.primary.red,
-  },
-  statLabel: {
-    color: Colors.textSecondary,
-    fontSize: 13,
+  buttonLabel: {
+    fontWeight: 'bold',
+    color: Colors.brand.primary,
   },
 });
 
 type Props = {
+  isCurrent: boolean,
   user: User,
 };
 
-const UserCard = ({ user }: Props): React.Node => (
+const UserCard = ({ isCurrent, user }: Props): React.Node => (
   <View style={styles.user}>
     <View style={[styles.section, styles.section_row]}>
       <Image bordered rounded size="large" url={user.imageUrl} />
@@ -111,81 +90,22 @@ const UserCard = ({ user }: Props): React.Node => (
         </Text>
       </View>
     </View>
+    {!isCurrent && (
+      <View style={[styles.section_row, styles.section_clear]}>
+        <FriendshipButton userId={user.id} />
+        <Button
+          containerStyle={styles.button}
+          styleDisabled={{ backgroundColor: Colors.iconButton.underlay }}
+          onPress={console.log}
+        >
+          <Icon name="users" color={Colors.brand.primary} size={16} style={styles.buttonIcon} />
+          <Text style={styles.buttonLabel}>{`${user.friendCount} friends`}</Text>
+        </Button>
+      </View>
+    )}
     <Text style={styles.sectionHeader}>Statistics</Text>
     <View style={styles.section}>
-      <Query query={GET_STATS} variables={{ userId: user.id }}>
-        {({ loading, error, data: { userStats } }): React.Node => (
-          <DerivedStateSplash loading={loading} error={error}>
-            {userStats && (
-              <React.Fragment>
-                <View style={[styles.statRow, styles.statRow_first]}>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text style={[styles.stat, userStats.won > 0 && styles.stat_success]}>{userStats.won}</Text>
-                    </View>
-                    <Text style={styles.statLabel}>Bets Won</Text>
-                  </View>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text style={[styles.stat, userStats.played > userStats.won && styles.stat_error]}>
-                        {userStats.played - userStats.won}
-                      </Text>
-                    </View>
-                    <Text style={styles.statLabel}>Bets Lost</Text>
-                  </View>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text
-                        style={[
-                          styles.stat,
-                          2 * userStats.won > userStats.played && styles.stat_success,
-                          2 * userStats.won < userStats.played && styles.stat_error,
-                        ]}
-                      >
-                        {`${userStats.won}-${userStats.played - userStats.won}`}
-                      </Text>
-                    </View>
-                    <Text style={styles.statLabel}>Record</Text>
-                  </View>
-                </View>
-                <View style={styles.statRow}>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text style={styles.statSuperscript}>$</Text>
-                      <Text style={styles.stat}>{userStats.amountWon}</Text>
-                    </View>
-                    <Text style={styles.statLabel}>Total Won</Text>
-                  </View>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text style={styles.statSuperscript}>$</Text>
-                      <Text style={styles.stat}>{userStats.amountLost}</Text>
-                    </View>
-                    <Text style={styles.statLabel}>Total Lost</Text>
-                  </View>
-                  <View style={styles.statCard}>
-                    <View style={styles.statContent}>
-                      <Text style={styles.statSuperscript}>$</Text>
-                      <Text
-                        style={[
-                          styles.stat,
-                          userStats.amountWon > userStats.amountLost && styles.stat_success,
-                          userStats.amountWon < userStats.amountLost && styles.stat_error,
-                        ]}
-                      >
-                        {userStats.amountWon === userStats.amountLost ? '0' : (
-                          `${userStats.amountWon > userStats.amountLost ? '+' : '-'}${Math.abs(userStats.amountWon - userStats.amountLost)}`
-                        )}
-                      </Text>
-                    </View>
-                    <Text style={styles.statLabel}>Net</Text>
-                  </View>
-                </View>
-              </React.Fragment>
-            )}
-          </DerivedStateSplash>
-        )}
-      </Query>
+      <UserStats userId={user.id} />
     </View>
   </View>
 );
