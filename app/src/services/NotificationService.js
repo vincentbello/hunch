@@ -36,6 +36,8 @@ export default class NotificationService {
   onNotification = (notification) => {
     if (notification.data.betId) {
       Actions.betCard({ betId: notification.data.betId });
+    } else if (notification.data.userId) {
+      Actions.userCard({ userId: notification.data.userId });
     }
   };
 }

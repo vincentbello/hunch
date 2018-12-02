@@ -3,9 +3,9 @@ import * as React from 'react';
 import { FlatList, ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { compose, graphql, Query } from 'react-apollo';
+import gql from 'graphql-tag';
 import GET_BET from 'graphql/queries/getBet';
 import GET_GAME from 'graphql/queries/getGame';
-import GET_USER_STATS from 'graphql/queries/getUserStats';
 import { noop } from 'utils/functions';
 
 import { type Error } from 'types/apollo';
@@ -28,6 +28,17 @@ import Image from 'components/Image';
 import ImageSplash from 'components/ImageSplash';
 import FeedMessage from 'components/FeedMessage';
 import PaymentActions from 'components/PaymentActions';
+
+const GET_USER_STATS = gql`
+  query FullUserStats($userId: Int!) {
+    userStats(userId: $userId) {
+      overall {
+        won
+        played
+      }
+    }
+  }
+`;
 
 type ExternalProps = {
   betId: number,
@@ -279,7 +290,7 @@ class BetCardContainer extends React.Component<Props> {
           <Query query={GET_USER_STATS} variables={{ userId: user.id }}>
             {({ data: { userStats } }): React.Node => (userStats ? (
               <Text style={styles.userMetaText}>
-                {`${userStats.won}-${userStats.played - userStats.won}`}
+                {`${userStats.overall.won}-${userStats.overall.played - userStats.overall.won}`}
               </Text>
             ) : null)}
           </Query>

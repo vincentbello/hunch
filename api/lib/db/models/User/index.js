@@ -72,15 +72,23 @@ export default (sequelize, DataTypes) => {
   User.getFriends = async function(userId) {
     const friendsQuery = `
       SELECT B.* FROM (
-        SELECT userId as friendId FROM Friendships WHERE friendId=${userId}
+        SELECT userId as friendId FROM Friendships WHERE friendId=${userId} AND status="ACTIVE"
         UNION
-        SELECT friendId FROM Friendships WHERE userId=${userId}
+        SELECT friendId FROM Friendships WHERE userId=${userId} AND status="ACTIVE"
       ) A
       INNER JOIN Users B
       ON A.friendId = B.id
       ORDER BY B.firstName ASC
     `;
     return await models.sequelize.query(friendsQuery, {
+      model: models.User,
+      type: Sequelize.QueryTypes.SELECT,
+    });
+  };
+
+  User.getFriendRequests = async function(userId) {
+    const friendRequestsQuery = `SELECT A.* FROM Users A INNER JOIN Friendships B ON A.id = B.userId WHERE B.friendId=${userId} AND B.status='PENDING'`;
+    return await models.sequelize.query(friendRequestsQuery, {
       model: models.User,
       type: Sequelize.QueryTypes.SELECT,
     });

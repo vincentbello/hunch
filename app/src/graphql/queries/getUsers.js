@@ -4,8 +4,8 @@ import userFragment from 'graphql/fragments/user';
 export default gql`
   ${userFragment}
 
-  query UserLists($userListType: UserListType) {
-    users(userListType: $userListType) {
+  query UserList($userListType: UserListType, $userId: Int) {
+    users(userListType: $userListType, userId: $userId) {
       ...userFields
     }
   }

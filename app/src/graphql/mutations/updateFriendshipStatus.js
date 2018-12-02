@@ -4,8 +4,8 @@ import friendshipFragment from 'graphql/fragments/friendship';
 export default gql`
   ${friendshipFragment}
 
-  query GetUserFriendship($userId: Int!) {
-    userFriendship(userId: $userId) {
+  mutation UpdateFriendshipStatus($userId: Int!, $status: FriendshipStatusType!) {
+    updateFriendshipStatus(userId: $userId, status: $status) {
       ...friendshipFields
     }
   }

@@ -5,12 +5,12 @@ import { Actions, ActionConst, Scene, Stack, Lightbox, Modal, Tabs } from 'react
 
 import AppConfig from 'constants/navigation';
 
+import withUserListType from 'hocs/withUserListType';
 import AppLaunchContainer from 'containers/AppLaunch';
 import BetCardContainer from 'containers/BetCard';
 import BetRequestsContainer from 'containers/BetRequests';
 import BetsContainer from 'containers/Bets';
 import CreateBetContainer from 'containers/CreateBet';
-import FriendsContainer from 'containers/Friends';
 import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
 import LogoutButtonContainer from 'containers/LogoutButton';
@@ -19,6 +19,7 @@ import UserCardContainer from 'containers/UserCard';
 import NavButton from 'components/NavButton';
 import TabbarIcon from 'components/TabbarIcon';
 import TitleLogo from 'components/TitleLogo';
+import UserList from 'components/UserList';
 
 import Colors from 'theme/colors';
 import AppSizes from 'theme/sizes';
@@ -44,7 +45,7 @@ export default Actions.create(
                 renderTitle={<TitleLogo />}
                 component={BetsContainer}
                 renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
-                renderRightButton={<InboxButtonContainer />}
+                renderRightButton={() => <InboxButtonContainer targetScene="requestedBets" />}
               />
 
               <Scene
@@ -67,7 +68,13 @@ export default Actions.create(
               <Scene
                 key="friends"
                 title="My Friends"
-                component={FriendsContainer}
+                component={withUserListType('FRIENDS')}
+                renderRightButton={() => <InboxButtonContainer targetScene="friendRequests" />}
+              />
+              <Scene
+                key="friendRequests"
+                title="Friend Requests"
+                component={withUserListType('FRIEND_REQUESTS')}
               />
             </Scene>
             <Scene key="userTab" icon={props => <TabbarIcon focused={props.focused} name="user" />} tabBarLabel="Me">
@@ -75,7 +82,7 @@ export default Actions.create(
                 key="user"
                 title="My Account"
                 component={UserContainer}
-                renderRightButton={() => <LogoutButtonContainer />}
+                renderRightButton={LogoutButtonContainer}
               />
             </Scene>
           </Tabs>
@@ -85,6 +92,13 @@ export default Actions.create(
             {...AppConfig.navbarProps}
             title="User"
             component={UserCardContainer}
+            renderBackButton={(): React.Node => <NavButton iconName="arrow-left" onClick={Actions.pop} />}
+          />
+          <Scene
+            clone
+            key="userFriends"
+            {...AppConfig.navbarProps}
+            component={withUserListType('FRIENDS')}
             renderBackButton={(): React.Node => <NavButton iconName="arrow-left" onClick={Actions.pop} />}
           />
         </Scene>

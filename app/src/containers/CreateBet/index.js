@@ -235,7 +235,7 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   onBetCreated = () => {
     Actions.pop();
-    setTimeout(this.props.actions.clearForm, 150);
+    setTimeout(this.props.actions.clearForm, 1000);
   };
 
   onBetteeInputChange = (betteeInputText: string): void => this.setState({ betteeInputText });
@@ -368,6 +368,8 @@ class CreateBetContainer extends React.Component<Props, State> {
     <DerivedStateSplash loading={this.props.friends.loading} error={this.props.friends.error}>
       {this.props.friends.users && (
         <FlatList
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
           data={this.getFilteredFriends(this.state.betteeInputText)}
           keyExtractor={(user: User): string => `${user.id}`}
           renderItem={({ item }): React.Node => (

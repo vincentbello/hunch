@@ -22,11 +22,16 @@ export type UserFriendship = {
   source: FriendshipSource,
 };
 
-export type UserStats = {
+export type StatGroup = {
   won: number,
   played: number,
   amountWon: number,
   amountLost: number,
 };
 
-export type UserGroupType = 'friends';
+export type UserStats = {
+  overall: StatGroup,
+  against: StatGroup,
+};
+
+export type UserListType = 'FRIENDS' | 'FRIEND_REQUESTS';

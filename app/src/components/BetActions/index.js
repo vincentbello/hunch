@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { distanceInWordsToNow, differenceInDays } from 'date-fns';
 import GET_BET from 'graphql/queries/getBet';
 import GET_BETS from 'graphql/queries/getBets';
@@ -11,7 +10,7 @@ import RESPOND_TO_BET from 'graphql/mutations/respondToBet';
 
 import { chain, noop } from 'utils/functions';
 
-import Colors from 'theme/colors';
+import DualAction from 'components/DualAction';
 
 import { type Bet } from 'types/bet';
 
@@ -31,45 +30,6 @@ const onBetRespond = (cache, { data: { respondToBet } }) => {
   cache.writeQuery({ ...activeBetsQuery, data: { bets: [...activeBets, newBet] } });
   cache.writeQuery({ ...requestedBetsQuery, data: { bets: requestedBets.filter((bet: Bet): boolean => bet.id !== respondToBet.id) } });
 };
-
-const styles = StyleSheet.create({
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flex: 1,
-  },
-  buttonPlaceholder: {
-    flex: 1,
-    fontSize: 12,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-  },
-  button: {
-    overflow: 'hidden',
-    padding: 8,
-    marginRight: 8,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: Colors.border,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-  },
-  button_primary: {
-    marginRight: 0,
-    backgroundColor: Colors.brand.primary,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    color: Colors.textSecondary,
-    textAlign: 'center',
-  },
-  buttonText_primary: {
-    color: Colors.white,
-  },
-});
 
 type Props = {
   bet: Bet,
@@ -106,25 +66,15 @@ class BetActions extends React.PureComponent<Props> {
   render(): React.Node {
     const { bet, isBettor } = this.props;
     return (
-      <View style={styles.actions}>
-        <TouchableOpacity onPress={this.secondaryAction} style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>{isBettor ? 'Cancel Bet' : 'Decline'}</Text>
-          </View>
-        </TouchableOpacity>
-        {isBettor && differenceInDays(new Date(), bet.lastRemindedAt) < 2 ? (
-          <Text style={styles.buttonPlaceholder}>
-            {bet.lastRemindedAt === bet.createdAt ? 'Created ' : 'Reminded '}
-            {distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}
-          </Text>
-        ) : (
-          <TouchableOpacity onPress={this.primaryAction} style={styles.buttonContainer}>
-            <View style={[styles.button, styles.button_primary]}>
-              <Text style={[styles.buttonText, styles.buttonText_primary]}>{isBettor ? 'Remind' : 'Accept'}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
+      <DualAction
+        canPerformPrimaryAction={!isBettor || differenceInDays(new Date(), bet.lastRemindedAt) >= 2}
+        canPerformSecondaryAction
+        primaryAction={this.primaryAction}
+        primaryLabel={isBettor ? 'Remind' : 'Accept'}
+        primaryPlaceholder={`${bet.lastRemindedAt === bet.createdAt ? 'Created ' : 'Reminded '} ${distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}`}
+        secondaryAction={this.secondaryAction}
+        secondaryLabel={isBettor ? 'Cancel Bet' : 'Decline'}
+      />
     );
   }
 }

@@ -6,7 +6,6 @@ module.exports = {
     const teamRows = teams[0];
     const lakersId = teamRows[0].id;
     const warriorsId = teamRows[1].id;
-    console.log('IDS', lakersId, warriorsId);
 
     return await queryInterface.bulkInsert('Games', [
       {

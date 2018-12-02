@@ -1,16 +1,10 @@
 // @flow
 import * as React from 'react';
-import { ActionSheetIOS, View, StyleSheet, Text } from 'react-native';
+import { ActionSheetIOS, StyleSheet, Text } from 'react-native';
 import Button from 'react-native-button';
-import { graphql } from 'react-apollo';
-import GET_FRIENDSHIP from 'graphql/queries/getUserFriendship';
-
 import Icon from 'react-native-vector-icons/Feather';
 
-import { type Error } from 'types/apollo';
-import { type UserFriendship as UserFriendshipType } from 'types/user';
-
-import DerivedStateSplash from 'components/DerivedStateSplash';
+import { type UserFriendship, type FriendshipStatus } from 'types/user';
 
 import Colors from 'theme/colors';
 
@@ -19,7 +13,8 @@ type ButtonAttrs = {
   icon: null | string,
   label: string,
   primary: boolean,
-  action: null | string,
+  targetStatus: null | FriendshipStatus,
+  confirmation: null | string,
 };
 
 const styles = StyleSheet.create({
@@ -32,6 +27,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.brand.primary,
     borderWidth: 1,
     borderRadius: 3,
+  },
+  button_primary: {
+    backgroundColor: Colors.brand.primary,
+  },
+  button_disabled: {
+    borderColor: Colors.textSecondary,
+    backgroundColor: Colors.background,
   },
   icon: {
     marginRight: 8,
@@ -49,94 +51,96 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  name: string,
   userId: number,
-  userFriendshipQuery: {
-    loading: boolean,
-    error: Error,
-    userFriendship: UserFriendshipType,
-  },
-};
-
-const getButtonAttrs = (friendship?: UserFriendshipType | null, userId: number): ButtonAttrs | null => {
-  if (!friendship || (friendship.status === 'REJECTED' && friendship.userId !== userId)) {
-    return {
-      disabled: false,
-      icon: 'user-plus',
-      label: 'Add Friend',
-      primary: true,
-      action: 'REQUEST_FRIENDSHIP',
-    };
-  }
-
-  if (friendship.status === 'ACTIVE') {
-    return {
-      disabled: false,
-      icon: 'user-check',
-      label: 'Friends',
-      primary: false,
-      action: 'UNFRIEND',
-    };
-  }
-
-  if (friendship.status === 'PENDING') {
-    return {
-      disabled: friendship.userId !== userId,
-      icon: null,
-      label: friendship.userId === userId ? 'Requested' : 'Received Request',
-      primary: false,
-      action: friendship.userId === userId ? 'CANCEL_REQUEST' : null,
-    };
-  }
-
-  return null;
+  friendship: UserFriendship,
+  updateFriendshipStatus: (status: FriendshipStatus) => void,
 };
 
 class FriendshipButton extends React.PureComponent<Props> {
-  onPressHandler = (action: string | null): (() => void) => () => {
-    const friendship = this.props.userFriendshipQuery.userFriendship;
-    if (action === null) return;
+  get buttonAttrs(): ButtonAttrs | null {
+    const { friendship, userId } = this.props;
+    if (!friendship || friendship.status === 'DELETED' || (friendship.status === 'REJECTED' && friendship.userId !== userId)) {
+      return {
+        disabled: false,
+        icon: 'user-plus',
+        label: 'Add Friend',
+        primary: true,
+        targetStatus: 'PENDING',
+        confirmation: null,
+      };
+    }
 
-    if (action === 'UNFRIEND') {
+    if (friendship.status === 'ACTIVE') {
+      return {
+        disabled: false,
+        icon: 'user-check',
+        label: 'Friends',
+        primary: false,
+        targetStatus: 'DELETED',
+        confirmation: 'UNFRIEND',
+      };
+    }
+
+    if (friendship.status === 'PENDING') {
+      return {
+        disabled: friendship.userId === userId,
+        icon: null,
+        label: friendship.userId === userId ? 'Received Request' : 'Requested',
+        primary: false,
+        targetStatus: friendship.userId === userId ? null : 'DELETED',
+        confirmation: 'CANCEL_REQUEST',
+      };
+    }
+
+    return null;
+  }
+
+  onPressHandler = (targetStatus: FriendshipStatus | null, confirmation: string | null): (() => void) => () => {
+    const { name, updateFriendshipStatus } = this.props;
+    if (targetStatus === null) return;
+
+    if (confirmation !== null) {
+      const unfriend = confirmation === 'UNFRIEND';
       ActionSheetIOS.showActionSheetWithOptions({
-        options: ['Cancel', 'Unfriend'],
+        options: ['Cancel', unfriend ? 'Unfriend' : 'Cancel Request'],
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
-        message: 'Remove xxx as a friend?',
+        message: unfriend ? `Are you sure you want to remove ${name} from your friends? You will not be able to bet with them anymore.` : `Are you sure you want to cancel your friend request to ${name}?`,
       },
       (buttonIndex: number) => {
-        if (buttonIndex === 1) console.log('UNFRIEND!');
+        if (buttonIndex === 1 && targetStatus !== null) updateFriendshipStatus(targetStatus);
       });
+      return;
     }
+
+    this.props.updateFriendshipStatus(targetStatus);
   };
 
   render(): React.Node {
-    const { userId, userFriendshipQuery: { loading, error, userFriendship } } = this.props;
-    const buttonAttrs = getButtonAttrs(userFriendship, userId);
+    const { buttonAttrs } = this;
+    if (buttonAttrs === null) return null;
     return (
-      <DerivedStateSplash loading={loading} error={error} size="small">
-        {buttonAttrs !== null && (
-          <Button
-            disabled={buttonAttrs.disabled}
-            containerStyle={styles.button}
-            onPress={this.onPressHandler(buttonAttrs.action)}
-          >
-            {buttonAttrs.icon !== null && (
-              <Icon
-                name={buttonAttrs.icon}
-                color={buttonAttrs.disabled ? Colors.textSecondary : (buttonAttrs.primary ? Colors.white : Colors.brand.primary)}
-                size={16}
-                style={styles.icon}
-              />
-            )}
-            <Text style={[styles.label, buttonAttrs.primary && styles.label_primary, buttonAttrs.disabled && styles.label_disabled]}>
-              {buttonAttrs.label}
-            </Text>
-          </Button>
+      <Button
+        disabled={buttonAttrs.disabled}
+        containerStyle={[styles.button, buttonAttrs.primary && styles.button_primary, buttonAttrs.disabled && styles.button_disabled]}
+        onPress={this.onPressHandler(buttonAttrs.targetStatus, buttonAttrs.confirmation)}
+      >
+        {buttonAttrs.icon !== null && (
+          <Icon
+            name={buttonAttrs.icon}
+            color={buttonAttrs.disabled ? Colors.textSecondary : (buttonAttrs.primary ? Colors.white : Colors.brand.primary)}
+            size={16}
+            style={styles.icon}
+          />
         )}
-      </DerivedStateSplash>
+        <Text style={[styles.label, buttonAttrs.primary && styles.label_primary, buttonAttrs.disabled && styles.label_disabled]}>
+          {buttonAttrs.label}
+        </Text>
+      </Button>
     );
   }
 }
 
 FriendshipButton.displayName = 'FriendshipButton';
-export default graphql(GET_FRIENDSHIP, { name: 'userFriendshipQuery', options: ({ userId }) => ({ variables: { userId } }) })(FriendshipButton);
+export default FriendshipButton;

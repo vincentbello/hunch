@@ -50,7 +50,7 @@ const UserCell = ({ full, inList, user, withDisclosureIndicator, onPress, render
   const contents = (
     <React.Fragment>
       <Image bordered rounded size="small" url={user.imageUrl} />
-      <View style={[styles.User__content, styles.User__content_full]}>
+      <View style={[styles.User__content, inList && styles.User__content_full]}>
         <Text>{user.fullName}</Text>
       </View>
       {renderMeta()}

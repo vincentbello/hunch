@@ -1,14 +1,6 @@
 // @flow
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { graphql } from 'react-apollo';
-import GET_STATS from 'graphql/queries/getUserStats';
-
-import { type Error } from 'types/apollo';
-import { type UserStats as UserStatsType } from 'types/user';
-
-import DerivedStateSplash from 'components/DerivedStateSplash';
-
 import Colors from 'theme/colors';
 
 const styles = StyleSheet.create({
@@ -51,85 +43,76 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  userId: number,
-  userStatsQuery: {
-    loading: boolean,
-    error: Error,
-    userStats: UserStatsType,
-  },
+  stats: StatsGroup,
 };
 
-const UserStats = ({ userStatsQuery: { loading, error, userStats } }: Props): React.Node => (
-  <DerivedStateSplash loading={loading} error={error}>
-    {userStats && (
-      <React.Fragment>
-        <View style={[styles.statRow, styles.statRow_first]}>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text style={[styles.stat, userStats.won > 0 && styles.stat_success]}>{userStats.won}</Text>
-            </View>
-            <Text style={styles.statLabel}>Bets Won</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text style={[styles.stat, userStats.played > userStats.won && styles.stat_error]}>
-                {userStats.played - userStats.won}
-              </Text>
-            </View>
-            <Text style={styles.statLabel}>Bets Lost</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text
-                style={[
-                  styles.stat,
-                  2 * userStats.won > userStats.played && styles.stat_success,
-                  2 * userStats.won < userStats.played && styles.stat_error,
-                ]}
-              >
-                {`${userStats.won}-${userStats.played - userStats.won}`}
-              </Text>
-            </View>
-            <Text style={styles.statLabel}>Record</Text>
-          </View>
+const UserStats = ({ stats }: Props): React.Node => (
+  <React.Fragment>
+    <View style={[styles.statRow, styles.statRow_first]}>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text style={[styles.stat, stats.won > 0 && styles.stat_success]}>{stats.won}</Text>
         </View>
-        <View style={styles.statRow}>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text style={styles.statSuperscript}>$</Text>
-              <Text style={styles.stat}>{userStats.amountWon}</Text>
-            </View>
-            <Text style={styles.statLabel}>Total Won</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text style={styles.statSuperscript}>$</Text>
-              <Text style={styles.stat}>{userStats.amountLost}</Text>
-            </View>
-            <Text style={styles.statLabel}>Total Lost</Text>
-          </View>
-          <View style={styles.statCard}>
-            <View style={styles.statContent}>
-              <Text style={styles.statSuperscript}>$</Text>
-              <Text
-                style={[
-                  styles.stat,
-                  userStats.amountWon > userStats.amountLost && styles.stat_success,
-                  userStats.amountWon < userStats.amountLost && styles.stat_error,
-                ]}
-              >
-                {userStats.amountWon === userStats.amountLost ? '0' : (
-                  `${userStats.amountWon > userStats.amountLost ? '+' : '-'}${Math.abs(userStats.amountWon - userStats.amountLost)}`
-                )}
-              </Text>
-            </View>
-            <Text style={styles.statLabel}>Net</Text>
-          </View>
+        <Text style={styles.statLabel}>Bets Won</Text>
+      </View>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text style={[styles.stat, stats.played > stats.won && styles.stat_error]}>
+            {stats.played - stats.won}
+          </Text>
         </View>
-      </React.Fragment>
-    )}
-  </DerivedStateSplash>
+        <Text style={styles.statLabel}>Bets Lost</Text>
+      </View>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text
+            style={[
+              styles.stat,
+              2 * stats.won > stats.played && styles.stat_success,
+              2 * stats.won < stats.played && styles.stat_error,
+            ]}
+          >
+            {`${stats.won}-${stats.played - stats.won}`}
+          </Text>
+        </View>
+        <Text style={styles.statLabel}>Record</Text>
+      </View>
+    </View>
+    <View style={styles.statRow}>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text style={styles.statSuperscript}>$</Text>
+          <Text style={styles.stat}>{stats.amountWon}</Text>
+        </View>
+        <Text style={styles.statLabel}>Total Won</Text>
+      </View>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text style={styles.statSuperscript}>$</Text>
+          <Text style={styles.stat}>{stats.amountLost}</Text>
+        </View>
+        <Text style={styles.statLabel}>Total Lost</Text>
+      </View>
+      <View style={styles.statCard}>
+        <View style={styles.statContent}>
+          <Text style={styles.statSuperscript}>$</Text>
+          <Text
+            style={[
+              styles.stat,
+              stats.amountWon > stats.amountLost && styles.stat_success,
+              stats.amountWon < stats.amountLost && styles.stat_error,
+            ]}
+          >
+            {stats.amountWon === stats.amountLost ? '0' : (
+              `${stats.amountWon > stats.amountLost ? '+' : '-'}${Math.abs(stats.amountWon - stats.amountLost)}`
+            )}
+          </Text>
+        </View>
+        <Text style={styles.statLabel}>Net</Text>
+      </View>
+    </View>
+  </React.Fragment>
 );
 
 UserStats.displayName = 'UserStats';
-export default graphql(GET_STATS, { name: 'userStatsQuery', options: ({ userId }) => ({ variables: { userId } }) })(UserStats);
+export default UserStats;

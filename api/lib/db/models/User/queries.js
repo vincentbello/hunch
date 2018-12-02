@@ -11,9 +11,22 @@ export default models => ({
         description: 'User list type',
         type: UserListType,
       },
+      userId: {
+        description: 'User ID to get friends for. If not provided, default to current user',
+        type: GraphQLInt,
+      },
     },
     resolve: async function(root, args, context, info) {
-      return await models.User.getFriends(context.userId);
+      switch (args.userListType) {
+        case 'FRIENDS':
+          return await models.User.getFriends(args.userId ? args.userId : context.userId);
+
+        case 'FRIEND_REQUESTS':
+          return await models.User.getFriendRequests(context.userId);
+
+        default:
+          throw new Error();
+      }
     },
   },
 
@@ -36,6 +49,6 @@ export default models => ({
         type: new GraphQLNonNull(GraphQLInt),
       },
     },
-    resolve: (_, { userId }) => ({ userId }),
+    resolve: (_, args, context) => ({ userId: args.userId, meId: context.userId }),
   },
 });
