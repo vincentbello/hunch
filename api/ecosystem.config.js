@@ -19,7 +19,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:vincentbello/hunch.git',
       path : '/home/ec2-user/hunch',
-      'post-deploy' : 'cd api && yarn && cp ~/.hunch_env .env && cp public/privacy_policy.html /www/public/privacy_policy.html && npm run build && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'cd api && yarn && cp ~/.hunch_env .env && sudo cp public/privacy_policy.html /www/public/privacy_policy.html && npm run build && pm2 reload ecosystem.config.js --env production'
     }
   }
 };
