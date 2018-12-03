@@ -41,13 +41,13 @@ type State = {
 
 class AppLaunch extends React.Component<Props, State> {
   state = {
-    bottomTop: new Animated.Value((AppSizes.screen.height - 2.15 * IMG_DIMENSION) / 2),
+    bottomTop: new Animated.Value((AppSizes.screen.height - 2.15 * IMG_DIMENSION + 20) / 2),
     dimensionRatio: new Animated.Value(1),
-    topTop: new Animated.Value((AppSizes.screen.height - IMG_DIMENSION) / 2),
+    topTop: new Animated.Value((AppSizes.screen.height - IMG_DIMENSION + 20) / 2),
   };
 
   componentDidMount() {
-    this.autoLogin();
+    // this.autoLogin();
   }
 
   autoLogin = async (): Promise<void> => {
