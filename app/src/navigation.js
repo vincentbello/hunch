@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import { View } from 'react-native';
 import { Actions, ActionConst, Scene, Stack, Lightbox, Modal, Tabs } from 'react-native-router-flux';
 
 import AppConfig from 'constants/navigation';
@@ -19,7 +18,6 @@ import UserCardContainer from 'containers/UserCard';
 import NavButton from 'components/NavButton';
 import TabbarIcon from 'components/TabbarIcon';
 import TitleLogo from 'components/TitleLogo';
-import UserList from 'components/UserList';
 
 import Colors from 'theme/colors';
 import AppSizes from 'theme/sizes';
@@ -58,10 +56,9 @@ export default Actions.create(
 
               <Scene
                 key="betCard"
-                {...AppConfig.navbarProps}
-                navTransparent
+                {...AppConfig.transparentNavbarProps}
                 component={BetCardContainer}
-                renderBackButton={(): React.Node => <NavButton color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
+                renderBackButton={(): React.Node => <NavButton backgroundColor="rgba(0,0,0,0.3)" color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
               />
             </Scene>
             <Scene key="friendsTab" icon={props => <TabbarIcon focused={props.focused} name="users" />} tabBarLabel="Friends">

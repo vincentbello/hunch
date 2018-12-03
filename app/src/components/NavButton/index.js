@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  backgroundColor: string,
   badgeCount: number,
   color: string,
   iconName: string,
@@ -51,10 +52,10 @@ type Props = {
   onClick: () => void,
 };
 
-const NavButton = ({ badgeCount, color, leftBadge, iconName, targetScene, onClick }: Props): React.Node => (
+const NavButton = ({ backgroundColor, badgeCount, color, leftBadge, iconName, targetScene, onClick }: Props): React.Node => (
   <View style={styles.IconContainer}>
     <Icon.Button
-      backgroundColor="transparent"
+      backgroundColor={backgroundColor}
       color={color}
       iconStyle={{ marginRight: 4, marginLeft: 4 }}
       style={styles.IconButton}
@@ -72,6 +73,7 @@ const NavButton = ({ badgeCount, color, leftBadge, iconName, targetScene, onClic
 );
 
 NavButton.defaultProps = {
+  backgroundColor: 'transparent',
   badgeCount: 0,
   color: Colors.brand.primary,
   leftBadge: false,

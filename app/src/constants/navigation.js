@@ -1,10 +1,12 @@
 // @flow
+import Colors from 'theme/colors';
+
 export default {
   // App Details
   appName: 'Hunch',
 
   // Build Configuration - eg. Debug or Release?
-  DEV: true, // __DEV__
+  DEV: __DEV__,
 
   // URLs
   urls: {},
@@ -20,5 +22,13 @@ export default {
     //   backgroundColor: AppColors.background,
     //   paddingTop: AppSizes.navbarHeight,
     // },
+  },
+
+  transparentNavbarProps: {
+    hideNavBar: false,
+    navigationBarStyle: {
+      backgroundColor: Colors.transparent,
+      borderBottomColor: Colors.transparent,
+    },
   },
 };

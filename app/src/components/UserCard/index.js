@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { ScrollView, View, StyleSheet, Text } from 'react-native';
 import { distanceInWordsToNow, format } from 'date-fns';
 import pluralize from 'pluralize';
 import { Actions } from 'react-native-router-flux';
@@ -43,6 +43,16 @@ const styles = StyleSheet.create({
   actionLabelText: {
     color: Colors.textPrimary,
     marginLeft: 8,
+  },
+  actionButton: {
+    marginBottom: 12,
+    backgroundColor: Colors.brand.primary,
+    padding: 12,
+    borderRadius: 4,
+  },
+  actionButtonText: {
+    color: Colors.white,
+    fontWeight: 'bold',
   },
   section: {
     ...BoxStyles,
@@ -131,9 +141,10 @@ class UserCard extends React.PureComponent<Props> {
 
   render(): React.Node {
     const { isCurrent, user, userFriendshipQuery } = this.props;
+    const { needsAction } = this;
     return (
-      <React.Fragment>
-        {this.needsAction && (
+      <ScrollView stickyHeaderIndices={needsAction ? [0] : []}>
+        {needsAction && (
           <View style={styles.action}>
             <View style={styles.actionLabel}>
               <Icon name="bell" size={16} color={Colors.textPrimary} />
@@ -163,24 +174,35 @@ class UserCard extends React.PureComponent<Props> {
             </View>
           </View>
           {!isCurrent && (
-            <View style={[styles.section_row, styles.section_clear]}>
-              <DerivedStateSplash loading={userFriendshipQuery.loading} error={userFriendshipQuery.error} size="small">
-                <FriendshipButton
-                  friendship={userFriendshipQuery.userFriendship}
-                  name={user.firstName}
-                  userId={user.id}
-                  updateFriendshipStatus={this.updateFriendshipStatus}
-                />
-              </DerivedStateSplash>
-              <Button
-                containerStyle={styles.button}
-                styleDisabled={{ backgroundColor: Colors.iconButton.underlay }}
-                onPress={(): void => Actions.userFriends({ userId: user.id, title: `${user.firstName}'s friends` })}
-              >
-                <Icon name="users" color={Colors.brand.primary} size={16} style={styles.buttonIcon} />
-                <Text style={styles.buttonLabel}>{pluralize('friend', user.friendCount, true)}</Text>
-              </Button>
-            </View>
+            <React.Fragment>
+              <View style={[styles.section_row, styles.section_clear]}>
+                <DerivedStateSplash loading={userFriendshipQuery.loading} error={userFriendshipQuery.error} size="small">
+                  <FriendshipButton
+                    friendship={userFriendshipQuery.userFriendship}
+                    name={user.firstName}
+                    userId={user.id}
+                    updateFriendshipStatus={this.updateFriendshipStatus}
+                  />
+                </DerivedStateSplash>
+                <Button
+                  containerStyle={styles.button}
+                  styleDisabled={{ backgroundColor: Colors.iconButton.underlay }}
+                  onPress={(): void => Actions.userFriends({ userId: user.id, title: `${user.firstName}'s friends` })}
+                >
+                  <Icon name="users" color={Colors.brand.primary} size={16} style={styles.buttonIcon} />
+                  <Text style={styles.buttonLabel}>{pluralize('friend', user.friendCount, true)}</Text>
+                </Button>
+              </View>
+              {userFriendshipQuery.userFriendship && userFriendshipQuery.userFriendship.status === 'ACTIVE' && (
+                <Button
+                  containerStyle={styles.actionButton}
+                  style={styles.actionButtonText}
+                  onPress={(): void => Actions.createBetModal({ preselectedBettee: user })}
+                >
+                  {`Challenge ${user.firstName} to a Bet`}
+                </Button>
+              )}
+            </React.Fragment>
           )}
           <Query query={GET_STATS} variables={{ userId: user.id }}>
             {({ loading, error, data }): React.Node => (
@@ -205,7 +227,7 @@ class UserCard extends React.PureComponent<Props> {
             )}
           </Query>
         </View>
-      </React.Fragment>
+      </ScrollView>
     );
   }
 }

@@ -53,7 +53,7 @@ type Props = ExternalProps & CurrentUserProps;
 
 const styles = StyleSheet.create({
   Bet: {
-    marginTop: 0,
+    marginTop: -AppSizes.navbarHeight,
   },
   game: {
     marginLeft: 8,
@@ -183,7 +183,7 @@ class BetCardContainer extends React.Component<Props> {
   renderBet = (bet: Bet): React.Node => (
     <Query query={GET_GAME} variables={{ id: bet.game.id }}>
       {({ loading, error, data: { game } }): React.Node => (
-        <ScrollView bounces={false} style={styles.Bet}>
+        <ScrollView style={styles.Bet}>
           <ImageSplash dimmed height={280} source={require('../../../assets/nba-splash.png')}>
             <DerivedStateSplash error={error} loading={loading}>
               {game && (

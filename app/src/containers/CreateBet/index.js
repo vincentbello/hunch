@@ -79,6 +79,7 @@ type Props = ReduxProps & {
     setDateViewIndex: (dateViewIndex: number) => void,
     setGame: (gameId: number | null) => void,
   },
+  preselectedBettee?: User,
 };
 
 type State = {
@@ -185,6 +186,10 @@ class CreateBetContainer extends React.Component<Props, State> {
     super(props);
     this.getFilteredFriends = memoize(this.getFilteredFriends);
     this.state = initialState;
+  }
+
+  componentWillMount() {
+    if (this.props.preselectedBettee) this.selectBettee(this.props.preselectedBettee);
   }
 
   componentDidMount() {
@@ -375,6 +380,7 @@ class CreateBetContainer extends React.Component<Props, State> {
           renderItem={({ item }): React.Node => (
             <UserCell
               inList
+              size="small"
               user={item}
               onPress={(): void => this.selectBettee(item)}
             />
@@ -421,7 +427,7 @@ class CreateBetContainer extends React.Component<Props, State> {
             <View style={styles.Create__headerMain}>
               <View style={styles.Create__headerMain}>
                 <View style={{ flex: 1 }}>
-                  <UserCell user={bettee} renderMeta = {(): React.Node => this.renderRemoveButton(this.removeBettee)} />
+                  <UserCell size="small" user={bettee} renderMeta = {(): React.Node => this.renderRemoveButton(this.removeBettee)} />
                 </View>
               </View>
             </View>

@@ -71,7 +71,7 @@ class BetActions extends React.PureComponent<Props> {
         canPerformSecondaryAction
         primaryAction={this.primaryAction}
         primaryLabel={isBettor ? 'Remind' : 'Accept'}
-        primaryPlaceholder={`${bet.lastRemindedAt === bet.createdAt ? 'Created ' : 'Reminded '} ${distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}`}
+        primaryPlaceholder={`${bet.lastRemindedAt === bet.createdAt ? 'Created' : 'Reminded'} ${distanceInWordsToNow(bet.lastRemindedAt, { addSuffix: true })}`}
         secondaryAction={this.secondaryAction}
         secondaryLabel={isBettor ? 'Cancel Bet' : 'Decline'}
       />
