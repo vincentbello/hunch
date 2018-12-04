@@ -12,7 +12,7 @@ import BetActions from 'components/BetActions';
 import Image from 'components/Image';
 
 const styles = StyleSheet.create({
-  Bet: {
+  bet: {
     backgroundColor: Colors.white,
     borderRadius: 2,
     marginLeft: 8,
@@ -20,68 +20,71 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingLeft: 8,
     paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 6,
+    paddingBottom: 6,
   },
-  Bet__container: {
+  container: {
     flexDirection: 'row',
-    height: 68,
     backgroundColor: Colors.white,
     borderRadius: 2,
     alignItems: 'center',
   },
-  Bet__content: {
+  image: {
+    alignSelf: 'flex-start',
+  },
+  content: {
     flex: 1,
     marginLeft: 8,
   },
-  Bet__header: {
-    flex: 1,
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 2,
   },
-  Bet__link: {
+  link: {
     fontWeight: '800',
   },
-  Bet__label: {
+  label: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  Bet__labelText: {
+  labelText: {
     fontSize: 18,
     fontWeight: '600',
     color: Colors.textPrimary,
   },
-  Bet__labelText_green: {
+  labelText_green: {
     fontSize: 20,
     fontWeight: '900',
     color: Colors.primary.green,
   },
-  Bet__labelText_red: {
+  labelText_red: {
     fontSize: 20,
     fontWeight: '900',
     color: Colors.primary.red,
   },
-  Bet__labelSuperscript: {
+  labelSuperscript: {
     fontSize: 14,
     marginLeft: 5,
     marginRight: 1,
   },
-  Bet__headerText: {
+  headerText: {
     flex: 1,
     color: Colors.textPrimary,
+    marginRight: 4,
     ...Typography.base,
   },
-  Bet__body: {
+  body: {
     flex: 1,
     fontSize: 13,
     color: Colors.textSecondary,
   },
-  Bet__meta: {
+  meta: {
     textAlign: 'right',
     fontSize: 12,
     color: Colors.primary.gray,
   },
-  Bet__footer: {
+  footer: {
     paddingTop: 4,
     paddingBottom: 4,
   },
@@ -117,11 +120,11 @@ export default class BetCell extends React.PureComponent<Props> {
   renderBetAmount = (): React.Node => {
     const { bet, userId } = this.props;
     const isComplete = bet.winnerId !== null;
-    const labelTextStyle = [styles.Bet__labelText, isComplete && styles[`Bet__labelText_${bet.winnerId === userId ? 'green' : 'red'}`]];
+    const labelTextStyle = [styles.labelText, isComplete && styles[`labelText_${bet.winnerId === userId ? 'green' : 'red'}`]];
     return (
       <React.Fragment>
-        {bet.winnerId !== null && <Text style={styles.Bet__labelText}>{bet.winnerId === userId ? 'Won' : 'Lost'}</Text>}
-        <Text style={styles.Bet__labelSuperscript}>$</Text>
+        {bet.winnerId !== null && <Text style={styles.labelText}>{bet.winnerId === userId ? 'Won' : 'Lost'}</Text>}
+        <Text style={styles.labelSuperscript}>$</Text>
         <Text style={labelTextStyle}>{bet.amount}</Text>
       </React.Fragment>
     );
@@ -132,24 +135,26 @@ export default class BetCell extends React.PureComponent<Props> {
     const { bet, disabled, onPress } = this.props;
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress}>
-        <View style={styles.Bet}>
-          <View style={styles.Bet__container}>
-            <Image bordered rounded url={displayedImageUrl} />
-            <View style={styles.Bet__content}>
-              <View style={styles.Bet__header}>
-                <Text style={styles.Bet__headerText}>
-                  {isInvolved && isBettor ? <Text>You</Text> : <Text style={styles.Bet__link}>{bet.bettor.fullName}</Text>}
-                  <Text> bet </Text>
-                  {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.Bet__link}>{bet.bettee.fullName}</Text>}
+        <View style={styles.bet}>
+          <View style={styles.container}>
+            <View style={styles.image}>
+              <Image bordered rounded url={displayedImageUrl} />
+            </View>
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Text numberOfLines={1} style={styles.headerText}>
+                  {isInvolved && isBettor ? <Text>You</Text> : <Text style={styles.link}>{bet.bettor.firstName}</Text>}
+                  <Text> challenged </Text>
+                  {isInvolved && !isBettor ? <Text>you</Text> : <Text style={styles.link}>{bet.bettee.firstName}</Text>}
                 </Text>
-                <View style={styles.Bet__label}>{this.renderBetAmount()}</View>
+                <View style={styles.label}>{this.renderBetAmount()}</View>
               </View>
-              <Text style={styles.Bet__body}>{bet.wager.length > 0 ? `“${bet.wager}”` : ''}</Text>
-              <Text style={styles.Bet__meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>
+              <Text style={styles.body} numberOfLines={2}>{bet.wager}</Text>
+              <Text style={styles.meta}>{distanceInWordsToNow(bet.createdAt, { addSuffix: true })}</Text>
             </View>
           </View>
           {!bet.responded && (
-            <View style={styles.Bet__footer}>
+            <View style={styles.footer}>
               <BetActions bet={bet} isBettor={isBettor} />
             </View>
           )}

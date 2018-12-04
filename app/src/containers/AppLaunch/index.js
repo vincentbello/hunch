@@ -47,7 +47,7 @@ class AppLaunch extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    // this.autoLogin();
+    this.autoLogin();
   }
 
   autoLogin = async (): Promise<void> => {

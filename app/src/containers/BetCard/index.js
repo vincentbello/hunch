@@ -53,7 +53,7 @@ type Props = ExternalProps & CurrentUserProps;
 
 const styles = StyleSheet.create({
   Bet: {
-    marginTop: -AppSizes.navbarHeight,
+    marginTop: -AppSizes.navbarHeight - AppSizes.homeIndicatorHeight,
   },
   game: {
     marginLeft: 8,

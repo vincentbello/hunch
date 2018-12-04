@@ -21,6 +21,7 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   content: {
+    flex: 1,
     padding: 8,
     backgroundColor: Colors.background,
     borderTopLeftRadius: 8,
@@ -29,7 +30,6 @@ const s = StyleSheet.create({
     borderBottomRightRadius: 8,
     marginLeft: 8,
     textAlign: 'left',
-    // TODO: How to properly wrap text?
   },
   content_byMe: {
     backgroundColor: Colors.brand.primary,
