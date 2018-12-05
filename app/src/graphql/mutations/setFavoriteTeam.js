@@ -4,8 +4,8 @@ import teamFragment from 'graphql/fragments/team';
 export default gql`
   ${teamFragment}
 
-  query GetTeams($league: LeagueType!, $userId: Int) {
-    teams(league: $league, userId: $userId) {
+  mutation SetFavoriteTeam($teamId: Int!, $userId: Int) {
+    setFavoriteTeam(teamId: $teamId, userId: $userId) {
       ...teamFields
       isFavorite
     }

@@ -1,21 +1,20 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Favorites', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('FavoriteTeams', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    entity: {
-      allowNull: false,
-      type: Sequelize.ENUM('Team'),
-      defaultValue: 'Team',
-    },
-    entityId: {
+    teamId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      references: {
+        model: 'Teams',
+        key: 'id',
+      },
     },
     userId: {
       allowNull: false,
@@ -34,5 +33,5 @@ module.exports = {
       type: Sequelize.DATE
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Favorites'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('FavoriteTeams'),
 };

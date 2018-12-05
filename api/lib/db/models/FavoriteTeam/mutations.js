@@ -2,6 +2,6 @@ import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList 
 import { isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import { resolver } from 'graphql-sequelize';
-import FavoriteType from './type';
+import FavoriteTeamType from './type';
 
 export default models => ({});

@@ -14,21 +14,15 @@ export default (sequelize, DataTypes) => {
     state: DataTypes.STRING,
     xmlStatsId: DataTypes.STRING,
     msfId: DataTypes.INTEGER,
-    favorite: {
+    isFavorite: {
       type: DataTypes.VIRTUAL(DataTypes.BOOLEAN),
       get() {
-        return Array.isArray(this.Favorites) && this.Favorites.length > 0;
+        return this.FavoriteTeam !== null;
       }
     },
   }, {});
   Team.associate = function(models) {
-    Team.hasMany(models.Favorite, {
-      foreignKey: 'entityId',
-      constraints: false,
-      scope: {
-        entity: 'Team',
-      },
-    });
+    Team.hasOne(models.FavoriteTeam);
   };
   return Team;
 };

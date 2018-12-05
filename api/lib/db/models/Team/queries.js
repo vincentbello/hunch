@@ -23,7 +23,7 @@ export default models => ({
         type: LeagueType,
       },
       userId: {
-        description: 'ID for user to get favorites for',
+        description: 'ID of user to identify favorite teams for',
         type: GraphQLInt,
       },
     },
@@ -35,13 +35,34 @@ export default models => ({
         },
         order: [['firstName', 'ASC']],
         include: {
-          model: models.Favorite,
-          as: 'Favorites',
+          model: models.FavoriteTeam,
+          // as: 'favorite',
           where: {
-            entity: 'Team',
             userId: userId || myId,
           },
           required: false,
+        },
+      }),
+    }),
+  },
+
+  favoriteTeams: {
+    type: GraphQLList(TeamType),
+    args: {
+      userId: {
+        description: 'ID of user to get favorite teams for',
+        type: GraphQLInt,
+      },
+    },
+    resolve: resolver(models.Team, {
+      before: (findOptions, { league, userId }, { userId: myId }) => ({
+        ...findOptions,
+        order: [['abbreviation', 'ASC']],
+        include: {
+          model: models.FavoriteTeam,
+          where: {
+            userId: userId || myId,
+          },
         },
       }),
     }),

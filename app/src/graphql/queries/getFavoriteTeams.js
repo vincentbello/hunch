@@ -4,10 +4,9 @@ import teamFragment from 'graphql/fragments/team';
 export default gql`
   ${teamFragment}
 
-  query GetTeams($league: LeagueType!, $userId: Int) {
-    teams(league: $league, userId: $userId) {
+  query GetFavoriteTeams($userId: Int) {
+    favoriteTeams(userId: $userId) {
       ...teamFields
-      isFavorite
     }
   }
 `;

@@ -4,15 +4,11 @@ import { resolver } from 'graphql-sequelize';
 import TeamType from './type';
 
 export default models => ({
-  removeFavorite: {
+  removeFavoriteTeam: {
     type: TeamType,
     args: {
-      entity: {
-        description: 'Entity type',
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      entityId: {
-        description: 'Entity ID',
+      teamId: {
+        description: 'Team ID',
         type: new GraphQLNonNull(GraphQLInt),
       },
       userId: {
@@ -20,29 +16,24 @@ export default models => ({
         type: GraphQLInt,
       },
     },
-    resolve: async function(root, { entity, entityId, userId: argUserId }, { userId: myId }) {
+    resolve: async function(root, { teamId, userId: argUserId }, { userId: myId }) {
       const userId = argUserId || myId;
-      await models.Favorite.destroy({ where: { entity, entityId, userId } });
-      return models.Team.findById(entityId, {
+      await models.FavoriteTeam.destroy({ where: { teamId, userId } });
+      return models.Team.findById(teamId, {
         include: {
-          model: models.Favorite,
-          as: 'Favorites',
-          where: { entity, userId },
+          model: models.FavoriteTeam,
+          where: { teamId, userId },
           required: false,
         },
       });
     },
   },
 
-  setFavorite: {
+  setFavoriteTeam: {
     type: TeamType,
     args: {
-      entity: {
-        description: 'Entity type',
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      entityId: {
-        description: 'Entity ID',
+      teamId: {
+        description: 'Team ID',
         type: new GraphQLNonNull(GraphQLInt),
       },
       userId: {
@@ -50,14 +41,13 @@ export default models => ({
         type: GraphQLInt,
       },
     },
-    resolve: async function(root, { entity, entityId, userId: argUserId }, { userId: myId }) {
+    resolve: async function(root, { teamId, userId: argUserId }, { userId: myId }) {
       const userId = argUserId || myId;
-      await models.Favorite.create({ entity, entityId, userId });
-      return models.Team.findById(entityId, {
+      await models.FavoriteTeam.create({ teamId, userId });
+      return models.Team.findById(teamId, {
         include: {
-          model: models.Favorite,
-          as: 'Favorites',
-          where: { entity, userId },
+          model: models.FavoriteTeam,
+          where: { teamId, userId },
           required: false,
         },
       });
