@@ -427,7 +427,12 @@ class CreateBetContainer extends React.Component<Props, State> {
             <View style={styles.Create__headerMain}>
               <View style={styles.Create__headerMain}>
                 <View style={{ flex: 1 }}>
-                  <UserCell size="small" user={bettee} renderMeta = {(): React.Node => this.renderRemoveButton(this.removeBettee)} />
+                  <UserCell
+                    emphasized
+                    size="small"
+                    user={bettee}
+                    renderMeta={(): React.Node => this.renderRemoveButton(this.removeBettee)}
+                  />
                 </View>
               </View>
             </View>

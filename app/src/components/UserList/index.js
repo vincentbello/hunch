@@ -55,7 +55,6 @@ class UserList extends React.PureComponent<Props> {
         refreshing={networkStatus === 4}
         renderItem={({ item }): React.Node => (
           <UserCell
-            full
             inList
             user={item}
             withDisclosureIndicator={myId !== item.id}

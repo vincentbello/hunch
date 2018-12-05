@@ -2,6 +2,7 @@ import { GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql'
 import { Op } from 'sequelize';
 import { addHours, endOfDay, max, startOfDay } from 'date-fns';
 import { resolver } from 'graphql-sequelize';
+import { LeagueType } from '../Team/type';
 import GameType from './type';
 
 export default models => ({
@@ -33,7 +34,7 @@ export default models => ({
       },
       league: {
         description: 'League to fetch games for',
-        type: GraphQLNonNull(GraphQLString),
+        type: GraphQLNonNull(LeagueType),
       },
     },
     resolve: resolver(models.Game, {

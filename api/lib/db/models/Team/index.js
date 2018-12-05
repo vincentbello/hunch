@@ -1,5 +1,6 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
+
+export default (sequelize, DataTypes) => {
   const Team = sequelize.define('Team', {
     abbreviation: DataTypes.STRING,
     firstName: DataTypes.STRING,
@@ -13,9 +14,21 @@ module.exports = (sequelize, DataTypes) => {
     state: DataTypes.STRING,
     xmlStatsId: DataTypes.STRING,
     msfId: DataTypes.INTEGER,
+    favorite: {
+      type: DataTypes.VIRTUAL(DataTypes.BOOLEAN),
+      get() {
+        return Array.isArray(this.Favorites) && this.Favorites.length > 0;
+      }
+    },
   }, {});
   Team.associate = function(models) {
-    // associations can be defined here
+    Team.hasMany(models.Favorite, {
+      foreignKey: 'entityId',
+      constraints: false,
+      scope: {
+        entity: 'Team',
+      },
+    });
   };
   return Team;
 };

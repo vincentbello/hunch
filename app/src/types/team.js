@@ -9,4 +9,5 @@ export type Team = {
   league: string,
   conference: string,
   division: string,
+  favorite: boolean,
 };

@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class BetCardContainer extends React.Component<Props> {
+class BetCardContainer extends React.PureComponent<Props> {
   static displayName = 'BetCardContainer';
 
   renderBet = (bet: Bet): React.Node => (

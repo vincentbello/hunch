@@ -14,3 +14,7 @@ export const DATE_VIEW_TYPES = [...Array(10)].map((_, index) => {
     title: index === 0 ? 'Today' : format(date, 'ddd       MMM D'),
   };
 });
+
+export const LEAGUE_VIEW_TYPES = [
+  { key: 'NBA', title: 'NBA' },
+];

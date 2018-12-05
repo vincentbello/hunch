@@ -27,17 +27,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.cellBorder,
   },
-  User__content: {
+  content: {
     marginLeft: 8,
     marginRight: 8,
   },
-  User__content_full: {
+  content_full: {
     flex: 1,
+  },
+  label: {
+    fontSize: 15,
+  },
+  label_emphasized: {
+    fontWeight: 'bold',
   },
 });
 
 type Props = {
-  full: boolean,
+  emphasized: boolean,
   inList: boolean,
   user: User,
   withDisclosureIndicator: boolean,
@@ -45,13 +51,13 @@ type Props = {
   renderMeta: () => React.Node,
 };
 
-const UserCell = ({ full, inList, user, withDisclosureIndicator, onPress, renderMeta }: Props): React.Node => {
+const UserCell = ({ emphasized, inList, user, withDisclosureIndicator, onPress, renderMeta }: Props): React.Node => {
   const s = [styles.User, inList && styles.User_inList];
   const contents = (
     <React.Fragment>
       <Image bordered rounded size="small" url={user.imageUrl} />
-      <View style={[styles.User__content, inList && styles.User__content_full]}>
-        <Text>{user.fullName}</Text>
+      <View style={[styles.content, inList && styles.content_full]}>
+        <Text style={[styles.label, emphasized && styles.label_emphasized]}>{user.fullName}</Text>
       </View>
       {renderMeta()}
       {withDisclosureIndicator && <Icon name="chevron-right" color={Colors.textSecondary} size={16} />}
@@ -61,7 +67,7 @@ const UserCell = ({ full, inList, user, withDisclosureIndicator, onPress, render
 };
 
 UserCell.defaultProps = {
-  full: false,
+  emphasized: false,
   withDisclosureIndicator: false,
   onPress: null,
   renderMeta: (): React.Node => null,
