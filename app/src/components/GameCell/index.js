@@ -113,6 +113,9 @@ const styles = StyleSheet.create({
   lightText: {
     color: Colors.white,
   },
+  favoriteText: {
+    color: Colors.primary.orange,
+  },
   metaRow: {
     fontSize: 13,
     fontWeight: '500',
@@ -150,8 +153,10 @@ const TeamRow = ({ didLose, didWin, large, light, score, team }: TeamRowProps): 
     <View style={[styles.row, large && styles.row_large, didLose && styles.row_muted]}>
       <Image rounded light={light} size={large ? 'medium' : 'xsmall'} url={team.imageUrl} />
       <View style={styles.rowStack}>
-        {large && <Text style={[styles.rowSubhead, light && styles.lightText]}>{team.firstName}</Text>}
-        <Text style={[styles.rowLabel, light && styles.lightText, large && styles.rowLabel_large]}>
+        {large && (
+          <Text style={[styles.rowSubhead, light && styles.lightText, team.isFavorite && styles.favoriteText]}>{team.firstName}</Text>
+        )}
+        <Text style={[styles.rowLabel, light && styles.lightText, large && styles.rowLabel_large, team.isFavorite && styles.favoriteText]}>
           {team.lastName}
         </Text>
       </View>

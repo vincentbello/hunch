@@ -15,12 +15,14 @@ export default gql`
     startDate
     awayTeam {
       ...teamFields
+      isFavorite
     }
     homeTeam {
       ...teamFields
       site
       city
       state
+      isFavorite
     }
   }
 `;

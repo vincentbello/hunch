@@ -114,7 +114,12 @@ class FavoritesContainer extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <Text style={styles.sectionHeader}>My Favorite Teams</Text>
-        <FavoritesList editMode mine remove={(teamId: number): void => this.props.removeFavoriteTeam({ variables: { teamId } })} />
+        <FavoritesList
+          editMode
+          mine
+          userId={null}
+          remove={(teamId: number): void => this.props.removeFavoriteTeam({ variables: { teamId } })}
+        />
         <Text style={styles.sectionHeader}>Teams</Text>
         <TabView
           navigationState={{

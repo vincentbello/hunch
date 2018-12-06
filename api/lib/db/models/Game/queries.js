@@ -1,5 +1,5 @@
 import { GraphQLInt, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
-import { Op } from 'sequelize';
+import Sequelize, { Op } from 'sequelize';
 import { addHours, endOfDay, max, startOfDay } from 'date-fns';
 import { resolver } from 'graphql-sequelize';
 import { LeagueType } from '../Team/type';
@@ -15,11 +15,27 @@ export default models => ({
       },
     },
     resolve: resolver(models.Game, {
-      before: findOptions => ({
+      before: (findOptions, _, { userId }) => ({
         ...findOptions,
         include: [
-          { model: models.Team, as: 'homeTeam' },
-          { model: models.Team, as: 'awayTeam' },
+          {
+            model: models.Team,
+            as: 'homeTeam',
+            include: {
+              model: models.FavoriteTeam,
+              where: { userId },
+              required: false,
+            },
+          },
+          {
+            model: models.Team,
+            as: 'awayTeam',
+            include: {
+              model: models.FavoriteTeam,
+              where: { userId },
+              required: false,
+            },
+          },
         ],
       }),
     }),
@@ -38,7 +54,7 @@ export default models => ({
       },
     },
     resolve: resolver(models.Game, {
-      before: (findOptions, { date, league }) => {
+      before: (findOptions, { date, league }, { userId }) => {
         const dateObj = new Date(date.substr(4), parseInt(date.substr(0, 2), 10) - 1, date.substr(2, 2));
         const hourOffset = 7; // TODO: Figure out how to handle this
         return {
@@ -50,10 +66,29 @@ export default models => ({
             },
             league,
           },
-          order: [['startDate', 'ASC']],
           include: [
-            { model: models.Team, as: 'homeTeam' },
-            { model: models.Team, as: 'awayTeam' },
+            {
+              model: models.Team,
+              as: 'homeTeam',
+              include: {
+                model: models.FavoriteTeam,
+                where: { userId },
+                required: false,
+              },
+            },
+            {
+              model: models.Team,
+              as: 'awayTeam',
+              include: {
+                model: models.FavoriteTeam,
+                where: { userId },
+                required: false,
+              },
+            },
+          ],
+          order: [
+            Sequelize.literal('`homeTeam->FavoriteTeam`.`id` IS NOT NULL OR `awayTeam->FavoriteTeam`.`id` IS NOT NULL DESC'),
+            ['startDate', 'ASC'],
           ],
         };
       },
