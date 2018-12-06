@@ -11,13 +11,8 @@ export default models => ({
         description: 'Team ID',
         type: new GraphQLNonNull(GraphQLInt),
       },
-      userId: {
-        description: 'User ID to remove favorite from',
-        type: GraphQLInt,
-      },
     },
-    resolve: async function(root, { teamId, userId: argUserId }, { userId: myId }) {
-      const userId = argUserId || myId;
+    resolve: async function(root, { teamId }, { userId }) {
       await models.FavoriteTeam.destroy({ where: { teamId, userId } });
       return models.Team.findById(teamId, {
         include: {
@@ -36,13 +31,8 @@ export default models => ({
         description: 'Team ID',
         type: new GraphQLNonNull(GraphQLInt),
       },
-      userId: {
-        description: 'User ID to remove favorite from',
-        type: GraphQLInt,
-      },
     },
-    resolve: async function(root, { teamId, userId: argUserId }, { userId: myId }) {
-      const userId = argUserId || myId;
+    resolve: async function(root, { teamId }, { userId }) {
       await models.FavoriteTeam.create({ teamId, userId });
       return models.Team.findById(teamId, {
         include: {

@@ -4,8 +4,8 @@ import teamFragment from 'graphql/fragments/team';
 export default gql`
   ${teamFragment}
 
-  mutation RemoveFavoriteTeam($teamId: Int!, $userId: Int) {
-    removeFavoriteTeam(teamId: $teamId, userId: $userId) {
+  mutation RemoveFavoriteTeam($teamId: Int!) {
+    removeFavoriteTeam(teamId: $teamId) {
       ...teamFields
       isFavorite
     }

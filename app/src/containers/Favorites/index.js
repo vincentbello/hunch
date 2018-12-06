@@ -1,8 +1,7 @@
 // @flow
 import * as React from 'react';
-import { FlatList, StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { compose, graphql, Query } from 'react-apollo';
-import GET_FAVORITE_TEAMS from 'graphql/queries/getFavoriteTeams';
 import GET_TEAMS from 'graphql/queries/getTeams';
 import REMOVE_FAVORITE_TEAM from 'graphql/mutations/removeFavoriteTeam';
 import SET_FAVORITE_TEAM from 'graphql/mutations/setFavoriteTeam';
@@ -13,10 +12,10 @@ import { type Team } from 'types/Team';
 import Colors from 'theme/colors';
 import Typography from 'theme/typography';
 
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DerivedStateSplash from 'components/DerivedStateSplash';
+import FavoritesList from 'components/FavoritesList';
 import Image from 'components/Image';
 import Splash from 'components/Splash';
 import TabView from 'components/TabView';
@@ -31,9 +30,6 @@ type State = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 8,
-  },
   team: {
     backgroundColor: Colors.white,
     flexDirection: 'row',
@@ -61,39 +57,6 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 8,
     paddingBottom: 2,
-  },
-  favorites: {
-    flexGrow: 0,
-    paddingLeft: 4,
-    paddingRight: 4,
-    paddingTop: 12,
-  },
-  favorite: {
-    width: 80,
-    marginLeft: 8,
-    marginRight: 8,
-    padding: 8,
-    backgroundColor: Colors.white,
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  favoriteLabel: {
-    marginTop: 4,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  favoriteButton: {
-    backgroundColor: Colors.primary.red,
-    position: 'absolute',
-    top: -12,
-    right: -12,
-    height: 24,
-    width: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-    overflow: 'hidden',
   },
 });
 
@@ -147,46 +110,11 @@ class FavoritesContainer extends React.Component<Props, State> {
     </Query>
   );
 
-  renderFavoriteTeam = (team: Team): React.Node => (
-    <View style={styles.favorite}>
-      <TouchableHighlight
-        style={styles.favoriteButton}
-        underlayColor={`${Colors.primary.red}80`}
-        onPress={(): void => this.props.removeFavoriteTeam({ variables: { teamId: team.id } })}
-      >
-        <FeatherIcon
-          color={Colors.white}
-          style={styles.favoriteButtonIcon}
-          name="minus"
-          size={18}
-        />
-      </TouchableHighlight>
-      <Image rounded url={team.imageUrl} />
-      <Text style={styles.favoriteLabel}>{team.abbreviation}</Text>
-    </View>
-  );
-
-  renderFavoriteTeams = (teams: Array<Team>): React.Node => (
-    <FlatList
-      horizontal
-      data={teams}
-      style={styles.favorites}
-      keyExtractor={(team: Team): string => `${team.id}`}
-      renderItem={({ item }): React.Node => this.renderFavoriteTeam(item)}
-    />
-  );
-
   render(): React.Node {
     return (
       <React.Fragment>
-        <Text style={styles.sectionHeader}>My Favorites</Text>
-        <Query query={GET_FAVORITE_TEAMS}>
-          {({ loading, error, data: { favoriteTeams } }): React.Node => (
-            <DerivedStateSplash size="small" loading={loading} error={error}>
-              {Boolean(favoriteTeams) && this.renderFavoriteTeams(favoriteTeams)}
-            </DerivedStateSplash>
-          )}
-        </Query>
+        <Text style={styles.sectionHeader}>My Favorite Teams</Text>
+        <FavoritesList editMode mine remove={(teamId: number): void => this.props.removeFavoriteTeam({ variables: { teamId } })} />
         <Text style={styles.sectionHeader}>Teams</Text>
         <TabView
           navigationState={{

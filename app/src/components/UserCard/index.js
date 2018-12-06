@@ -17,6 +17,7 @@ import Button from 'react-native-button';
 import Icon from 'react-native-vector-icons/Feather';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import DualAction from 'components/DualAction';
+import FavoritesList from 'components/FavoritesList';
 import FriendshipButton from 'components/FriendshipButton';
 import Image from 'components/Image';
 import UserStats from 'components/UserStats';
@@ -27,7 +28,7 @@ import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
   user: {
-    margin: 8,
+    marginTop: 8,
   },
   action: {
     padding: 8,
@@ -45,6 +46,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   actionButton: {
+    marginLeft: 8,
+    marginRight: 8,
     marginBottom: 12,
     backgroundColor: Colors.brand.primary,
     padding: 12,
@@ -56,6 +59,8 @@ const styles = StyleSheet.create({
   },
   section: {
     ...BoxStyles,
+    marginLeft: 8,
+    marginRight: 8,
     marginBottom: 8,
     padding: 8,
   },
@@ -71,6 +76,8 @@ const styles = StyleSheet.create({
     ...Typography.h4,
     fontWeight: '900',
     marginBottom: 2,
+    marginLeft: 8,
+    marginRight: 8,
   },
   headerContent: {
     marginLeft: 8,
@@ -103,6 +110,28 @@ const styles = StyleSheet.create({
   buttonLabel: {
     fontWeight: 'bold',
     color: Colors.brand.primary,
+  },
+  favorites: {
+    marginBottom: 12,
+  },
+  listHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  listHeaderText: {
+    flex: 1,
+    marginRight: 8,
+  },
+  listEditButton: {
+    padding: 0,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 6,
+    paddingRight: 6,
+  },
+  listEditIcon: {
+    marginRight: 0,
   },
 });
 
@@ -160,6 +189,7 @@ class UserCard extends React.PureComponent<Props> {
             />
           </View>
         )}
+
         <View style={styles.user}>
           <View style={[styles.section, styles.section_row]}>
             <Image bordered rounded size="large" url={user.imageUrl} />
@@ -173,6 +203,7 @@ class UserCard extends React.PureComponent<Props> {
               </Text>
             </View>
           </View>
+
           {!isCurrent && (
             <React.Fragment>
               <View style={[styles.section_row, styles.section_clear]}>
@@ -204,6 +235,26 @@ class UserCard extends React.PureComponent<Props> {
               )}
             </React.Fragment>
           )}
+
+          <View style={styles.listHeader}>
+            <Text style={[styles.sectionHeader, styles.listHeaderText]}>{`${isCurrent ? 'My ' : ''}Favorite Teams`}</Text>
+            {isCurrent && (
+              <Icon.Button
+                backgroundColor={Colors.transparent}
+                color={Colors.brand.primary}
+                style={styles.listEditButton}
+                iconStyle={styles.listEditIcon}
+                name="edit-2"
+                size={18}
+                underlayColor="rgba(0, 0, 0, 0.1)"
+                onPress={Actions.favorites}
+              />
+            )}
+          </View>
+          <View style={styles.favorites}>
+            <FavoritesList mine={isCurrent} userId={isCurrent ? null : user.id} />
+          </View>
+
           <Query query={GET_STATS} variables={{ userId: user.id }}>
             {({ loading, error, data }): React.Node => (
               <React.Fragment>
