@@ -13,6 +13,7 @@ export default (sequelize, DataTypes) => {
     fbAccessToken: DataTypes.TEXT,
     imageUrl: DataTypes.STRING,
     gender: DataTypes.STRING,
+    fbExpiresAt: DataTypes.DATE,
     lastLoginAt: DataTypes.DATE,
     currentLoginAt: DataTypes.DATE,
     loginCount: DataTypes.INTEGER,

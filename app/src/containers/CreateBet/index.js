@@ -312,14 +312,14 @@ class CreateBetContainer extends React.Component<Props, State> {
 
   renderGamesList = (): React.Node => (
     <Query query={GET_UPCOMING_GAMES} variables={{ date: this.props.dateViewType, league: 'NBA' }}>
-      {({ loading, error, data: { upcomingGames } }): React.Node => (
+      {({ loading, error, data }): React.Node => (
         <DerivedStateSplash loading={loading} error={error}>
-          {upcomingGames && (
-            upcomingGames.length === 0 ? (
+          {data && data.upcomingGames && (
+            data.upcomingGames.length === 0 ? (
               <Splash heading={this.props.dateViewIndex === 0 ? 'No more games today.' : 'No games.'} iconName="slash" grow />
             ) : (
               <FlatList
-                data={upcomingGames}
+                data={data.upcomingGames}
                 keyExtractor={(game: Game): string => `${game.id}`}
                 renderItem={({ item }): React.Node => (
                   <TouchableOpacity onPress={(): void => this.props.actions.setGame(item.id)}>
