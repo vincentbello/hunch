@@ -45,7 +45,9 @@ function BetList({ betsQuery: { bets, error, loading, networkStatus, refetch }, 
       return (
         <Splash
           heading={`You have no ${betListType.toLowerCase()} bets.`}
-          iconName="search"
+          inTabs
+          visualName="MEH_LIGHTBULB"
+          visualType="illustration"
           renderSubhead={betListType === 'ACTIVE' ? (): React.Node => (
             <Icon.Button
               backgroundColor={Colors.transparent}

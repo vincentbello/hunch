@@ -44,7 +44,7 @@ const DerivedStateSplash = ({ children, error, loading, size, withCachedData }: 
   );
 
   return Boolean(error) ? (
-    <Splash heading={error.errors.length > 0 ? error.errors[0].message : 'An error occurred.'} iconName="alert-triangle" />
+    <Splash heading={error.errors.length > 0 ? error.errors[0].message : 'An error occurred.'} visualName="alert-triangle" />
   ) : children;
 };
 

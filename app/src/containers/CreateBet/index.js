@@ -316,7 +316,7 @@ class CreateBetContainer extends React.Component<Props, State> {
         <DerivedStateSplash loading={loading} error={error}>
           {upcomingGames && (
             upcomingGames.length === 0 ? (
-              <Splash heading={this.props.dateViewIndex === 0 ? 'No more games today.' : 'No games.'} iconName="slash" grow />
+              <Splash heading={this.props.dateViewIndex === 0 ? 'No more games today.' : 'No games.'} visualName="slash" grow />
             ) : (
               <FlatList
                 data={upcomingGames}

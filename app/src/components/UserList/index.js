@@ -43,7 +43,7 @@ class UserList extends React.PureComponent<Props> {
   }
 
   renderUsers = (users: Array<User>): React.Node => {
-    if (users.length === 0) return <Splash heading={USER_LIST_EMPTY_MESSAGES[this.props.userListType]} iconName="search" />;
+    if (users.length === 0) return <Splash heading={USER_LIST_EMPTY_MESSAGES[this.props.userListType]} visualName="search" />;
 
     const { usersQuery: { networkStatus, refetch } } = this.props;
     const myId = this.props.currentUser.id;

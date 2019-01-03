@@ -90,7 +90,7 @@ class FavoritesContainer extends React.Component<Props, State> {
   );
 
   renderTeams = (teams: Array<Team>): React.Node => {
-    if (teams.length === 0) return <Splash heading="No teams in this league." iconName="search" />;
+    if (teams.length === 0) return <Splash heading="No teams in this league." visualName="search" />;
     return (
       <FlatList
         data={teams}
