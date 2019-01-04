@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 
-import GET_BETS from 'graphql/queries/getBets';
+import GET_HUNCHES from 'graphql/queries/getHunches';
 import GET_USERS from 'graphql/queries/getUsers';
 
 import NavButton from 'components/NavButton';
@@ -19,10 +19,10 @@ const InboxButton = ({ numRequests, targetScene }: Props) => (
 InboxButton.displayName = 'InboxButtonContainer';
 
 export default compose(
-  graphql(GET_BETS, {
-    options: () => ({ variables: { betListType: 'REQUESTED' } }),
-    props: ({ data: { bets } }) => ({ numRequests: bets ? bets.length : 0 }),
-    skip: ({ targetScene }) => targetScene !== 'requestedBets',
+  graphql(GET_HUNCHES, {
+    options: () => ({ variables: { hunchListType: 'REQUESTED' } }),
+    props: ({ data: { hunches } }) => ({ numRequests: hunches ? hunches.length : 0 }),
+    skip: ({ targetScene }) => targetScene !== 'requestedHunches',
   }),
   graphql(GET_USERS, {
     options: { variables: { userListType: 'FRIEND_REQUESTS' } },

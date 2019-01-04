@@ -228,9 +228,9 @@ class UserCard extends React.PureComponent<Props> {
                 <Button
                   containerStyle={styles.actionButton}
                   style={styles.actionButtonText}
-                  onPress={(): void => Actions.createBetModal({ preselectedBettee: user })}
+                  onPress={(): void => Actions.createHunchModal({ preselectedBettee: user })}
                 >
-                  {`Challenge ${user.firstName} to a Bet`}
+                  {`Challenge ${user.firstName} to a Hunch`}
                 </Button>
               )}
             </React.Fragment>

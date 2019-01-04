@@ -1,6 +1,6 @@
 import { addDays, format } from 'date-fns';
 
-export const BET_VIEW_TYPES = [
+export const HUNCH_VIEW_TYPES = [
   { key: 'ACTIVE', title: 'Active' },
   { key: 'COMPLETED', title: 'Completed' },
   { key: 'PENDING', title: 'Pending' },

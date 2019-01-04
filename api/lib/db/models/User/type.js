@@ -9,11 +9,11 @@ const StatGroupType = new GraphQLObjectType({
   fields: {
     won: {
       type: GraphQLInt,
-      description: 'Number of bets won',
+      description: 'Number of hunches won',
       async resolve({ meId, userId, type }) {
         if (type === 'AGAINST') {
           if (userId === meId) return 0;
-          return await models.Bet.count({
+          return await models.Hunch.count({
             where: {
               winnerId: userId,
               [Op.or]: [
@@ -24,17 +24,17 @@ const StatGroupType = new GraphQLObjectType({
           });
         }
 
-        return await models.Bet.count({ where: { winnerId: userId } });
+        return await models.Hunch.count({ where: { winnerId: userId } });
       },
     },
 
     played: {
       type: GraphQLInt,
-      description: 'Number of bets played',
+      description: 'Number of hunches played',
       async resolve({ meId, userId, type }) {
         if (type === 'AGAINST') {
           if (userId === meId) return 0;
-          return await models.Bet.count({
+          return await models.Hunch.count({
             where: {
               accepted: true,
               active: false,
@@ -46,7 +46,7 @@ const StatGroupType = new GraphQLObjectType({
           });
         }
 
-        return await models.Bet.count({
+        return await models.Hunch.count({
           where: {
             accepted: true,
             active: false,
@@ -61,11 +61,11 @@ const StatGroupType = new GraphQLObjectType({
 
     amountWon: {
       type: GraphQLInt,
-      description: 'Total amount won on bets',
+      description: 'Total amount won on hunches',
       async resolve({ meId, userId, type }) {
         if (type === 'AGAINST') {
           if (userId === meId) return 0;
-          return await models.Bet.sum('amount', {
+          return await models.Hunch.sum('amount', {
             where: {
               winnerId: userId,
               [Op.or]: [
@@ -76,17 +76,17 @@ const StatGroupType = new GraphQLObjectType({
           }) || 0;
         }
 
-        return await models.Bet.sum('amount', { where: { winnerId: userId } }) || 0;
+        return await models.Hunch.sum('amount', { where: { winnerId: userId } }) || 0;
       },
     },
 
     amountLost: {
       type: GraphQLInt,
-      description: 'Total amount lost on bets',
+      description: 'Total amount lost on hunches',
       async resolve({ meId, userId, type }) {
         if (type === 'AGAINST') {
           if (userId === meId) return 0;
-          return await models.Bet.sum('amount', {
+          return await models.Hunch.sum('amount', {
             where: {
               accepted: true,
               active: false,
@@ -101,7 +101,7 @@ const StatGroupType = new GraphQLObjectType({
           }) || 0;
         }
 
-        return await models.Bet.sum('amount', {
+        return await models.Hunch.sum('amount', {
           where: {
             accepted: true,
             active: false,
@@ -125,12 +125,12 @@ export const UserStatsType = new GraphQLObjectType({
   fields: {
     overall: {
       type: StatGroupType,
-      description: 'Group of stats on total bets',
+      description: 'Group of stats on total hunches',
       resolve: args => ({ ...args, type: 'OVERALL' }),
     },
     against: {
       type: StatGroupType,
-      description: 'Group of stats on head to head bets',
+      description: 'Group of stats on head to head hunches',
       resolve: args => ({ ...args, type: 'AGAINST' }),
     },
   },
