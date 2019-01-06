@@ -30,6 +30,10 @@ class LoginContainer extends React.Component<Props, State> {
     refreshToken: null,
   };
 
+  componentWillMount() {
+    Actions.refresh({ key: 'drawer', open: false });
+  }
+
   async componentDidMount(): Promise<void> {
     const [[_1, accessToken], [_2, refreshToken]] = await AsyncStorage.multiGet(['accessToken', 'refreshToken']);
     this.setState({ accessToken, refreshToken });
@@ -50,7 +54,9 @@ class LoginContainer extends React.Component<Props, State> {
     new NotificationService(({ os, token }): void => {
       if (os && token) this.props.registerDevice({ variables: { os: os.toUpperCase(), token } });
     });
+
     Actions.main();
+    if (login.loginCount <= 10000000) Actions.onboardingModal();
   };
 
   renderAdminInfo = (): React.Node => (

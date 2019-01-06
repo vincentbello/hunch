@@ -14,6 +14,7 @@ import DrawerContainer from 'containers/Drawer';
 import FavoritesContainer from 'containers/Favorites';
 import InboxButtonContainer from 'containers/InboxButton';
 import LoginContainer from 'containers/Login';
+import OnboardingContainer from 'containers/Onboarding';
 import UserContainer from 'containers/User';
 import UserCardContainer from 'containers/UserCard';
 import NavButton from 'components/NavButton';
@@ -131,6 +132,15 @@ export default Actions.create(
       leftTitle="Cancel"
       onLeft={Actions.pop}
       component={CreateHunchContainer}
+    />
+
+    <Scene
+      key="onboardingModal"
+      {...AppConfig.navbarProps}
+      navTransparent
+      rightTitle="Skip"
+      onRight={Actions.pop}
+      component={OnboardingContainer}
     />
 
     <Scene

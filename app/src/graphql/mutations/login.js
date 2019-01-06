@@ -7,6 +7,7 @@ export default gql`
   mutation Login {
     login {
       ...userFields
+      loginCount
       accessToken
       refreshToken
     }

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { addSeconds } from 'date-fns';
 import passport from 'passport';
 import FacebookTokenStrategy from 'passport-facebook-token';
 
@@ -27,9 +28,7 @@ export default () => {
         }
 
         const fbAccessToken = res.access_token;
-        console.log(res);
-        var fbExpiresAt = res.expires ? res.expires : 0;
-        console.log('TOKENS', fbToken, fbAccessToken, fbExpiresAt);
+        var fbExpiresAt = addSeconds(new Date(), res.expires_in ? res.expires_in : 0);
 
         const newProfile = {
           fbId: id,

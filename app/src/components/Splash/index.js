@@ -23,9 +23,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   image: {
-    width: 90,
+    width: 120,
     height: 120,
     marginBottom: 16,
+  },
+  image_large: {
+    width: 160,
+    height: 160,
   },
   heading: {
     ...Typography.h3,
@@ -34,8 +38,16 @@ const styles = StyleSheet.create({
   },
 });
 
+const DEFAULT_SIZE = 'medium';
 const ILLUSTRATIONS = {
-  MEH_LIGHTBULB: require('../../../assets/illustrations/meh-lightbulb.png'),
+  MEH_LIGHTBULB: {
+    source: require('../../../assets/illustrations/meh-lightbulb.png'),
+    size: DEFAULT_SIZE,
+  },
+  LAUGHING_LIGHTBULB: {
+    source: require('../../../assets/illustrations/laughing-lightbulb.png'),
+    size: 'large',
+  },
 };
 
 type VisualType = 'icon' | 'illustration';
@@ -56,7 +68,9 @@ const Visual = ({ name, type }: { name: string, type: VisualType }): React.Node 
       return <Icon style={styles.icon} name={name} size={48} color={Colors.textPrimary} />;
 
     case 'illustration': {
-      return <Image style={styles.image} source={ILLUSTRATIONS[name]} />;
+      const illustration = ILLUSTRATIONS[name];
+      const imageStyle = [styles.image, illustration.size !== DEFAULT_SIZE && styles[`image_${illustration.size}`]];
+      return <Image style={imageStyle} source={illustration.source} />;
     }
 
     default:
