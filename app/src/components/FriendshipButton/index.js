@@ -106,7 +106,7 @@ class FriendshipButton extends React.PureComponent<Props> {
         options: ['Cancel', unfriend ? 'Unfriend' : 'Cancel Request'],
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
-        message: unfriend ? `Are you sure you want to remove ${name} from your friends? You will not be able to bet with them anymore.` : `Are you sure you want to cancel your friend request to ${name}?`,
+        message: unfriend ? `Are you sure you want to remove ${name} from your friends? You will not be able to challenge them anymore.` : `Are you sure you want to cancel your friend request to ${name}?`,
       },
       (buttonIndex: number) => {
         if (buttonIndex === 1 && targetStatus !== null) updateFriendshipStatus(targetStatus);

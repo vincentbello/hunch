@@ -90,7 +90,7 @@ async function pollGames() {
   const updatedGameIds = Object.keys(updatedGames);
   console.log(`\n\n\nSuccessfully updated ${updatedGameIds.length} games.`);
 
-  const bets = await models.Bet.findAll({
+  const hunches = await models.Hunch.findAll({
     where: {
       active: true,
       gameId: {
@@ -103,25 +103,25 @@ async function pollGames() {
     ],
   });
 
-  console.log(`\n\n\nFound ${bets.length} bets to update.`);
+  console.log(`\n\n\nFound ${hunches.length} hunches to update.`);
 
-  for (let i = 0; i < bets.length; i++) {
-    const bet = bets[i];
-    const updatedGame = updatedGames[bet.gameId];
+  for (let i = 0; i < hunches.length; i++) {
+    const hunch = hunches[i];
+    const updatedGame = updatedGames[hunch.gameId];
     const didHomeTeamWin = updatedGame.attrs.homeScore > updatedGame.attrs.awayScore;
     const winningTeamId = didHomeTeamWin ? updatedGame.homeTeam.id : updatedGame.awayTeam.id;
     const winningTeam = didHomeTeamWin ? updatedGame.homeTeam : updatedGame.awayTeam;
     const losingTeam = didHomeTeamWin ? updatedGame.awayTeam : updatedGame.homeTeam;
-    const winner = winningTeamId === bet.bettorPickTeamId ? bet.bettor : bet.bettee;
-    const loser = winningTeamId === bet.bettorPickTeamId ? bet.bettee : bet.bettor;
+    const winner = winningTeamId === hunch.bettorPickTeamId ? hunch.bettor : hunch.bettee;
+    const loser = winningTeamId === hunch.bettorPickTeamId ? hunch.bettee : hunch.bettor;
 
-    await models.Bet.update({
+    await models.Hunch.update({
       active: false,
       winnerId: winner.id,
       resolvedAt: now,
       updatedAt: now,
-    }, { where: { id: bet.id } });
-    console.log(`\n\nResolved bet ${bet.id}`);
+    }, { where: { id: hunch.id } });
+    console.log(`\n\nResolved hunch ${hunch.id}`);
 
     // Get device tokens
     const devices = await models.Device.findAll({
@@ -136,20 +136,20 @@ async function pollGames() {
 
     for (let i = 0; i < devices.length; i++) {
       const device = devices[i];
-      const didWinBet = device.user.id === winner.id;
+      const didWinHunch = device.user.id === winner.id;
       const gameResultText = `The ${winningTeam.lastName} beat the ${losingTeam.lastName}.`;
-      const winnerNotificationHeader = `🎉 You won your bet!`;
-      const loserNotificationHeader = `😤 You lost your bet.`;
-      const winnerNotificationText = `${loser.firstName} owes you $${bet.amount}!`;
-      const loserNotificationText = `Pay up! You owe ${winner.firstName} $${bet.amount}.`;
-      const notificationHeader = didWinBet ? winnerNotificationHeader : loserNotificationHeader;
-      const notificationBody = `${gameResultText} ${didWinBet ? winnerNotificationText : loserNotificationText}`;
+      const winnerNotificationHeader = `🎉 You won your Hunch!`;
+      const loserNotificationHeader = `😤 You lost your Hunch.`;
+      const winnerNotificationText = `${loser.firstName} owes you $${hunch.amount}!`;
+      const loserNotificationText = `Pay up! You owe ${winner.firstName} $${hunch.amount}.`;
+      const notificationHeader = didWinHunch ? winnerNotificationHeader : loserNotificationHeader;
+      const notificationBody = `${gameResultText} ${didWinHunch ? winnerNotificationText : loserNotificationText}`;
 
       const notification = new Notification({
         alert: notificationHeader,
         title: notificationHeader,
         body: notificationBody,
-        payload: { betId: bet.id },
+        payload: { hunchId: hunch.id },
       });
       console.log(`\n\nSending notification to ${device.user.fullName}`);
       const result = await notification.send(device.token);
@@ -157,7 +157,7 @@ async function pollGames() {
     }
     // TODO: Batch winner and loser tokens
   }
-  console.log(`Found ${bets.length} bets.`);
+  console.log(`Found ${hunches.length} hunches.`);
   process.exit();
 };
 

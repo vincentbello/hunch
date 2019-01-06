@@ -53,7 +53,7 @@ const UserStats = ({ stats }: Props): React.Node => (
         <View style={styles.statContent}>
           <Text style={[styles.stat, stats.won > 0 && styles.stat_success]}>{stats.won}</Text>
         </View>
-        <Text style={styles.statLabel}>Bets Won</Text>
+        <Text style={styles.statLabel}>Hunches Won</Text>
       </View>
       <View style={styles.statCard}>
         <View style={styles.statContent}>
@@ -61,7 +61,7 @@ const UserStats = ({ stats }: Props): React.Node => (
             {stats.played - stats.won}
           </Text>
         </View>
-        <Text style={styles.statLabel}>Bets Lost</Text>
+        <Text style={styles.statLabel}>Hunches Lost</Text>
       </View>
       <View style={styles.statCard}>
         <View style={styles.statContent}>

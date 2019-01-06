@@ -1,6 +1,4 @@
 // @flow
-import { type AllEntities } from 'types/entities';
-
 type Id = string | number;
 
 type Entity = {

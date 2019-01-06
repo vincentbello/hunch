@@ -1,17 +1,15 @@
 // @flow
 import * as React from 'react';
-import { Text } from 'react-native';
 import { Actions, ActionConst, Drawer, Scene, Stack, Lightbox, Modal, Tabs } from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/Feather';
 
 import AppConfig from 'constants/navigation';
 
 import withUserListType from 'hocs/withUserListType';
 import AppLaunchContainer from 'containers/AppLaunch';
-import BetCardContainer from 'containers/BetCard';
-import BetRequestsContainer from 'containers/BetRequests';
-import BetsContainer from 'containers/Bets';
-import CreateBetContainer from 'containers/CreateBet';
+import HunchCardContainer from 'containers/HunchCard';
+import HunchRequestsContainer from 'containers/HunchRequests';
+import HunchesContainer from 'containers/Hunches';
+import CreateHunchContainer from 'containers/CreateHunch';
 import DrawerContainer from 'containers/Drawer';
 import FavoritesContainer from 'containers/Favorites';
 import InboxButtonContainer from 'containers/InboxButton';
@@ -46,30 +44,30 @@ export default Actions.create(
             drawerPosition="right"
           >
             <Tabs activeTintColor={Colors.brand.primary} key="tabbar" hideNavBar>
-              <Scene key="betsTab" hideNavBar icon={props => <TabbarIcon focused={props.focused} name="dollar-sign" />} tabBarLabel="Bets">
+              <Scene key="hunchesTab" hideNavBar icon={props => <TabbarIcon focused={props.focused} name="dollar-sign" />} tabBarLabel="Hunches">
                 <Scene
-                  key="bets"
+                  key="hunches"
                   {...AppConfig.navbarProps}
                   renderTitle={<TitleLogo />}
-                  component={BetsContainer}
-                  renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createBetModal" />}
-                  renderRightButton={() => <InboxButtonContainer targetScene="requestedBets" />}
+                  component={HunchesContainer}
+                  renderLeftButton={(): React.Node => <NavButton iconName="plus" targetScene="createHunchModal" />}
+                  renderRightButton={() => <InboxButtonContainer targetScene="requestedHunches" />}
                 />
 
                 <Scene
                   back
-                  key="requestedBets"
+                  key="requestedHunches"
                   {...AppConfig.navbarProps}
-                  title="My Bet Requests"
-                  component={BetRequestsContainer}
+                  title="My Hunch Requests"
+                  component={HunchRequestsContainer}
                   renderBackButton={(): React.Node => <NavButton iconName="arrow-left" onClick={Actions.pop} />}
                 />
 
                 <Scene
                   back
-                  key="betCard"
+                  key="hunchCard"
                   {...AppConfig.transparentNavbarProps}
-                  component={BetCardContainer}
+                  component={HunchCardContainer}
                   renderBackButton={(): React.Node => <NavButton backgroundColor="rgba(0,0,0,0.3)" color={Colors.white} iconName="arrow-left" onClick={Actions.pop} />}
                 />
               </Scene>
@@ -127,12 +125,12 @@ export default Actions.create(
     </Lightbox>
 
     <Scene
-      key="createBetModal"
+      key="createHunchModal"
       {...AppConfig.navbarProps}
-      title="Create Bet"
+      title="Create Hunch"
       leftTitle="Cancel"
       onLeft={Actions.pop}
-      component={CreateBetContainer}
+      component={CreateHunchContainer}
     />
 
     <Scene

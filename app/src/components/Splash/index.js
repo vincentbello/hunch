@@ -11,37 +11,74 @@ import { SplashStyles, SplashStylesWithNav } from 'theme/app';
 import Typography from 'theme/typography';
 
 const styles = StyleSheet.create({
-  Splash__grow: {
+  splash: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  Splash__icon: {
+  splash_tabs: {
+    height: SplashStylesWithNav.height - 64,
+  },
+  icon: {
     marginBottom: 16,
   },
-  Splash__heading: {
+  image: {
+    width: 90,
+    height: 120,
+    marginBottom: 16,
+  },
+  heading: {
     ...Typography.h3,
     fontWeight: '500',
     color: Colors.textPrimary,
   },
 });
 
+const ILLUSTRATIONS = {
+  MEH_LIGHTBULB: require('../../../assets/illustrations/meh-lightbulb.png'),
+};
+
+type VisualType = 'icon' | 'illustration';
+
 type Props = {
   fullScreen: boolean,
   grow: boolean,
   heading: string,
-  iconName: string,
+  inTabs: boolean,
+  visualName: string,
+  visualType: VisualType,
   renderSubhead: null | () => React.Node,
 };
 
-const Splash = ({ fullScreen, grow, heading, iconName, renderSubhead }: Props): React.Node => (
-  <View style={[grow && styles.Splash__grow, !grow && (fullScreen ? SplashStyles : SplashStylesWithNav)]}>
-    <Icon style={styles.Splash__icon} name={iconName} size={48} color={Colors.textPrimary} />
-    <Text style={styles.Splash__heading}>{heading}</Text>
+const Visual = ({ name, type }: { name: string, type: VisualType }): React.Node => {
+  switch (type) {
+    case 'icon':
+      return <Icon style={styles.icon} name={name} size={48} color={Colors.textPrimary} />;
+
+    case 'illustration': {
+      return <Image style={styles.image} source={ILLUSTRATIONS[name]} />;
+    }
+
+    default:
+      return null;
+  }
+};
+
+const Splash = ({ fullScreen, grow, heading, inTabs, visualName, visualType, renderSubhead }: Props): React.Node => (
+
+  <View style={[grow && styles.splash, !grow && (fullScreen ? SplashStyles : SplashStylesWithNav), inTabs && styles.splash_tabs]}>
+    <Visual name={visualName} type={visualType} />
+    <Text style={styles.heading}>{heading}</Text>
     {renderSubhead !== null && renderSubhead()}
   </View>
 );
 
-Splash.defaultProps = { grow: false, fullScreen: false, renderSubhead: null };
+Splash.defaultProps = {
+  grow: false,
+  inTabs: false,
+  fullScreen: false,
+  visualType: 'icon',
+  renderSubhead: null,
+};
 Splash.displayName = 'Splash';
 export default Splash;
