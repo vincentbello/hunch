@@ -91,7 +91,11 @@ class AppLaunch extends React.Component<Props, State> {
         duration: ANIMATION_DURATION,
         toValue: AppSizes.statusBarHeight + AppSizes.topOffset + 22,
       }),
-    ]).start(Actions.main);
+    // ]).start(Actions.main);
+    ]).start(() => {
+      Actions.main();
+      Actions.onboardingModal();
+    });
   };
 
   render(): React.Node {

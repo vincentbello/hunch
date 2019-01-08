@@ -1,5 +1,6 @@
 import Sequelize, { Op } from 'sequelize';
 import difference from 'lodash.difference';
+import FB from '../../../services/facebook';
 import models from '../';
 
 export default (sequelize, DataTypes) => {
@@ -94,5 +95,19 @@ export default (sequelize, DataTypes) => {
       type: Sequelize.QueryTypes.SELECT,
     });
   };
+
+  User.prototype.getFacebookFriends = async function() {
+    if (!this.fbId || !this.fbAccessToken) return [];
+
+    const friends = await FB.api(`${this.fbId}/friends`, { access_token: this.fbAccessToken });
+    if (!friends || friends.error) return [];
+
+    return await models.User.findAll({
+      where: {
+        fbId: friends.data.map(friend => friend.id),
+      },
+    });
+  };
+
   return User;
 };

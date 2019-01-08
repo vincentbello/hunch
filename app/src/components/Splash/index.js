@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     ...Typography.h3,
     fontWeight: '500',
     color: Colors.textPrimary,
+    textAlign: 'center',
   },
 });
 
@@ -46,6 +47,10 @@ const ILLUSTRATIONS = {
   },
   LAUGHING_LIGHTBULB: {
     source: require('../../../assets/illustrations/laughing-lightbulb.png'),
+    size: 'large',
+  },
+  SMILING_LIGHTBULB: {
+    source: require('../../../assets/illustrations/smiling-lightbulb.png'),
     size: 'large',
   },
 };

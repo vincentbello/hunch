@@ -136,8 +136,8 @@ export default Actions.create(
 
     <Scene
       key="onboardingModal"
-      {...AppConfig.navbarProps}
-      navTransparent
+      {...AppConfig.transparentNavbarProps}
+      panHandlers={null}
       rightTitle="Skip"
       onRight={Actions.pop}
       component={OnboardingContainer}

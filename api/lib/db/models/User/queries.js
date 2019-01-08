@@ -54,24 +54,9 @@ export default models => ({
 
   fbFriends: {
     type: new GraphQLList(UserType),
-    args: {
-      userId: {
-        description: 'ID of user',
-        type: new GraphQLNonNull(GraphQLInt),
-      },
-    },
     resolve: async function(root, args, context, info) {
-      const user = await models.User.findById(args.userId);
-      // switch (args.userListType) {
-      //   case 'FRIENDS':
-      //     return await models.User.getFriends(args.userId ? args.userId : context.userId);
-
-      //   case 'FRIEND_REQUESTS':
-      //     return await models.User.getFriendRequests(context.userId);
-
-      //   default:
-      //     throw new Error();
-      // }
+      const me = await models.User.findById(context.userId);
+      return me.getFacebookFriends();
     },
   },
 });
