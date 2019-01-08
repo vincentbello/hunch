@@ -10,6 +10,8 @@ import { type User } from 'types/user';
 
 import Colors from 'theme/colors';
 
+import Icon from 'react-native-vector-icons/Feather';
+
 import UserCell from 'components/UserCell';
 import DerivedStateSplash from 'components/DerivedStateSplash';
 import Splash from 'components/Splash';
@@ -41,7 +43,25 @@ function FacebookFriendList({ friendsQuery: { fbFriends, error, loading } }: Pro
       <FlatList
         data={friends}
         keyExtractor={(friend: User): string => `${friend.id}`}
-        renderItem={({ item }): React.Node => <UserCell inList size="small" user={item} />}
+        renderItem={({ item }): React.Node => (
+          <UserCell
+            inList
+            size="small"
+            user={item}
+            renderMeta={(): React.Node => (
+              <Icon.Button
+                backgroundColor={Colors.transparent}
+                color={Colors.brand.primary}
+                style={{}}
+                iconStyle={{}}
+                name="user-plus"
+                size={16}
+                underlayColor="rgba(0, 0, 0, 0.1)"
+                onPress={console.log}
+              />
+            )}
+          />
+        )}
       />
     );
   };

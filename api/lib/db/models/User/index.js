@@ -102,10 +102,11 @@ export default (sequelize, DataTypes) => {
     const friends = await FB.api(`${this.fbId}/friends`, { access_token: this.fbAccessToken });
     if (!friends || friends.error) return [];
 
-    return await models.User.findAll({
-      where: {
-        fbId: friends.data.map(friend => friend.id),
-      },
+    const friendIdList = friends.data.map(friend => `'${friend.id}'`).join(', ');
+    const query = `SELECT u.* FROM Users u LEFT OUTER JOIN Friendships f ON (u.id = f.userId AND f.friendId = ${this.id} OR u.id = f.friendId AND f.userId = ${this.id}) WHERE u.fbId IN (${friendIdList}) AND f.id IS NULL;`;
+    return await models.sequelize.query(query, {
+      model: models.User,
+      type: Sequelize.QueryTypes.SELECT,
     });
   };
 
