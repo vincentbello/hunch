@@ -12,27 +12,18 @@ const style = StyleSheet.create({
   },
 });
 
-type State = {
-  logoWidth: Animated.Value,
-};
-
-export default class TitleLogo extends React.Component<{}, State> {
-  state = {
-    logoWidth: new Animated.Value(21),
-  };
-
-  componentDidMount() {
-    Animated.timing(this.state.logoWidth, {
+export default function TitleLogo(): React.Node {
+  const [width] = React.useState((): Animated.Value => new Animated.Value(21));
+  React.useEffect(() => {
+    Animated.timing(width, {
       duration: 300,
       toValue: 150,
     }).start();
-  }
+  }, []);
 
-  render(): React.Node {
-    return (
-      <Animated.View style={[style.wrapper, { width: this.state.logoWidth }]}>
-        <Image style={style.image} source={require('../../../assets/brand/logo-text.png')} />
-      </Animated.View>
-    );
-  }
+  return (
+    <Animated.View style={[style.wrapper, { width }]}>
+      <Image style={style.image} source={require('../../../assets/brand/logo-text.png')} />
+    </Animated.View>
+  );
 }

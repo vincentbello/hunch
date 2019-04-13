@@ -99,53 +99,42 @@ type Props = {
   user: User,
 };
 
-type State = {
-  showingAll: boolean,
-};
+export default function PaymentActions({ user }: Props): React.Node {
+  const [showingAll, setShowingAll] = React.useState(false);
+  return (
+    <View style={styles.buttonList}>
+      <FlatList
+        data={showingAll ? PAYMENT_OPTIONS : PAYMENT_OPTIONS.slice(0, 2)}
+        keyExtractor={(option: PaymentOption): string => option.name}
+        style={styles.buttonList}
+        renderItem={({ item, index }): React.Node => {
+          const Icon = item.iconType === 'feather' ? FeatherIcon : MaterialIcon;
+          return (
+            <View style={styles.item}>
+              <Icon.Button
+                backgroundColor={item.color}
+                name={item.iconName}
+                size={item.iconSize}
+                style={styles.button}
+                onPress={async (): Promise<void> => openLink(...item.urls(user))}
+              >
+                <Text style={styles.buttonText}>
+                  Pay with {item.name}
+                </Text>
+              </Icon.Button>
+            </View>
+          );
+        }}
+      />
 
-export default class PaymentActions extends React.Component<Props, State> {
-  state = { showingAll: false };
-
-  get displayedOptions(): Array<PaymentOption> {
-    return this.state.showingAll ? PAYMENT_OPTIONS : PAYMENT_OPTIONS.slice(0, 2);
-  }
-
-  render(): React.Node {
-    return (
-      <View style={styles.buttonList}>
-        <FlatList
-          data={this.displayedOptions}
-          keyExtractor={(option: PaymentOption): string => option.name}
-          style={styles.buttonList}
-          renderItem={({ item, index }): React.Node => {
-            const Icon = item.iconType === 'feather' ? FeatherIcon : MaterialIcon;
-            return (
-              <View style={styles.item}>
-                <Icon.Button
-                  backgroundColor={item.color}
-                  name={item.iconName}
-                  size={item.iconSize}
-                  style={styles.button}
-                  onPress={async (): Promise<void> => openLink(...item.urls(this.props.user))}
-                >
-                  <Text style={styles.buttonText}>
-                    Pay with {item.name}
-                  </Text>
-                </Icon.Button>
-              </View>
-            );
-          }}
-        />
-
-        <View style={styles.item}>
-          <Button
-            style={styles.moreButton}
-            onPress={(): void => this.setState({ showingAll: !this.state.showingAll })}
-          >
-            {this.state.showingAll ? 'Show Less' : 'Show More Payment Options'}
-          </Button>
-        </View>
+      <View style={styles.item}>
+        <Button
+          style={styles.moreButton}
+          onPress={(): void => setShowingAll(!showingAll)}
+        >
+          {showingAll ? 'Show Less' : 'Show More Payment Options'}
+        </Button>
       </View>
-    );
-  }
+    </View>
+  );
 }

@@ -25,10 +25,6 @@ type Props = {
   setFavoriteTeam: ({ variables: { teamId: number } }) => void,
 };
 
-type State = {
-  viewIndex: number,
-};
-
 const styles = StyleSheet.create({
   team: {
     backgroundColor: Colors.white,
@@ -60,16 +56,12 @@ const styles = StyleSheet.create({
   },
 });
 
-class FavoritesContainer extends React.Component<Props, State> {
-  static displayName = 'FavoritesContainer';
+function FavoritesContainer(props: Props): React.Node {
+  const [viewIndex, setViewIndex] = React.useState(0);
 
-  state = {
-    viewIndex: 0,
-  };
-
-  getTeamPressHandler = (team: Team): (() => void) => () => {
+  const getTeamPressHandler = (team: Team): (() => void) => () => {
     const action = team.isFavorite ? 'removeFavoriteTeam' : 'setFavoriteTeam';
-    this.props[action]({
+    props[action]({
       optimisticResponse: {
         [action]: { ...team, isFavorite: !team.isFavorite },
       },
@@ -77,62 +69,54 @@ class FavoritesContainer extends React.Component<Props, State> {
     });
   };
 
-  renderTeam = (team: Team): React.Node => (
-    <TouchableOpacity style={styles.team} onPress={this.getTeamPressHandler(team)}>
-      <Image rounded size="small" url={team.imageUrl} />
-      <Text style={styles.teamLabel}>
-        {team.firstName}
-        {' '}
-        <Text style={styles.teamLabel_strong}>{team.lastName}</Text>
-      </Text>
-      <Icon name={team.isFavorite ? 'star' : 'star-o'} color={team.isFavorite ? Colors.primary.orange : Colors.textSecondary} size={22} />
-    </TouchableOpacity>
-  );
-
-  renderTeams = (teams: Array<Team>): React.Node => {
-    if (teams.length === 0) return <Splash heading="No teams in this league." visualName="search" />;
-    return (
-      <FlatList
-        data={teams}
-        keyExtractor={(team: Team): string => `${team.id}`}
-        renderItem={({ item }): React.Node => this.renderTeam(item)}
+  return (
+    <React.Fragment>
+      <Text style={styles.sectionHeader}>My Favorite Teams</Text>
+      <FavoritesList
+        editMode
+        mine
+        userId={null}
+        remove={(teamId: number): void => props.removeFavoriteTeam({ variables: { teamId } })}
       />
-    );
-  };
-
-  renderTeamsQuery = (): React.Node => (
-    <Query query={GET_TEAMS} variables={{ league: LEAGUE_VIEW_TYPES[this.state.viewIndex].key }}>
-      {({ loading, error, data: { teams } }): React.Node => (
-        <DerivedStateSplash loading={loading} error={error}>
-          {Boolean(teams) && this.renderTeams(teams)}
-        </DerivedStateSplash>
-      )}
-    </Query>
+      <Text style={styles.sectionHeader}>Teams</Text>
+      <TabView
+        navigationState={{
+          index: viewIndex,
+          routes: LEAGUE_VIEW_TYPES,
+        }}
+        onIndexChange={setViewIndex}
+        renderScene={(): React.Node => (
+          <Query query={GET_TEAMS} variables={{ league: LEAGUE_VIEW_TYPES[viewIndex].key }}>
+            {({ loading, error, data: { teams } }): React.Node => (
+              <DerivedStateSplash loading={loading} error={error}>
+                {Boolean(teams) && (
+                  teams.length === 0 ? <Splash heading="No teams in this league." visualName="search" /> : (
+                    <FlatList
+                      data={teams}
+                      keyExtractor={(team: Team): string => `${team.id}`}
+                      renderItem={({ item: team }): React.Node => (
+                        <TouchableOpacity style={styles.team} onPress={getTeamPressHandler(team)}>
+                          <Image rounded size="small" url={team.imageUrl} />
+                          <Text style={styles.teamLabel}>
+                            {team.firstName}
+                            {' '}
+                            <Text style={styles.teamLabel_strong}>{team.lastName}</Text>
+                          </Text>
+                          <Icon name={team.isFavorite ? 'star' : 'star-o'} color={team.isFavorite ? Colors.primary.orange : Colors.textSecondary} size={22} />
+                        </TouchableOpacity>
+                      )}
+                    />
+                  )
+                )}
+              </DerivedStateSplash>
+            )}
+          </Query>
+        )}
+      />
+    </React.Fragment>
   );
-
-  render(): React.Node {
-    return (
-      <React.Fragment>
-        <Text style={styles.sectionHeader}>My Favorite Teams</Text>
-        <FavoritesList
-          editMode
-          mine
-          userId={null}
-          remove={(teamId: number): void => this.props.removeFavoriteTeam({ variables: { teamId } })}
-        />
-        <Text style={styles.sectionHeader}>Teams</Text>
-        <TabView
-          navigationState={{
-            index: this.state.viewIndex,
-            routes: LEAGUE_VIEW_TYPES,
-          }}
-          onIndexChange={(viewIndex: number): void => this.setState({ viewIndex })}
-          renderScene={this.renderTeamsQuery}
-        />
-      </React.Fragment>
-    );
-  }
 }
+FavoritesContainer.displayName = 'FavoritesContainer';
 
 export default compose(
   graphql(REMOVE_FAVORITE_TEAM, { name: 'removeFavoriteTeam', options: { refetchQueries: ['GetFavoriteTeams'] } }),

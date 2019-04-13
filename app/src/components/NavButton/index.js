@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { AsyncStorage, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import Icon from 'react-native-vector-icons/Feather';

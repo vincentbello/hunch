@@ -1,7 +1,8 @@
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { API_URL } from 'react-native-dotenv';
+
 
 const httpLink = new HttpLink({ uri: `${API_URL}/api` });
 

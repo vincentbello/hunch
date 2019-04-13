@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { AsyncStorage, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { distanceInWordsToNow } from 'date-fns';
 

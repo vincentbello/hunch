@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 import ApolloClient from 'apollo-client';
-import { Animated, AsyncStorage, Easing, Image, View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Animated, Easing, Image, View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import NotificationService from 'services/NotificationService';
 

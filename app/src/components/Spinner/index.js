@@ -22,38 +22,29 @@ type Props = {
   size: 'small' | 'medium' | 'large',
 };
 
-export default class Spinner extends React.Component<Props, { spinValue: Animated.Value }> {
-  static displayName = 'Spinner';
-
-  static defaultProps = {
-    size: 'large',
-  };
-
-  state = {
-    spinValue: new Animated.Value(0),
-  };
-
-  componentDidMount() {
-    Animated.loop(Animated.timing(this.state.spinValue, {
+export default function Spinner({ size }: Props): React.Node {
+  const [spinValue] = React.useState(() => new Animated.Value(0));
+  React.useEffect(() => {
+    Animated.loop(Animated.timing(spinValue, {
       toValue: 1,
       duration: 1200,
       easing: Easing.linear,
       useNativeDriver: true,
     })).start();
-  }
+  }, []);
 
-  render(): React.Node {
-    const rotate = this.state.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg'],
-    });
-    return (
-      <AnimatedIcon
-        style={{ ...styles.Spinner, transform: [{ rotate }] }}
-        name="loader"
-        size={ICON_SIZES[this.props.size]}
-        color={Colors.brand.primary}
-      />
-    );
-  }
+  const rotate = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+  return (
+    <AnimatedIcon
+      style={{ ...styles.Spinner, transform: [{ rotate }] }}
+      name="loader"
+      size={ICON_SIZES[size]}
+      color={Colors.brand.primary}
+    />
+  );
 }
+Spinner.displayName = 'Spinner';
+Spinner.defaultProps = { size: 'large' };

@@ -8,21 +8,29 @@ const debug = debugModule('node-api:server');
 import models from '../../db/models';
 import MySportsFeedsClient from '../../third-party/my-sports-feeds';
 
+const SEASON_TYPES = {
+  REGULAR: 'regular',
+  POST: 'playoff',
+};
+
 const argv = minimist(process.argv.slice(2));
 const season = parseInt(argv.season || argv.s || new Date().getFullYear(), 10);
 const league = (argv.league || argv.l || 'NBA').toUpperCase();
+const seasonType = (argv.type || argv.t || 'REGULAR').toUpperCase();
 const now = new Date();
 
 async function populateSchedules() {
   const teams = await models.Team.findAll({ where: { league } });
   const msfTeamIds = teams.reduce((ids, team) => ({ ...ids, [team.msfId]: team.id }), {});
+  const msfSeason = seasonType === 'REGULAR' ? `${season - 1}-${season}` : season;
+  const msfSeasonType = SEASON_TYPES[seasonType] || 'regular';
 
-  const { games } = await MySportsFeedsClient.getData(league.toLowerCase(), `${season - 1}-${season}-regular`, 'seasonal_games', 'json', {});
+  const { games } = await MySportsFeedsClient.getData(league.toLowerCase(), `${msfSeason}-${msfSeasonType}`, 'seasonal_games', 'json', {});
   console.log(`\n\n\nFound ${games.length} games for ${season}.`);
   const gameRows = games.map((game) => ({
     league,
     season,
-    seasonType: 'REGULAR',
+    seasonType,
     completed: game.schedule.playedStatus === 'COMPLETED',
     homeScore: game.score.homeScoreTotal,
     awayScore: game.score.awayScoreTotal,

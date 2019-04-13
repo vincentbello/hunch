@@ -468,7 +468,7 @@ class CreateHunchContainer extends React.Component<Props, State> {
         </View>
         <View style={{ top: -this.state.keyboardOffset, zIndex: 1, backgroundColor: Colors.background }}>
           {bettee && !isAmountInputFocused && this.renderWagerInput()}
-          <Mutation mutation={CREATE_BET_REQUEST} update={onHunchCreate} onCompleted={this.onHunchCreated}>
+          <Mutation mutation={CREATE_HUNCH_REQUEST} update={onHunchCreate} onCompleted={this.onHunchCreated}>
             {(createHunchRequest, { called, loading }): React.Node => (
               <TouchableOpacity disabled={called || !isFormCompleted} onPress={(): void => createHunchRequest(this.hunchVariables)}>
                 <View style={[styles.Create__button, (called || !isFormCompleted) && styles.Create__button_disabled]}>

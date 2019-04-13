@@ -7,8 +7,6 @@ import Icon from 'react-native-vector-icons/Feather';
 import { type User } from 'types/user';
 
 import Colors from 'theme/colors';
-import { SplashStyles } from 'theme/app';
-import Typography from 'theme/typography';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 const ANIMATION_DURATION = 200;
