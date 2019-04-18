@@ -16,6 +16,6 @@ export default function(req, res, next) {
   return req.body.operationName === 'RefreshAuth' ? next() : expressJwt({
     secret: process.env.ACCESS_TOKEN_KEY,
     requestProperty: 'auth',
-    getToken: req => req.headers['x-auth-token'] || null,
+    getToken: req => req.headers['x-auth-token'] || req.cookies.accessToken || null,
   })(req, res, next);
 }

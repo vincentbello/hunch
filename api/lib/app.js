@@ -36,7 +36,7 @@ app.use('/', indexRouter);
 
 const apolloServer = new ApolloServer({
   schema,
-  context: ({ req, res }) => ({ userId: req.auth ? req.auth.id : null, user: req.user }),
+  context: ({ req, res }) => ({ req, res, userId: req.auth ? req.auth.id : null, user: req.user }),
   engine: { apiKey: process.env.ENGINE_API_KEY },
   formatResponse,
   formatError,

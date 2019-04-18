@@ -10,6 +10,8 @@ export default models => ({
     type: UserType,
     resolve: function(_root, _args, context) {
       if (!context.user) throw new AuthenticationError('Unable to log in.');
+      context.res.cookie('accessToken', context.user.accessToken, { httpOnly: true });
+      context.res.cookie('refreshToken', context.user.refreshToken, { httpOnly: true });
       return context.user;
     },
   },
@@ -20,6 +22,8 @@ export default models => ({
       const user = await models.User.findById(context.userId);
       user.set('accessToken', '');
       user.set('refreshToken', '');
+      context.res.cookie('accessToken', { httpOnly: true });
+      context.res.cookie('refreshToken', { httpOnly: true });
       return await user.save();
     },
   },
@@ -29,18 +33,22 @@ export default models => ({
     args: {
       refreshToken: {
         description: 'The refresh token to refresh authentication',
-        type: GraphQLNonNull(GraphQLString),
+        type: GraphQLString,
       },
     },
     resolve: async function(root, { refreshToken }, context, info) {
-      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
+      const token = refreshToken || context.req.cookies.refreshToken;
+      const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
       if (!decoded.id) throw new AuthenticationError('Invalid refresh token.');
 
       const user = await models.User.findById(decoded.id);
-      if (!user || refreshToken !== user.refreshToken) throw new AuthenticationError('This user does not exist.');
+      if (!user || token !== user.refreshToken) throw new AuthenticationError('This user does not exist.');
 
       // Refresh access token
-      user.set('accessToken', jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 }));
+      const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 60 * 120 });
+      user.set('accessToken', accessToken);
+      context.res.cookie('accessToken', accessToken, { httpOnly: true });
+      context.res.cookie('refreshToken', token, { httpOnly: true });
       return await user.save();
     },
   },

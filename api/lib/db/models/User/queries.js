@@ -35,10 +35,10 @@ export default models => ({
     args: {
       id: {
         description: 'ID of user',
-        type: new GraphQLNonNull(GraphQLInt),
+        type: GraphQLInt,
       },
     },
-    resolve: resolver(models.User),
+    resolve: (root, args, context) => models.User.findById(args.id || context.userId),
   },
 
   userStats: {
