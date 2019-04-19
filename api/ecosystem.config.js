@@ -14,7 +14,7 @@ module.exports = {
   deploy : {
     production : {
       user : 'ec2-user',
-      host : 'ec2-54-200-177-87.us-west-2.compute.amazonaws.com',
+      host : 'ec2-54-212-83-30.us-west-2.compute.amazonaws.com',
       key  : '~/.ssh/hunch_instance_key.pem',
       ref  : 'origin/master',
       repo : 'git@github.com:vincentbello/hunch.git',
