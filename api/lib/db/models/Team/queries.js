@@ -30,13 +30,10 @@ export default models => ({
     resolve: resolver(models.Team, {
       before: (findOptions, { league, userId }, { userId: myId }) => ({
         ...findOptions,
-        where: {
-          league,
-        },
+        where: league === null ? {} : { league },
         order: [['firstName', 'ASC']],
         include: {
           model: models.FavoriteTeam,
-          // as: 'favorite',
           where: {
             userId: userId || myId,
           },

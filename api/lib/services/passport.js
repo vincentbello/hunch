@@ -37,7 +37,8 @@ export default () => {
         // Refresh token: expires in 90 days
         refreshToken: jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN_KEY, { expiresIn: 60 * 60 * 24 * 90 }),
       }).then(newUser => {
-        models.User.populateFbFriendships(newUser.id, _json.friends.data.map(friend => friend.id));
+        const friends = _json.friends ? _json.friends.data : [];
+        models.User.populateFbFriendships(newUser.id, friends.map(friend => friend.id));
         return done(null, newUser);
       }));
     });
