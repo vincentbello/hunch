@@ -76,7 +76,4 @@ function Drawer({ currentUser }: Props): React.Node {
 }
 
 Drawer.displayName = 'DrawerContainer';
-export default compose(
-  withCurrentUser,
-  graphql(LOGOUT, )
-)(Drawer);
+export default withCurrentUser(Drawer);
