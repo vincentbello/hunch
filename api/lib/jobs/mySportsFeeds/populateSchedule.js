@@ -25,17 +25,17 @@ async function populateSchedules() {
   const msfTeamIds = teams.reduce((ids, team) => ({ ...ids, [team.msfId]: team.id }), {});
   const msfSeason = seasonType === 'REGULAR' ? `${season - 1}-${season}` : season;
   const msfSeasonType = SEASON_TYPES[seasonType] || 'regular';
-
+  const existingGames = await models.Game.findAll({ where: { league, season, seasonType } });
+  console.log(`\n\nFound ${existingGames.length} existing games.`);
   const { games } = await MySportsFeedsClient.getData(league.toLowerCase(), `${msfSeason}-${msfSeasonType}`, 'seasonal_games', 'json', {});
   console.log(`\n\n\nFound ${games.length} games for ${season}.`);
   let number = 0;
 
-  if (seasonType === 'POST') {
-    playoffMatchups
-  }
+  const newGameRows = [];
+  const updateGameRows = [];
 
-  const gameRows = [];
-  games.forEach((game) => {
+  for (let i = 0; i < games.length; i++) {
+    const game = games[i];
     let number = null;
 
     if (seasonType === 'POST') {
@@ -45,7 +45,9 @@ async function populateSchedules() {
       number = playoffMatchups[key].length;
     }
 
-    gameRows.push({
+    const existing = existingGames.find(g => g.msfId === game.schedule.id);
+
+    (existing ? updateGameRows : newGameRows).push({
       league,
       season,
       seasonType,
@@ -60,10 +62,13 @@ async function populateSchedules() {
       createdAt: now,
       updatedAt: now,
     });
-  });
+  }
 
-  const createdGames = await models.Game.bulkCreate(gameRows, { updateOnDuplicate: ['number'] });
-  console.log(`\n\n\nSuccessfully created ${gameRows.length} total games.`);
+  const createdGames = await models.Game.bulkCreate(newGameRows);
+
+  if (updateGameRows.length > 0) await Promise.all(updateGameRows.map(row => models.Game.update(row, { where: { msfId: row.msfId } })));
+
+  console.log(`\n\n\nSuccessfully created ${newGameRows.length} total games and updated ${updateGameRows.length} games.`);
   process.exit();
 }
 
