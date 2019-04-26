@@ -3,6 +3,7 @@ import 'dotenv/config';
 import debugModule from 'debug';
 import http from 'http';
 import minimist from 'minimist';
+import differenceWith from 'lodash.differencewith';
 const debug = debugModule('node-api:server');
 
 import models from '../../db/models';
@@ -67,6 +68,14 @@ async function populateSchedules() {
   const createdGames = await models.Game.bulkCreate(newGameRows);
 
   if (updateGameRows.length > 0) await Promise.all(updateGameRows.map(row => models.Game.update(row, { where: { msfId: row.msfId } })));
+
+  // Clean up invalid games
+  if (existingGames.length > 0) {
+    // Games in existingGames that are not in games (no longer scheduled)
+    const gamesToDelete = differenceWith(existingGames, games, (exGame, newGame) => exGame.msfId === newGame.schedule.id);
+    await models.Game.destroy({ where: { msfId: gamesToDelete.map(g => g.msfId) }, force: true });
+    console.log(`\n\n\nSuccessfully destroyed ${gamesToDelete.length} games that are no longer scheduled.`);
+  }
 
   console.log(`\n\n\nSuccessfully created ${newGameRows.length} total games and updated ${updateGameRows.length} games.`);
   process.exit();
