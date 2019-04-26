@@ -5,6 +5,7 @@ export default gql`
     id
     firstName
     lastName
+    fullName
     abbreviation
     imageUrl
     conference

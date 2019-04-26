@@ -20,6 +20,12 @@ export default (sequelize, DataTypes) => {
         return this.FavoriteTeam !== null;
       }
     },
+    fullName: {
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ['firstName', 'lastName']),
+      get() {
+        return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
+      }
+    },
   }, {});
   Team.associate = function(models) {
     Team.hasOne(models.FavoriteTeam);
