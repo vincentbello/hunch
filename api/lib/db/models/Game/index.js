@@ -12,6 +12,7 @@ export default (sequelize, DataTypes) => {
     startDate: DataTypes.DATE,
     xmlStatsId: DataTypes.STRING,
     msfId: DataTypes.INTEGER,
+    number: DataTypes.INTEGER,
     homeTeamId: {
       allowNull: false,
       type: DataTypes.INTEGER,
