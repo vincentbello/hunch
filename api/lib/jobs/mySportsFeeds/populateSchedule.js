@@ -20,6 +20,14 @@ const league = (argv.league || argv.l || 'NBA').toUpperCase();
 const seasonType = (argv.type || argv.t || 'REGULAR').toUpperCase();
 const now = new Date();
 
+const getNumWins = (games, teamId) =>
+  games.reduce((acc, game) => {
+    if (game.schedule.playedStatus !== 'COMPLETED') return acc;
+    const isHome = game.schedule.homeTeam.id === teamId;
+    const didHomeWin = game.score.homeScoreTotal > game.score.awayScoreTotal;
+    return acc + Boolean(isHome && didHomeWin || !isHome && !didHomeWin);
+  }, 0);
+
 async function populateSchedules() {
   const teams = await models.Team.findAll({ where: { league } });
   const playoffMatchups = {};
@@ -37,12 +45,23 @@ async function populateSchedules() {
 
   for (let i = 0; i < games.length; i++) {
     const game = games[i];
+    const completed = game.schedule.playedStatus === 'COMPLETED';
     let number = null;
 
     if (seasonType === 'POST') {
       const key = `${[game.schedule.homeTeam.id, game.schedule.awayTeam.id].sort()}`;
       if (!(key in playoffMatchups)) playoffMatchups[key] = [];
-      playoffMatchups[key].push(game.schedule.id);
+
+      if (!completed) {
+        const homeWins = getNumWins(playoffMatchups[key], game.schedule.homeTeam.id);
+        const awayWins = getNumWins(playoffMatchups[key], game.schedule.awayTeam.id);
+        const minGamesLeft = 4 - Math.max(homeWins, awayWins);
+        const numGamesScheduled = playoffMatchups[key].length + 1;
+        const numGamesPlayed = homeWins + awayWins;
+        if (minGamesLeft < numGamesScheduled - numGamesPlayed) continue;
+      }
+
+      playoffMatchups[key].push(game);
       number = playoffMatchups[key].length;
     }
 
@@ -52,7 +71,7 @@ async function populateSchedules() {
       league,
       season,
       seasonType,
-      completed: game.schedule.playedStatus === 'COMPLETED',
+      completed,
       homeScore: game.score.homeScoreTotal,
       awayScore: game.score.awayScoreTotal,
       number,
