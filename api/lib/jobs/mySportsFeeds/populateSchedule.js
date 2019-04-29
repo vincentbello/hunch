@@ -55,7 +55,6 @@ async function populateSchedules() {
       if (!completed) {
         const homeWins = getNumWins(playoffMatchups[key], game.schedule.homeTeam.id);
         const awayWins = getNumWins(playoffMatchups[key], game.schedule.awayTeam.id);
-        const mostWinsSoFar = Math.max(homeWins, awayWins);
         const minGamesLeft = 4 - Math.max(homeWins, awayWins);
         const numGamesScheduled = playoffMatchups[key].length + 1;
         const numGamesPlayed = homeWins + awayWins;
