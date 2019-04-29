@@ -142,6 +142,7 @@ export const UserListType = new GraphQLEnumType({
   values: {
     FRIENDS: { description: 'Friends of user' },
     FRIEND_REQUESTS: { description: 'Incoming friend requests for user' },
+    ALL_USERS: { description: 'All users' },
   },
 });
 

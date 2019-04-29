@@ -15,6 +15,10 @@ export default models => ({
         description: 'User ID to get friends for. If not provided, default to current user',
         type: GraphQLInt,
       },
+      filterInput: {
+        description: 'String input to filter users by',
+        type: GraphQLString,
+      },
     },
     resolve: async function(root, args, context, info) {
       switch (args.userListType) {
@@ -23,6 +27,16 @@ export default models => ({
 
         case 'FRIEND_REQUESTS':
           return await models.User.getFriendRequests(context.userId);
+
+        case 'ALL_USERS':
+          return await models.User.findAll({
+            where: {
+              [Op.or]: {
+                firstName: { [Op.like]: `${args.filterInput}%` },
+                lastName: { [Op.like]: `${args.filterInput}%` },
+              },
+            },
+          });
 
         default:
           throw new Error();
