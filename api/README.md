@@ -1,1 +1,1 @@
-Node.js backend. Uses [Sequelize](http://docs.sequelizejs.com/) to manage MySQL tables and [Passport.js](http://www.passportjs.org/) to manage authentication.
+Node.js backend. Uses [Sequelize](http://docs.sequelizejs.com/) to manage MySQL tables, [Passport.js](http://www.passportjs.org/) to manage authentication, and [Apollo](https://www.apollographql.com/) for the GraphQL API.
